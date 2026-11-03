@@ -169,7 +169,7 @@ describe('SC-06 IP literals in any form', () => {
 
 describe('SC-07 hostname shape', () => {
   it.each([
-    ['single label', 'https://intranet/'],
+    ['single label', 'https://myhost/'],
     ['label > 63 chars', `https://${'a'.repeat(64)}.com/`],
     ['label with leading hyphen', 'https://-bad.example.com/'],
     ['label with trailing hyphen', 'https://bad-.example.com/'],
@@ -243,7 +243,7 @@ describe('SC-17 resolveRedirectTarget', () => {
     ['file:///', 'SCHEME'],
     ['https://example.com:8080/', 'PORT'],
     ['http://app.localhost/', 'RESERVED_NAME'],
-    ['http://localhost/', 'HOSTNAME_SHAPE'],
+    ['http://localhost/', 'RESERVED_NAME'],
     ['https://u:p@example.com/', 'CREDENTIALS'],
     ['/x\r\nSet-Cookie: a=b', 'CONTROL_CHARS'],
     ['/x%0d%0a', 'CONTROL_CHARS'],

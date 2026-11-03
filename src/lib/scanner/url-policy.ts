@@ -82,6 +82,11 @@ function assertHostname(url: URL): void {
   // SC-06: WHATWG already normalized decimal/hex/octal/short IPv4 forms into dotted quads.
   if (isIpLiteral(hostname)) reject('IP_LITERAL')
 
+  // SC-08 before the shape check, so `localhost` is reported as reserved, not malformed.
+  if (RESERVED_HOST_SUFFIXES.some((s) => hostname === s || hostname.endsWith(`.${s}`))) {
+    reject('RESERVED_NAME')
+  }
+
   const labels = hostname.split('.')
   if (
     hostname.length === 0 ||
@@ -90,11 +95,6 @@ function assertHostname(url: URL): void {
     !labels.every(isValidLabel)
   ) {
     reject('HOSTNAME_SHAPE')
-  }
-
-  // SC-08
-  if (RESERVED_HOST_SUFFIXES.some((s) => hostname === s || hostname.endsWith(`.${s}`))) {
-    reject('RESERVED_NAME')
   }
 }
 
