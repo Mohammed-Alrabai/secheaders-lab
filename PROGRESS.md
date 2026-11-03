@@ -45,6 +45,8 @@ Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08
 
 ## Log
 
+- 2026-11-03 — 0.4: Strict `tsconfig` (`05` §1 flags + `noImplicitReturns`, target ES2022). ESLint flat config: next core-web-vitals + next/typescript + `typescript-eslint` strict/stylistic type-checked + `eslint-plugin-security`, `no-console`, `no-non-null-assertion`, and a `no-restricted-syntax` rule blocking physical-direction Tailwind classes in `src/app`/`src/components` (verified with a probe file). Prettier: 100 cols, single quotes, trailing commas, no semicolons (kept from shadcn output so generated components stay close to upstream); hand-written Markdown excluded. lint ✅ typecheck ✅.
+
 - 2026-11-03 — 0.3b: Preset tokens verified programmatically against `08` §2 (exact match). Added `08` §4 tokens + `@theme inline` mappings, font roles per `:lang()`, `src/app/fonts.ts` (Oxanium, JetBrains Mono; IBM Plex Sans Arabic + Changa with `preload: false`). Brand SVGs moved to `public/brand/`, `favicon.svg` copied to `src/app/icon.svg`, `assets/` removed. `pnpm build` ✅.
 
 - 2026-11-03 — 0.3: Scaffolded via `.scaffold-tmp`, moved into `src/` layout (app, components, hooks, lib); generated CLAUDE.md/AGENTS.md/README/favicon.ico discarded. All versions exact-pinned. pnpm 12 minimum-release-age policy flagged tailwindcss/@tailwindcss/postcss 4.3.4 and lucide-react 1.67.0 as too fresh → pinned 4.3.3 / 1.66.0 instead of adding exclusions. Build scripts denied for `@swc/core`, `@parcel/watcher` (prebuilt binaries). Confirmed in bundled Next 16.4 docs: `middleware.ts` is deprecated → `proxy.ts`. `pnpm build` ✅.

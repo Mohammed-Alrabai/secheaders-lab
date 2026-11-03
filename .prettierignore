@@ -1,7 +1,14 @@
-dist/
 node_modules/
 .next/
-.turbo/
+out/
+build/
 coverage/
+playwright-report/
+test-results/
+.corepack-bin/
 pnpm-lock.yaml
-.pnpm-store/
+next-env.d.ts
+
+# Planning documents are authored by hand; keep their formatting.
+*.md
+docs/
