@@ -1,0 +1,14 @@
+{
+  "common": {
+    "appName": "SecHeaders Lab"
+  },
+  "home": {
+    "metaTitle": "SecHeaders Lab — فحص أمني سلبي للمواقع",
+    "tagline": "فحص أمني سلبي للمواقع",
+    "placeholder": "أداة الفحص قيد الإنشاء."
+  },
+  "notFound": {
+    "title": "الصفحة غير موجودة",
+    "description": "الصفحة التي تبحث عنها غير موجودة."
+  }
+}
