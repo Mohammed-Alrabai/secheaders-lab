@@ -26,6 +26,15 @@ test('unknown locale returns 404', async ({ page }) => {
   expect(response?.status()).toBe(404)
 })
 
+test('responses carry baseline security headers and no X-Powered-By', async ({ request }) => {
+  const response = await request.get('/en')
+  const headers = response.headers()
+  expect(headers['x-powered-by']).toBeUndefined()
+  expect(headers['x-content-type-options']).toBe('nosniff')
+  expect(headers['x-frame-options']).toBe('DENY')
+  expect(headers['content-security-policy']).toContain("frame-ancestors 'none'")
+})
+
 test('no locale cookie is set (ADR-017)', async ({ page, context }) => {
   await page.goto('/ar')
   expect(await context.cookies()).toEqual([])
