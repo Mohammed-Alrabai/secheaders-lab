@@ -45,6 +45,8 @@ Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08
 
 ## Log
 
+- 2026-11-03 — 0.3b: Preset tokens verified programmatically against `08` §2 (exact match). Added `08` §4 tokens + `@theme inline` mappings, font roles per `:lang()`, `src/app/fonts.ts` (Oxanium, JetBrains Mono; IBM Plex Sans Arabic + Changa with `preload: false`). Brand SVGs moved to `public/brand/`, `favicon.svg` copied to `src/app/icon.svg`, `assets/` removed. `pnpm build` ✅.
+
 - 2026-11-03 — 0.3: Scaffolded via `.scaffold-tmp`, moved into `src/` layout (app, components, hooks, lib); generated CLAUDE.md/AGENTS.md/README/favicon.ico discarded. All versions exact-pinned. pnpm 12 minimum-release-age policy flagged tailwindcss/@tailwindcss/postcss 4.3.4 and lucide-react 1.67.0 as too fresh → pinned 4.3.3 / 1.66.0 instead of adding exclusions. Build scripts denied for `@swc/core`, `@parcel/watcher` (prebuilt binaries). Confirmed in bundled Next 16.4 docs: `middleware.ts` is deprecated → `proxy.ts`. `pnpm build` ✅.
 
 - 2026-11-03 — 0.2: `git init` (main), `.gitignore`, `.editorconfig`, `.nvmrc` (24), MIT `LICENSE`. Moved `KICKOFF-PROMPT.md` → `docs/`, `logo-preview.png` → `docs/brand/`. ADR-009 marked Accepted; ADR-010…017 added. Commits use the global git identity (user choice) with a Claude co-author trailer.

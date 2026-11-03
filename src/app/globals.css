@@ -73,9 +73,63 @@
     --sidebar-ring: oklch(0.547 0.021 43.1);
 }
 
+/* Extended semantic tokens (08 §4, ADR-016). Not part of the preset. */
+:root {
+    --success: oklch(0.596 0.145 163.225);
+    --success-foreground: oklch(0.979 0.021 166.113);
+    --warning: oklch(0.769 0.188 70.08);
+    --warning-foreground: oklch(0.279 0.077 45.635);
+    --info: var(--primary);
+    --info-foreground: var(--primary-foreground);
+
+    --grade-a-plus: oklch(0.527 0.154 150.069);
+    --grade-a: oklch(0.627 0.194 149.214);
+    --grade-b: oklch(0.648 0.2 131.684);
+    --grade-c: oklch(0.769 0.188 70.08);
+    --grade-d: oklch(0.646 0.222 41.116);
+    --grade-f: var(--destructive);
+}
+
+.dark {
+    --success: oklch(0.696 0.17 162.48);
+    --success-foreground: oklch(0.262 0.051 172.552);
+    --warning: oklch(0.828 0.189 84.429);
+    --warning-foreground: oklch(0.279 0.077 45.635);
+    --grade-a-plus: oklch(0.723 0.219 149.579);
+    --grade-a: oklch(0.792 0.209 151.711);
+    --grade-b: oklch(0.841 0.238 128.85);
+    --grade-c: oklch(0.828 0.189 84.429);
+    --grade-d: oklch(0.75 0.183 55.934);
+}
+
+/* Font roles per locale (08 §3). Variables come from next/font classes on <html>. */
+:root {
+    --font-sans: var(--font-oxanium);
+    --font-heading: var(--font-jetbrains-mono);
+    --font-mono: var(--font-jetbrains-mono);
+}
+
+:root:lang(ar) {
+    --font-sans: var(--font-ibm-plex-sans-arabic);
+    --font-heading: var(--font-changa);
+}
+
 @theme inline {
     --font-sans: var(--font-sans);
     --font-heading: var(--font-heading);
+    --font-mono: var(--font-mono);
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
+    --color-warning: var(--warning);
+    --color-warning-foreground: var(--warning-foreground);
+    --color-info: var(--info);
+    --color-info-foreground: var(--info-foreground);
+    --color-grade-a-plus: var(--grade-a-plus);
+    --color-grade-a: var(--grade-a);
+    --color-grade-b: var(--grade-b);
+    --color-grade-c: var(--grade-c);
+    --color-grade-d: var(--grade-d);
+    --color-grade-f: var(--grade-f);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -128,5 +182,12 @@
     }
   html {
     @apply font-sans;
+    line-height: 1.6;
+    }
+  html:lang(ar) {
+    line-height: 1.7;
+    }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
     }
 }

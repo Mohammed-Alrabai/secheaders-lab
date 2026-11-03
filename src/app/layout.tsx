@@ -1,11 +1,6 @@
-import { JetBrains_Mono, Oxanium } from "next/font/google"
-
 import "./globals.css"
+import { fontVariables } from "./fonts"
 import { cn } from "@/lib/utils"
-
-const jetbrainsMonoHeading = JetBrains_Mono({ subsets: ["latin"], variable: "--font-heading" })
-
-const oxanium = Oxanium({ subsets: ["latin"], variable: "--font-sans" })
 
 export default function RootLayout({
   children,
@@ -13,10 +8,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html
-      lang="en"
-      className={cn("antialiased", "font-sans", oxanium.variable, jetbrainsMonoHeading.variable)}
-    >
+    <html lang="en" className={cn("antialiased", fontVariables("en"))}>
       <body>{children}</body>
     </html>
   )
