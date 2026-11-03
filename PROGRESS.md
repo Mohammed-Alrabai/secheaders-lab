@@ -6,13 +6,13 @@
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 0 — in progress (0.1, 0.2 done) |
+| Current phase | Phase 0 — complete, awaiting gate approval |
 | Last gate approved | Phase 0 kickoff approved by user, 2026-11-03 (defaults accepted) |
 | Blockers | none |
 
 ## Phase checklist
 
-- [ ] Phase 0 — Environment & scaffold
+- [x] Phase 0 — Environment & scaffold (report posted 2026-11-03, awaiting approval)
 - [ ] Phase 1 — Secure fetch layer (SSRF) — **security gate**
 - [ ] Phase 2 — Checks & scoring engine
 - [ ] Phase 3 — API endpoint
@@ -46,6 +46,8 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-03 — 0.6 (closed): Chromium download stalled > 20 min and was stopped. Added optional local `PLAYWRIGHT_CHANNEL` (`msedge` / `chrome`) to reuse an installed browser; ignored in CI, which keeps the bundled Chromium. E2E 6/6 ✅ with Edge (redirect `/`→`/en`, `lang`/`dir` for en/ar, 404 for `/fr`, security headers + no `X-Powered-By`, no cookies). Local run: `$env:PLAYWRIGHT_CHANNEL='msedge'` then `corepack pnpm test:e2e`.
 
 - 2026-11-03 — 0.9: `.github/workflows/ci.yml` (verify: frozen install → lint → typecheck → coverage → build → Playwright e2e → `pnpm audit --audit-level=high`; Gitleaks; Semgrep container 1.183.0 with `p/owasp-top-ten`, `p/typescript`, `p/nextjs`, `p/secrets`, ERROR severity blocks), `codeql.yml` (javascript-typescript, security-extended, weekly + PR, job-level `security-events: write`), `.github/dependabot.yml` (npm + actions weekly, minor/patch grouped, majors ignored per `CLAUDE.md` §5). All actions pinned to commit SHAs resolved with `git ls-remote` (user approved; codeql-action tag is annotated → peeled commit used). YAML validated with Prettier; not pushed. Local `pnpm audit`: 0 high/critical; 1 low (`deepmerge` via `shadcn` CLI, no patch) and 1 moderate (`minimatch` <11.0.1 via `typescript-eslint`) — both dev-only tooling, tracked as T-9.
 

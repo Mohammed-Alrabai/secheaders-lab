@@ -17,7 +17,19 @@ export default defineConfig({
     baseURL,
     trace: 'retain-on-failure',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        // Optional locally: reuse an installed Chromium-based browser ('msedge' | 'chrome')
+        // instead of downloading Playwright's build. CI always uses the bundled Chromium.
+        ...(process.env.PLAYWRIGHT_CHANNEL && !process.env.CI
+          ? { channel: process.env.PLAYWRIGHT_CHANNEL }
+          : {}),
+      },
+    },
+  ],
   webServer: {
     command: `pnpm start --port ${String(PORT)}`,
     url: baseURL,
