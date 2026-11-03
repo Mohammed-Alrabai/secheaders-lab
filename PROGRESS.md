@@ -6,14 +6,14 @@
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 0 — complete, awaiting gate approval |
-| Last gate approved | Phase 0 kickoff approved by user, 2026-11-03 (defaults accepted) |
+| Current phase | Phase 1 — complete, awaiting security gate approval |
+| Last gate approved | Phase 0, approved by user 2026-11-03 |
 | Blockers | none |
 
 ## Phase checklist
 
-- [x] Phase 0 — Environment & scaffold (report posted 2026-11-03, awaiting approval)
-- [ ] Phase 1 — Secure fetch layer (SSRF) — **security gate**
+- [x] Phase 0 — Environment & scaffold (approved 2026-11-03)
+- [x] Phase 1 — Secure fetch layer (SSRF) — **security gate** (report posted 2026-11-03, awaiting approval)
 - [ ] Phase 2 — Checks & scoring engine
 - [ ] Phase 3 — API endpoint
 - [ ] Phase 4 — UI & i18n — **Arabic copy review gate**
@@ -34,6 +34,9 @@
 | T-8 | Add explicit tests + denylist for 6to4, Teredo, `64:ff9b:1::/48` (strengthens SC-12) | Agent (Phase 1) |
 | T-9 | Dev-only advisories: `deepmerge` (low, via shadcn CLI) and `minimatch` (moderate, via typescript-eslint); re-check on each Dependabot run | Agent (ongoing) |
 | T-10 | Confirm Dependabot handles the pnpm 12 lockfile once the repo is on GitHub | Agent (Phase 6) |
+| T-11 | Header values arrive as latin1-decoded bytes (e.g. U+202E shows as `â\x80®`). The UI sanitizer (SC-31) must decode UTF-8 for display and then strip bidi/control chars; SSRF case 22 UI half is a Phase 4/5 test | Agent (Phase 4) |
+| T-12 | SC-20 display truncation (2 KB per value) and `set-cookie` value redaction (ADR-015) happen when building `ScanResult.rawHeaders` | Agent (Phase 2, task 2.5) |
+| T-13 | ADR-013 fallback: `safeFetch` reports TLS failures as `TARGET_UNREACHABLE` / `TLS_FAILURE`; `scan()` must catch that detail and retry `http://` | Agent (Phase 2, task 2.5) |
 
 ## Justified exceptions (`any`, `eslint-disable`, `@ts-expect-error`)
 
@@ -46,6 +49,14 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-03 — Phase 1 complete. Added `undici` 8.12.3, `ipaddr.js` 2.5.0, `selfsigned` 5.5.0 (dev) from the approved list. Modules: `errors.ts` (1.1), `url-policy.ts` (1.2), `ip-policy.ts` (1.3), `dns.ts` (1.4), `safe-fetch.ts` (1.5), `tls-inspect.ts` (1.6), test helpers (1.7), SSRF matrix 24/24 + extra cases (1.8). 383 tests ✅; `src/lib/scanner/**` 100% lines / 100% branches; lint, typecheck, build ✅. ADR-018, ADR-019. Notes:
+  - SC-10: Node 24 deprecates `verbatim: true`; the identical `order: 'verbatim'` is used.
+  - SC-01 stricter: all percent-encoded `%00–%1F` and `%7F` are rejected, not only CR/LF.
+  - SC-07 stricter: labels must be LDH (+ `_`), 1–63 chars, no leading/trailing hyphen.
+  - SC-12 + T-8 stronger: IPv6 must be inside `2000::/3`; explicit deny lists back up ipaddr.js (6to4, Teredo, NAT64 incl. `64:ff9b:1::/48`, IPv4-compatible `::/96`, ORCHID, `3fff::/20`).
+  - SC-13: the connector dials the validated IP as `hostname` with the real name as TLS `servername`; no DNS happens at socket level. Verified by spying on `tls.connect` / `net.connect` in the production path.
+  - Network guard caught one test trying to TLS-inspect a public IP before it connected; test corrected to dial the local server.
 
 - 2026-11-03 — 0.6 (closed): Chromium download stalled > 20 min and was stopped. Added optional local `PLAYWRIGHT_CHANNEL` (`msedge` / `chrome`) to reuse an installed browser; ignored in CI, which keeps the bundled Chromium. E2E 6/6 ✅ with Edge (redirect `/`→`/en`, `lang`/`dir` for en/ar, 404 for `/fr`, security headers + no `X-Powered-By`, no cookies). Local run: `$env:PLAYWRIGHT_CHANNEL='msedge'` then `corepack pnpm test:e2e`.
 

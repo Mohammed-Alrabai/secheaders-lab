@@ -107,3 +107,15 @@ Format per entry: **ADR-NNN — Title** · Date · Status (Accepted / Superseded
 **Context:** next-intl sets `NEXT_LOCALE` by default. Our own responses would then carry a `Set-Cookie`, which our own CK rules penalise and which breaks the "own header set = 100 / A+" goal.
 **Decision:** `localeCookie: false`. The locale comes from the URL prefix; `/` negotiates from `Accept-Language`.
 **Consequences:** Returning visitors to `/` are negotiated again instead of remembered (acceptable).
+
+### ADR-018 — TLS inspection socket accepts TLS 1.0/1.1
+2026-11-03 · Accepted
+**Context:** Node defaults to `minVersion: TLSv1.2` and OpenSSL 3 disables TLS 1.0/1.1 ciphers at the default security level. A TLS 1.0-only site would fail the handshake and be scored as `TLS-AVAILABLE` fail (F) instead of `TLS-PROTOCOL` fail with `CAP-OLD-TLS` (C), which is what `04` §4.2 intends.
+**Decision:** Only the read-only inspection socket in `tls-inspect.ts` sets `minVersion: 'TLSv1'` and `ciphers: 'DEFAULT:@SECLEVEL=0'`. It already uses `rejectUnauthorized: false` per SC-21, sends no application data and is destroyed after the handshake. The page fetch keeps Node's strict defaults.
+**Consequences:** Old protocols are reported correctly. No data is ever exchanged over a weak session. Covered by an integration test against a TLS 1.1-only server.
+
+### ADR-019 — Redirect to an IP literal or reserved name is BLOCKED_TARGET
+2026-11-03 · Accepted
+**Context:** The SSRF matrix (`03` §9) expects `BLOCKED_TARGET` for a redirect to `http://169.254.169.254/` (case 15) and `INVALID_URL` for a redirect to `file:///` or a non-default port (case 17). The URL policy alone reports IP literals as `INVALID_URL`.
+**Decision:** On redirect hops only, `IP_LITERAL` and `RESERVED_NAME` policy failures are reported as `BLOCKED_TARGET`; everything else stays `INVALID_URL`. User input is unchanged (`INVALID_URL`, cases 1–11). Reserved names are now checked before hostname shape, so bare `localhost` reports `RESERVED_NAME`.
+**Consequences:** Error codes match the matrix exactly; both codes reject, so no control is relaxed.
