@@ -1,0 +1,12 @@
+packages: []
+
+savePrefix: ''
+
+# Only packages that need a native build step may run install scripts.
+# @swc/core and @parcel/watcher (via next-intl) ship prebuilt binaries as optional deps.
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+  msw: false
+  '@swc/core': false
+  '@parcel/watcher': false

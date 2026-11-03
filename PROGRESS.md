@@ -37,7 +37,15 @@
 
 _none_
 
+## shadcn-installed packages (`05` §6)
+
+`shadcn init --preset b3JA2ZBtnk --template next --rtl --pointer --no-monorepo` (shadcn 4.23.0, style `base-rhea`, Base UI primitives) added:
+`@base-ui/react` 1.9.0 · `class-variance-authority` 0.7.1 · `cn` 0.5.2 (shadcn-ui/cn, replaces clsx + tailwind-merge) · `tw-animate-css` 1.4.0 · `shadcn` 4.23.0 (dev; provides `shadcn/tailwind.css`) · `lucide-react`.
+Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
+
 ## Log
+
+- 2026-11-03 — 0.3: Scaffolded via `.scaffold-tmp`, moved into `src/` layout (app, components, hooks, lib); generated CLAUDE.md/AGENTS.md/README/favicon.ico discarded. All versions exact-pinned. pnpm 12 minimum-release-age policy flagged tailwindcss/@tailwindcss/postcss 4.3.4 and lucide-react 1.67.0 as too fresh → pinned 4.3.3 / 1.66.0 instead of adding exclusions. Build scripts denied for `@swc/core`, `@parcel/watcher` (prebuilt binaries). Confirmed in bundled Next 16.4 docs: `middleware.ts` is deprecated → `proxy.ts`. `pnpm build` ✅.
 
 - 2026-11-03 — 0.2: `git init` (main), `.gitignore`, `.editorconfig`, `.nvmrc` (24), MIT `LICENSE`. Moved `KICKOFF-PROMPT.md` → `docs/`, `logo-preview.png` → `docs/brand/`. ADR-009 marked Accepted; ADR-010…017 added. Commits use the global git identity (user choice) with a Claude co-author trailer.
 - 2026-11-03 — 0.1: Node v24.21.0, Corepack 0.36.0, git 2.52.0; pnpm not on PATH → run via `corepack pnpm` (ADR-011). Latest stable at start: next 16.4.4, pnpm 12.16.1, shadcn 4.23.0, next-intl 4.14.9, tailwindcss 4.3.4; TypeScript pinned 6.0.x and ESLint 9.39.x (ADR-012).

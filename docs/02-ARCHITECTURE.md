@@ -60,7 +60,7 @@ secheaders-lab/
 │  │  └─ robots.ts · sitemap.ts
 │  ├─ components/              # UI (ScanForm, GradeBadge, FindingCard, FixTabs, CodeBlock, ...)
 │  ├─ i18n/                    # next-intl routing + request config
-│  ├─ middleware.ts            # locale routing + CSP nonce
+│  ├─ proxy.ts                 # locale routing + CSP nonce (Next 16 rename of middleware.ts)
 │  └─ lib/
 │     ├─ scanner/
 │     │  ├─ index.ts           # scan() orchestrator + overall time budget

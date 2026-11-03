@@ -42,3 +42,6 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+# process-local corepack shims (ADR-011)
+.corepack-bin/
