@@ -45,6 +45,8 @@ Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08
 
 ## Log
 
+- 2026-11-03 — 0.5: `vitest.config.ts` (node env, coverage v8 on `src/lib/**`, thresholds: overall 85% lines, `src/lib/scanner/**` 95% lines+branches). `tests/setup/network-guard.ts` fails closed: throws on non-loopback IP-literal sockets, wraps injected `lookup` functions so they must resolve to loopback (handles Node's `all: true` form), blocks real DNS except `localhost`. 18 guard tests + 2 sample tests pass. **Incident:** the first guard draft missed `net.connect()`'s normalized `[[options, cb]]` argument shape, so two guard tests made real outbound connection attempts (to `93.184.215.14:80` and `1.1.1.1:443`, no data sent) before the fix; the guard now has tests for both call shapes.
+
 - 2026-11-03 — 0.4: Strict `tsconfig` (`05` §1 flags + `noImplicitReturns`, target ES2022). ESLint flat config: next core-web-vitals + next/typescript + `typescript-eslint` strict/stylistic type-checked + `eslint-plugin-security`, `no-console`, `no-non-null-assertion`, and a `no-restricted-syntax` rule blocking physical-direction Tailwind classes in `src/app`/`src/components` (verified with a probe file). Prettier: 100 cols, single quotes, trailing commas, no semicolons (kept from shadcn output so generated components stay close to upstream); hand-written Markdown excluded. lint ✅ typecheck ✅.
 
 - 2026-11-03 — 0.3b: Preset tokens verified programmatically against `08` §2 (exact match). Added `08` §4 tokens + `@theme inline` mappings, font roles per `:lang()`, `src/app/fonts.ts` (Oxanium, JetBrains Mono; IBM Plex Sans Arabic + Changa with `preload: false`). Brand SVGs moved to `public/brand/`, `favicon.svg` copied to `src/app/icon.svg`, `assets/` removed. `pnpm build` ✅.
