@@ -45,6 +45,8 @@ Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08
 
 ## Log
 
+- 2026-11-03 — 0.8: `src/lib/env.ts` (zod): `NEXT_PUBLIC_SITE_URL` (http/https only, normalized to origin, required in production), `SCAN_TOTAL_BUDGET_MS` 1000–20000 (default 8000), `SCAN_RATE_LIMIT_PER_MIN` 1–100 (default 10); errors never echo values. `.env.example` committed. 45 tests ✅, `src/lib` coverage 100%.
+
 - 2026-11-03 — 0.7: next-intl routing (`/en`, `/ar`, prefix always, `localeCookie: false` per ADR-017) via `src/proxy.ts`; `[locale]` root layout sets `lang`/`dir` and per-locale font variables; placeholder home + localized 404. Request config uses `next/root-params` (next-intl 4.14 deprecates `requestLocale`/`setRequestLocale`); `typecheck` now runs `next typegen` first. Message parity test (keys + ICU placeholders + non-empty). 29 unit tests ✅, build ✅ (`/[locale]` dynamic, ADR-014). E2E smoke written; run pending Chromium download.
 - 2026-11-03 — 0.6: `playwright.config.ts` (Chromium, `next start` on :3100, traces on failure) + smoke spec. Chromium download from `cdn.playwright.dev` failed twice (ECONNRESET, then ENOTFOUND); retry running.
 
