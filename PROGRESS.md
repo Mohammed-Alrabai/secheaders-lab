@@ -32,6 +32,8 @@
 | T-6 | SC-25 Origin check vs Netlify deploy-preview origins | Agent (Phase 3) |
 | T-7 | Verify `sonner` / Radix runtime `<style>` injection under nonce CSP | Agent (Phase 5) |
 | T-8 | Add explicit tests + denylist for 6to4, Teredo, `64:ff9b:1::/48` (strengthens SC-12) | Agent (Phase 1) |
+| T-9 | Dev-only advisories: `deepmerge` (low, via shadcn CLI) and `minimatch` (moderate, via typescript-eslint); re-check on each Dependabot run | Agent (ongoing) |
+| T-10 | Confirm Dependabot handles the pnpm 12 lockfile once the repo is on GitHub | Agent (Phase 6) |
 
 ## Justified exceptions (`any`, `eslint-disable`, `@ts-expect-error`)
 
@@ -44,6 +46,8 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-03 — 0.9: `.github/workflows/ci.yml` (verify: frozen install → lint → typecheck → coverage → build → Playwright e2e → `pnpm audit --audit-level=high`; Gitleaks; Semgrep container 1.183.0 with `p/owasp-top-ten`, `p/typescript`, `p/nextjs`, `p/secrets`, ERROR severity blocks), `codeql.yml` (javascript-typescript, security-extended, weekly + PR, job-level `security-events: write`), `.github/dependabot.yml` (npm + actions weekly, minor/patch grouped, majors ignored per `CLAUDE.md` §5). All actions pinned to commit SHAs resolved with `git ls-remote` (user approved; codeql-action tag is annotated → peeled commit used). YAML validated with Prettier; not pushed. Local `pnpm audit`: 0 high/critical; 1 low (`deepmerge` via `shadcn` CLI, no patch) and 1 moderate (`minimatch` <11.0.1 via `typescript-eslint`) — both dev-only tooling, tracked as T-9.
 
 - 2026-11-03 — 0.10: `poweredByHeader: false`; own headers from `03` §6 defined once in `src/lib/security-headers.ts` and applied by `next.config.ts` to every path (no `netlify.toml` duplicate). Baseline CSP limited to `object-src`/`base-uri`/`form-action`/`frame-ancestors`/`upgrade-insecure-requests`; nonce CSP in Phase 5. Unit tests + e2e header assertion. 54 tests ✅, build ✅.
 
