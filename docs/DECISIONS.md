@@ -185,3 +185,27 @@ Format per entry: **ADR-NNN — Title** · Date · Status (Accepted / Superseded
 **Context:** Next.js applies a nonce it finds in the request's CSP header; our proxy also runs next-intl routing.
 **Decision:** The proxy builds the `03` §6 CSP with a 128-bit nonce, sets it (and `x-nonce`) on the request it passes to next-intl (which forwards request headers), then sets the same CSP on the response. Static security headers stay in `next.config.ts`; API and brand files get locked-down CSPs.
 **Verification:** Production build, all pages exercised: 0 CSP violations; positive controls show an injected inline event handler, a parser-inserted inline script and an inline `<style>` are each blocked and reported. Scripts created by already-running JavaScript are allowed by `'strict-dynamic'` by design. No runtime `<style>` injection from Base UI (T-7 closed).
+
+### ADR-031 — `--link` token for primary-coloured text
+2026-11-07 · Accepted
+**Context:** The contrast test (`08` §4 pairings, both themes) found dark `--primary` used as text on `--background` at 2.6:1, below WCAG AA 4.5:1. `--primary` itself is a preset token and must not change.
+**Decision:** Add `--link` (`text-link`): light = `var(--primary)`, dark = `var(--sidebar-primary)`. Text and links use `text-link`; `--primary` stays for fills (buttons, focus rings). The muted chip uses the same tint/mix formula as the other chips.
+**Consequences:** Every token pairing passes AA in both themes, enforced by `tests/unit/contrast.test.ts`. Preset tokens unchanged.
+
+### ADR-032 — Open Graph images rendered by the browser, committed as PNGs
+2026-11-07 · Accepted (deviation from `src/app/[locale]/opengraph-image.tsx` in `08` §9; the output meets `06` §6 "static, branded, EN and AR")
+**Context:** `next/og` (Satori) does not shape Arabic text (no contextual letter forms, no bidi), and loading fonts for it at runtime would add a fetch path we do not need.
+**Decision:** `pnpm og:generate` runs a Playwright spec (`playwright.og.config.ts`) that renders a 1200×630 card with the app's own self-hosted fonts and tokens and saves `public/og/{en,ar}.png`. The locale layout references them in `openGraph` / `twitter` metadata via `metadataBase`.
+**Consequences:** Correct Arabic shaping, zero runtime cost, static files covered by our headers. Images must be regenerated when the tagline or brand changes.
+
+### ADR-033 — Zod runs jitless
+2026-11-07 · Accepted
+**Context:** Zod 4 probes `Function('')` on first parse to decide whether to JIT-compile schemas. Our page CSP forbids eval, so the probe is blocked: harmless, but Chrome records a CSP issue (Lighthouse Best Practices 96 on the results page).
+**Decision:** `z.config({ jitless: true })` in `src/lib/schemas.ts`, the only module that parses on the client. The CSP e2e test also fails on DevTools `ContentSecurityPolicyIssue`s, not only `securitypolicyviolation` events.
+**Consequences:** No eval attempt anywhere; CSP unchanged. Parsing a ~20 KB result without JIT is negligible.
+
+### ADR-034 — Lighthouse target scope (NFR-01)
+2026-11-07 · Proposed (needs the user's decision)
+**Context:** Home and About in both locales score ≥ 95 on all four categories. The results page (`/en/scan?url=example.com`, live scan) scores Performance 89 (LCP 3.7 s: the largest element is the report, which can only render after the scan of a third-party site returns) and SEO 66 (`noindex` is required by `06` §6).
+**Proposal:** Apply the "≥ 95 ×4" target to the indexable pages; record results-page scores as informational with Accessibility and Best Practices still required at 100.
+**Consequences:** No change to `noindex`; no artificial LCP tricks.

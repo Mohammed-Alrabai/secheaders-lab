@@ -6,8 +6,8 @@
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 4 — complete, awaiting UI + Arabic copy review |
-| Last gate approved | Phase 3, approved by user 2026-11-07 |
+| Current phase | Phase 5 — complete, awaiting approval |
+| Last gate approved | Phase 4, approved by user 2026-11-07 |
 | Blockers | none |
 
 ## Phase checklist
@@ -16,8 +16,8 @@
 - [x] Phase 1 — Secure fetch layer (SSRF) — **security gate** (approved 2026-11-07)
 - [x] Phase 2 — Checks & scoring engine (approved 2026-11-07)
 - [x] Phase 3 — API endpoint (approved 2026-11-07)
-- [x] Phase 4 — UI & i18n — **Arabic copy review gate** (report posted 2026-11-07, awaiting review)
-- [ ] Phase 5 — Report, self-hardening, E2E
+- [x] Phase 4 — UI & i18n — **Arabic copy review gate** (approved 2026-11-07)
+- [x] Phase 5 — Report, self-hardening, E2E (report posted 2026-11-07, awaiting approval)
 - [ ] Phase 6 — Docs, repository & deploy — **approval per step**
 
 ## Open TODOs
@@ -28,9 +28,9 @@
 | T-2 | Provide LinkedIn profile URL for footer | User (Phase 6) — `https://www.linkedin.com/in/mohammed-alrabai` |
 | T-3 | Netlify docs verified 2026-11-07 (ADR-024): 60 s sync limit, code-based rate limits on all plans (2 rules on free). Still to do at deploy: add the `netlify.toml` redirect rate-limit rule and confirm it blocks the 11th request/min on `/api/scan` | Agent (Phase 6) |
 | ~~T-4~~ | ~~Scoring spec gaps~~ — resolved 2026-11-07 (ADR-020…023) | Done |
-| T-5 | Remove obsolete `interest-cohort=()` from own Permissions-Policy (needs approval, `03` §6) | User (Phase 5) |
+| ~~T-5~~ | ~~Remove obsolete `interest-cohort=()`~~ — approved and done (ADR-029) | Done |
 | T-6 | SC-25 Origin check vs Netlify deploy-preview origins | Agent (Phase 3) |
-| T-7 | Verify `sonner` / Radix runtime `<style>` injection under nonce CSP | Agent (Phase 5) |
+| ~~T-7~~ | ~~Runtime `<style>` injection under nonce CSP~~ — none from Base UI; 0 violations (ADR-030) | Done |
 | T-8 | Add explicit tests + denylist for 6to4, Teredo, `64:ff9b:1::/48` (strengthens SC-12) | Agent (Phase 1) |
 | T-9 | Dev-only advisories: `deepmerge` (low, via shadcn CLI) and `minimatch` (moderate, via typescript-eslint); re-check on each Dependabot run | Agent (ongoing) |
 | T-10 | Confirm Dependabot handles the pnpm 12 lockfile once the repo is on GitHub | Agent (Phase 6) |
@@ -42,7 +42,8 @@
 | ~~T-16~~ | ~~platform 429 without `Retry-After`~~ — handled (status fallback) + e2e | Done |
 | T-17 | Footer GitHub link once the repository exists | Agent (Phase 6) |
 | T-18 | Optional: the brand SVGs carry a ~7.7 KB C2PA provenance block each (62% of the file); strip only if the user wants | User |
-| T-19 | Arabic copy review by the user (Phase 4 gate); apply feedback before Phase 5 | User |
+| ~~T-19~~ | ~~Arabic copy review~~ — approved with Phase 4 | Done |
+| T-20 | Lighthouse target scope for the results page (ADR-034, proposed) | User (Phase 5 gate) |
 
 ## Justified exceptions (`any`, `eslint-disable`, `@ts-expect-error`)
 
@@ -55,6 +56,16 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-07 — Phase 5 complete (pending approval). Tasks:
+  - 5.1 Print / Save as PDF (FR-09): A4, page numbers, print header (product, target, date), failing/warning findings expanded, selected platform's fix only, controls hidden, light palette always (dark tokens screen-only). E2E saves EN/AR PDFs to `test-results/`.
+  - 5.2 Nonce CSP per request in `proxy.ts` (ADR-030), final own headers from `03` §6; `interest-cohort` removed (ADR-029, approved). API and `/brand` get locked-down CSPs.
+  - 5.2b Contrast test for every `08` §4 pairing in both themes (`--link` token, ADR-031); OG images EN/AR rendered by the browser (ADR-032); canonical + hreflang per page, `robots.txt`, `sitemap.xml`.
+  - 5.3 E2E: axe WCAG 2.2 AA on 5 pages × 2 locales × 2 themes, keyboard-only flow, CSP violations + DevTools CSP issues, print.
+  - 5.4 The headers our production server actually sends score 100 / A+ (e2e) and the configured set scores 100 / A+ (unit).
+  - 5.5 Lighthouse 13.6.0 (`pnpm dlx`, approved; Chrome headless, mobile profile, local production build). Perf / A11y / BP / SEO: `/en` 100/100/100/100, `/ar` 100/100/100/100, `/en/about` 100/100/100/100, `/ar/about` 98/100/100/100, `/en/scan?url=example.com` 89/100/100/66 (live scan LCP 3.7 s; `noindex` by design) — ADR-034 proposed.
+  - Gate: lint, typecheck, build ✅; 1173 unit/integration tests ✅ (99.8% statements, 98.9% branches); 46 e2e ✅ (Edge).
+  - Bugs caught: print override lost to preflight's `!important [hidden]` (early cascade layer); dark palette leaking into print; dark `--primary` text at 2.6:1; destructive alert text contrast; scroll regions not keyboard-reachable; unknown paths lost `lang`/`dir` (localized catch-all); `/about` canonicalized to home; Zod's eval probe logged a CSP issue (ADR-033, test now catches DevTools CSP issues).
 
 - 2026-11-07 — Phase 4 complete (pending the user's UI + Arabic review). shadcn components added: input, label, card, badge, tabs, collapsible, separator, skeleton, alert, dropdown-menu, table (no new packages; Base UI already present); `sonner`, `tooltip`, `progress`, `scroll-area` not installed (ADR-027). Layout + server-resolved theme (ADR-026), header/footer/skip link/language switch, home + `ScanForm` (client check proven to agree with the server policy), results page (`ScanRunner`, `ScanReport`, `FindingCard`, `FixTabs`, `CodeBlock`, `CopyButton`), loading/error states, methodology page rendered from `rules.ts`/`scoring.ts`, full EN/AR copy, `sanitize.ts` (SC-29…31, T-11). Tests: 1119 unit/integration ✅, 21 e2e ✅ (twice, Edge); lint, typecheck, build ✅; no horizontal overflow at 360 px on any page in either language. Notes:
   - Bugs caught: Arabic «−20 نقطة» rendered as «20- نقطة» in RTL → rephrased «خصم 20 نقطة»; e2e load timeouts with 6 workers → 3 workers.
