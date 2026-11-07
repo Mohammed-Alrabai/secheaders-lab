@@ -14,3 +14,22 @@ export const RAW_HEADER_MAX = 2048
 
 /** SC-23: maximum request body size for `POST /api/scan`. */
 export const MAX_REQUEST_BYTES = 4096
+
+/**
+ * SC-08: reserved / internal names and suffixes. A hostname is rejected if it equals one of
+ * these or ends with `.<suffix>`. `example.com/.net/.org` are public and stay allowed.
+ */
+export const RESERVED_HOST_SUFFIXES: readonly string[] = [
+  'localhost',
+  'local',
+  'internal',
+  'intranet',
+  'lan',
+  'home.arpa',
+  'corp',
+  'test',
+  'invalid',
+  'example',
+  'onion',
+  'arpa',
+]

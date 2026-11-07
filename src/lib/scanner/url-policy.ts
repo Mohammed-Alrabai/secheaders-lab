@@ -3,34 +3,15 @@ import { isIP } from 'node:net'
 import ipaddr from 'ipaddr.js'
 
 import { ScanError } from './errors'
-import { MAX_URL_LENGTH } from './limits'
+import { MAX_URL_LENGTH, RESERVED_HOST_SUFFIXES } from './limits'
 
-export { MAX_URL_LENGTH } from './limits'
+export { MAX_URL_LENGTH, RESERVED_HOST_SUFFIXES } from './limits'
 
 /** SC-05: only default ports may be targeted. */
 const ALLOWED_PORTS = new Set(['', '80', '443'])
 
 /** SC-02: only plain web schemes. */
 const ALLOWED_PROTOCOLS = new Set(['http:', 'https:'])
-
-/**
- * SC-08: reserved / internal names and suffixes. A hostname is rejected if it equals one of
- * these or ends with `.<suffix>`. `example.com/.net/.org` are public and stay allowed.
- */
-export const RESERVED_HOST_SUFFIXES: readonly string[] = [
-  'localhost',
-  'local',
-  'internal',
-  'intranet',
-  'lan',
-  'home.arpa',
-  'corp',
-  'test',
-  'invalid',
-  'example',
-  'onion',
-  'arpa',
-]
 
 // SC-01: percent-encoded control characters (covers encoded CR/LF header injection).
 const ENCODED_CONTROL_CHARS = /%(?:[01][0-9a-f]|7f)/i
