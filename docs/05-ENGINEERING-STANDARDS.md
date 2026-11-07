@@ -57,7 +57,7 @@ Workflow-level `permissions: contents: read`.
 
 **Approved list** (anything else needs user approval + ADR):
 
-Runtime: `next`, `react`, `react-dom`, `next-intl`, `zod`, `ipaddr.js`, `undici`, `lucide-react`, `clsx`
+Runtime: `next`, `react`, `react-dom`, `next-intl`, `zod`, `ipaddr.js`, `undici`, `lucide-react`, `clsx`, `tldts` (ADR-020)
 Dev: `typescript`, `@types/node`, `@types/react`, `@types/react-dom`, `tailwindcss`, `@tailwindcss/postcss`, `postcss`, `eslint`, `eslint-config-next`, `typescript-eslint`, `eslint-plugin-security`, `prettier`, `prettier-plugin-tailwindcss`, `vitest`, `@vitest/coverage-v8`, `@playwright/test`, `@axe-core/playwright`, `selfsigned` (test certs only)
 
 shadcn/ui: the packages that `shadcn init --preset b3JA2ZBtnk` and `shadcn add <component>` install for the components listed in `08` §6 (e.g. `class-variance-authority`, `tailwind-merge`, `tw-animate-css`, the Radix/Base UI primitives, `sonner`). Record the exact list they added in `PROGRESS.md`. `next-themes` is **not** approved (see `08` §6).

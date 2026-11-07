@@ -119,3 +119,27 @@ Format per entry: **ADR-NNN — Title** · Date · Status (Accepted / Superseded
 **Context:** The SSRF matrix (`03` §9) expects `BLOCKED_TARGET` for a redirect to `http://169.254.169.254/` (case 15) and `INVALID_URL` for a redirect to `file:///` or a non-default port (case 17). The URL policy alone reports IP literals as `INVALID_URL`.
 **Decision:** On redirect hops only, `IP_LITERAL` and `RESERVED_NAME` policy failures are reported as `BLOCKED_TARGET`; everything else stays `INVALID_URL`. User input is unchanged (`INVALID_URL`, cases 1–11). Reserved names are now checked before hostname shape, so bare `localhost` reports `RESERVED_NAME`.
 **Consequences:** Error codes match the matrix exactly; both codes reject, so no control is relaxed.
+
+### ADR-020 — `tldts` for registrable-domain checks
+2026-11-07 · Accepted (user approved new dependency)
+**Context:** TLS-HTTP-REDIRECT requires "same registrable domain", which needs the Public Suffix List (e.g. `a.github.io` vs `b.github.io` are different sites).
+**Decision:** Add `tldts` 7.4.19 (exact pin, PSL-based, no runtime network access). Only `getDomain` is used, on hostnames that already passed the URL policy.
+**Consequences:** Spec-exact behaviour. PSL snapshot ages with the package; Dependabot keeps it current.
+
+### ADR-021 — Browser-accurate CSP evaluation
+2026-11-07 · Accepted (user approved; clarifies `04` §1 and §4.1, SCORING_VERSION stays 1 as no results were published)
+**Context:** `04` scored the most permissive of several CSPs and penalised `*`/`https:` even under `'strict-dynamic'`, which contradicts how browsers enforce CSP and penalises Google's recommended strict-CSP fallback.
+**Decision:** (a) With a nonce or hash plus `'strict-dynamic'`, host/scheme sources and `'unsafe-inline'` in the effective script policy are ignored. (b) With several enforced policies, a sub-check deducts only if every policy has that weakness.
+**Consequences:** Fewer false positives; the A+ requirement "HDR-CSP status pass" uses the same logic.
+
+### ADR-022 — Unlisted HSTS / CSP cases are pass
+2026-11-07 · Accepted (user approved)
+**Context:** `04` §4.1 did not state HSTS 180 d–1 y with `includeSubDomains`, nor a clean CSP lacking only `base-uri`.
+**Decision:** Both are `pass` with 0 points; the missing `base-uri` adds an info note. A short HSTS still blocks A+ through the 1-year requirement.
+**Consequences:** Matches worked example 4; A+ remains reachable without `base-uri`.
+
+### ADR-023 — One finding per cookie rule
+2026-11-07 · Accepted (user approved)
+**Context:** `Finding.id` is a RuleId and caps are per rule, but `04` §4.3 phrased conditions per cookie.
+**Decision:** Each CK rule yields one finding; evidence lists offending cookie names (never values); status is the worst across cookies; deduction is the per-cookie sum capped by the rule cap. Worked example 2's cookie has `Secure` (otherwise its stated 62 would be 57).
+**Consequences:** Stable result shape; UI lists cookie names inside one card per rule.
