@@ -82,5 +82,444 @@
     "title": "Page not found",
     "description": "The page you are looking for does not exist.",
     "home": "Go to the home page"
+  },
+  "results": {
+    "pageTitle": "Scan results",
+    "metaTitle": "Scan results",
+    "title": "Scan results",
+    "loading": {
+      "scanning": "Scanning {host}…",
+      "steps": {
+        "resolving": "Resolving the address…",
+        "connecting": "Connecting…",
+        "analyzing": "Analyzing the response…"
+      }
+    },
+    "summary": {
+      "gradeLabel": "Grade {grade}",
+      "finalUrl": "Final URL",
+      "scannedAt": "Scanned {date}",
+      "duration": "took {seconds} s",
+      "heading": "Report for {host}"
+    },
+    "actions": {
+      "rescan": "Rescan",
+      "share": "Copy share link",
+      "linkCopied": "Share link copied",
+      "print": "Print / PDF",
+      "copy": "Copy",
+      "copied": "Copied to clipboard",
+      "copyFailed": "Could not copy",
+      "copyCode": "Copy code",
+      "copyUrl": "Copy final URL"
+    },
+    "caps": {
+      "title": "Grade capped",
+      "CAP-NO-HTTPS": "HTTPS is not available, so the grade cannot be better than F.",
+      "CAP-CERT-INVALID": "The TLS certificate is not valid, so the grade cannot be better than F.",
+      "CAP-OLD-TLS": "The server negotiates a protocol older than TLS 1.2, so the grade cannot be better than C.",
+      "CAP-NO-HSTS": "Strict-Transport-Security is missing, so the grade cannot be better than B.",
+      "CAP-NO-CSP": "Content-Security-Policy is missing, so the grade cannot be better than B."
+    },
+    "counts": {
+      "label": "Summary",
+      "pass": "Passed",
+      "warn": "Warnings",
+      "fail": "Failed",
+      "info": "Notes"
+    },
+    "categories": {
+      "headers": "HTTP security headers",
+      "tls": "TLS and HTTPS",
+      "cookies": "Cookies",
+      "disclosure": "Information disclosure"
+    },
+    "status": {
+      "pass": "Pass",
+      "warn": "Warning",
+      "fail": "Fail",
+      "info": "Info"
+    },
+    "severity": {
+      "critical": "Critical",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
+      "info": "Info"
+    },
+    "deduction": "{points, plural, =0 {0 points} one {−# point} other {−# points}}",
+    "evidence": "Observed",
+    "notPresent": "not present",
+    "details": {
+      "show": "Show details",
+      "hide": "Hide details"
+    },
+    "why": "Why it matters",
+    "fix": "How to fix",
+    "references": "References",
+    "opensInNewTab": "(opens in a new tab)",
+    "passed": {
+      "show": "{count, plural, one {Show # passed check} other {Show # passed checks}}",
+      "hide": "Hide passed checks"
+    },
+    "platformsLabel": "Server platform",
+    "platforms": {
+      "nginx": "Nginx",
+      "apache": "Apache",
+      "iis": "IIS",
+      "nextjs": "Next.js",
+      "netlify": "Netlify",
+      "cloudflare": "Cloudflare"
+    },
+    "file": "File: {name}",
+    "tls": {
+      "title": "TLS certificate",
+      "protocol": "Protocol",
+      "trust": "Trust",
+      "trusted": "Trusted certificate",
+      "notTrusted": "Not trusted",
+      "issuer": "Issuer",
+      "validUntil": "Valid until",
+      "daysRemaining": "{days, plural, =0 {expires today} one {# day left} other {# days left}}",
+      "expired": "expired",
+      "unavailable": "No TLS connection could be made on port 443."
+    },
+    "redirects": {
+      "title": "Redirect chain",
+      "none": "No redirects: the address answered directly."
+    },
+    "rawHeaders": {
+      "title": "Raw response headers ({count})",
+      "note": "Shown as plain text, each value truncated to 2 KB. Cookie values are hidden.",
+      "name": "Header",
+      "value": "Value"
+    }
+  },
+  "errors": {
+    "retry": "Try again",
+    "scanAnother": "Scan another site",
+    "retryAfter": "{seconds, plural, one {You can try again in # second.} other {You can try again in # seconds.}}",
+    "INVALID_URL": {
+      "title": "This address can’t be scanned",
+      "description": "It is not a valid public web address, or it points to a local, internal or IP address. Only public domain names on ports 80 and 443 can be scanned."
+    },
+    "FORBIDDEN_ORIGIN": {
+      "title": "Request blocked",
+      "description": "Scans can only be started from this site."
+    },
+    "PAYLOAD_TOO_LARGE": {
+      "title": "Request too large",
+      "description": "The scan request is larger than allowed."
+    },
+    "UNSUPPORTED_MEDIA_TYPE": {
+      "title": "Unsupported request",
+      "description": "The scan request was not sent in the expected format."
+    },
+    "BLOCKED_TARGET": {
+      "title": "Target not allowed",
+      "description": "The domain resolves to a private, internal or reserved network address, or redirected to one. Such targets are never scanned."
+    },
+    "DNS_NOT_FOUND": {
+      "title": "Domain not found",
+      "description": "The domain has no public address records. Check the spelling."
+    },
+    "RATE_LIMITED": {
+      "title": "Too many scans",
+      "description": "You have reached the limit of scans per minute. Please wait a moment."
+    },
+    "TARGET_UNREACHABLE": {
+      "title": "Site unreachable",
+      "description": "The site could not be reached over HTTPS or HTTP, refused the connection, or sent a response that could not be read."
+    },
+    "TARGET_TIMEOUT": {
+      "title": "The scan took too long",
+      "description": "The site did not respond within the time limit."
+    },
+    "INTERNAL": {
+      "title": "Something went wrong",
+      "description": "An unexpected error occurred. Please try again."
+    },
+    "NETWORK": {
+      "title": "Connection problem",
+      "description": "Your browser could not reach SecHeaders Lab. Check your connection and try again."
+    },
+    "MISSING_URL": {
+      "title": "No address to scan",
+      "description": "Enter the address of a site to scan."
+    }
+  },
+  "rules": {
+    "HDR-HSTS": {
+      "title": "Strict-Transport-Security (HSTS)",
+      "why": "HSTS tells browsers to use only HTTPS for your site for a set time, even when someone types or follows an http:// link. It prevents downgrade and cookie-theft attacks on networks an attacker controls.",
+      "states": {
+        "notHttps": "The final page is served over plain HTTP, so HSTS cannot take effect.",
+        "missing": "The header is missing.",
+        "invalidMaxAge": "The header has no valid max-age (or max-age is 0), so it has no effect.",
+        "short": "max-age is {days, plural, one {# day} other {# days}}; at least 180 days is recommended, ideally one year or more.",
+        "noSubdomains": "Enabled for {days, plural, one {# day} other {# days}}, but without includeSubDomains, so subdomains are not covered.",
+        "belowOneYear": "Enabled for {days, plural, one {# day} other {# days}} with includeSubDomains. One year or more is needed for A+.",
+        "ok": "Enabled for {days, plural, one {# day} other {# days}}, including subdomains."
+      }
+    },
+    "HDR-CSP": {
+      "title": "Content-Security-Policy (CSP)",
+      "why": "A CSP limits where scripts and other resources may load from. A strict policy is the strongest browser defence against cross-site scripting (XSS).",
+      "states": {
+        "missing": "No enforced Content-Security-Policy header was found.",
+        "reportOnlyIgnored": "Only Content-Security-Policy-Report-Only is present; it reports violations but blocks nothing.",
+        "weak": "A policy is enforced but has weaknesses.",
+        "noScriptControl": "Neither script-src nor default-src is set, so scripts are not restricted (−10).",
+        "unsafeInline": "'unsafe-inline' allows inline scripts without a nonce or hash (−10).",
+        "unsafeEval": "'unsafe-eval' allows eval() and similar string-to-code functions (−5).",
+        "broadSource": "Scripts may load from any host or scheme (*, http:, https: or data:) (−5).",
+        "objectSrc": "object-src is not 'none', so plugins and embedded objects are allowed (−3).",
+        "noBaseUri": "base-uri is not set; base-uri 'none' or 'self' stops injected base elements from redirecting relative URLs.",
+        "ok": "A strict policy is enforced."
+      }
+    },
+    "HDR-FRAME": {
+      "title": "Clickjacking protection (X-Frame-Options / frame-ancestors)",
+      "why": "Without it, other sites can load your pages in a hidden frame and trick users into clicking things they cannot see (clickjacking).",
+      "states": {
+        "missing": "Neither X-Frame-Options nor CSP frame-ancestors restricts framing.",
+        "allowFrom": "X-Frame-Options ALLOW-FROM is obsolete and ignored by modern browsers.",
+        "ok": "Framing is restricted."
+      }
+    },
+    "HDR-XCTO": {
+      "title": "X-Content-Type-Options",
+      "why": "nosniff stops browsers from guessing a file’s type, which could otherwise turn an uploaded text file into script or style.",
+      "states": {
+        "missing": "The header is missing.",
+        "invalid": "The value is not nosniff.",
+        "ok": "Set to nosniff."
+      }
+    },
+    "HDR-REFERRER": {
+      "title": "Referrer-Policy",
+      "why": "Controls how much of the page address is sent to other sites when people follow links. Full URLs can leak tokens, IDs or private paths.",
+      "states": {
+        "missing": "Not set; the browser default applies.",
+        "invalid": "No valid policy value was recognised; the browser default applies.",
+        "leaky": "{policy} sends the full URL to other sites.",
+        "ok": "The policy {policy} limits what is shared."
+      }
+    },
+    "HDR-PERMISSIONS": {
+      "title": "Permissions-Policy",
+      "why": "Turns off powerful browser features you do not use, such as camera, microphone and geolocation, so injected or third-party code cannot use them.",
+      "states": {
+        "missing": "The header is missing.",
+        "ok": "Set."
+      }
+    },
+    "HDR-COOP": {
+      "title": "Cross-Origin-Opener-Policy (COOP)",
+      "why": "same-origin isolates your window from pages it opens or that open it, which reduces cross-window attacks and side-channel leaks.",
+      "states": {
+        "missing": "Not set (informational, no points deducted).",
+        "ok": "Set."
+      }
+    },
+    "HDR-XXSS": {
+      "title": "X-XSS-Protection",
+      "why": "The old browser XSS filter has been removed from modern browsers and could itself cause problems. Rely on CSP, and send 0 or nothing.",
+      "states": {
+        "enabled": "The legacy XSS filter is enabled (informational).",
+        "absent": "Not set, which is fine for modern browsers.",
+        "disabled": "Set to 0, which is fine."
+      }
+    },
+    "HDR-DUPLICATE": {
+      "title": "Duplicated headers",
+      "why": "When a header is sent twice, browsers may use either value or combine them, so the effective policy becomes unclear.",
+      "states": {
+        "found": "Sent more than once: {headers}. The first value was evaluated."
+      }
+    },
+    "TLS-AVAILABLE": {
+      "title": "HTTPS availability",
+      "why": "Without HTTPS, anyone on the network path can read and change everything sent between visitors and your site.",
+      "states": {
+        "unavailable": "No TLS connection could be made on port 443.",
+        "ok": "HTTPS is available."
+      }
+    },
+    "TLS-CERT-VALID": {
+      "title": "Certificate validity",
+      "why": "Browsers show a full-page warning for invalid certificates, and visitors who click through are exposed to interception.",
+      "states": {
+        "ok": "The certificate is trusted and matches the host name.",
+        "expired": "The certificate has expired.",
+        "notYetValid": "The certificate is not valid yet.",
+        "hostnameMismatch": "The certificate does not cover this host name.",
+        "untrusted": "The certificate is not issued by a trusted authority (for example, it is self-signed).",
+        "notEvaluated": "Not evaluated because HTTPS is not available."
+      }
+    },
+    "TLS-CERT-EXPIRY": {
+      "title": "Certificate expiry",
+      "why": "An expired certificate takes the site offline for visitors. Automated renewal prevents this.",
+      "states": {
+        "soon": "Expires in {days, plural, one {# day} other {# days}}; renew it now.",
+        "month": "Expires in {days, plural, one {# day} other {# days}}; make sure renewal is automated.",
+        "ok": "Expires in {days, plural, one {# day} other {# days}}.",
+        "notEvaluated": "Not evaluated."
+      }
+    },
+    "TLS-PROTOCOL": {
+      "title": "TLS protocol version",
+      "why": "TLS 1.0 and 1.1 have known weaknesses and are deprecated. Modern clients use TLS 1.2 and TLS 1.3.",
+      "states": {
+        "old": "The server negotiated {protocol}, which is deprecated.",
+        "tls12": "{protocol} was negotiated.",
+        "tls13": "{protocol} was negotiated (modern).",
+        "notEvaluated": "Not evaluated."
+      }
+    },
+    "TLS-HTTP-REDIRECT": {
+      "title": "HTTP to HTTPS redirect",
+      "why": "Visitors who type the address without https:// should be sent straight to the secure site; otherwise their first request travels unencrypted.",
+      "states": {
+        "ok": "http:// redirects to HTTPS on the same site.",
+        "noRedirect": "http:// does not redirect to HTTPS.",
+        "otherSite": "http:// redirects to HTTPS on a different site.",
+        "httpUnavailable": "Port 80 is not served; only HTTPS is available, which is fine."
+      }
+    },
+    "CK-SECURE": {
+      "title": "Cookie Secure attribute",
+      "why": "Secure cookies are only sent over HTTPS, so they cannot leak over an unencrypted connection.",
+      "states": {
+        "noCookies": "No cookies are set on this page.",
+        "ok": "All cookies have Secure.",
+        "violations": "{count, plural, one {# cookie lacks} other {# cookies lack}} Secure: {cookies}.",
+        "notHttps": "Not applicable: the page is served over HTTP."
+      }
+    },
+    "CK-HTTPONLY": {
+      "title": "Cookie HttpOnly attribute",
+      "why": "HttpOnly hides cookies from JavaScript, so a cross-site scripting bug cannot read session cookies.",
+      "states": {
+        "noCookies": "No cookies are set on this page.",
+        "ok": "All cookies have HttpOnly.",
+        "violations": "{count, plural, one {# cookie lacks} other {# cookies lack}} HttpOnly: {cookies}."
+      }
+    },
+    "CK-SAMESITE": {
+      "title": "Cookie SameSite attribute",
+      "why": "SameSite limits when cookies are sent with requests started by other sites, which mitigates cross-site request forgery (CSRF).",
+      "states": {
+        "noCookies": "No cookies are set on this page.",
+        "ok": "All cookies set a valid SameSite value.",
+        "violations": "{count, plural, one {# cookie has} other {# cookies have}} no valid SameSite value: {cookies}.",
+        "noneWithoutSecure": "SameSite=None requires Secure; affected: {cookies}."
+      }
+    },
+    "CK-PREFIX": {
+      "title": "Cookie name prefixes",
+      "why": "The __Host- and __Secure- prefixes make browsers enforce secure attributes, but only when the cookie follows their rules.",
+      "states": {
+        "noCookies": "No cookies are set on this page.",
+        "ok": "Cookie prefixes are used correctly, or not used.",
+        "violations": "{count, plural, one {# cookie breaks its} other {# cookies break their}} prefix rules: {cookies}."
+      }
+    },
+    "INF-SERVER": {
+      "title": "Server header",
+      "why": "A version number helps attackers match your server to known vulnerabilities.",
+      "states": {
+        "absent": "No Server header is sent.",
+        "version": "The Server header reveals a version number.",
+        "present": "The Server header names the software but no version (informational)."
+      }
+    },
+    "INF-POWERED-BY": {
+      "title": "X-Powered-By header",
+      "why": "It reveals the framework or language behind the site, which helps attackers target known issues.",
+      "states": {
+        "absent": "Not sent.",
+        "present": "The X-Powered-By header is sent."
+      }
+    },
+    "INF-ASPNET": {
+      "title": "ASP.NET version headers",
+      "why": "X-AspNet-Version and X-AspNetMvc-Version reveal exact framework versions.",
+      "states": {
+        "absent": "Not sent.",
+        "present": "An ASP.NET version header is sent."
+      }
+    }
+  },
+  "remediation": {
+    "steps": {
+      "certificate": "Install a certificate from a trusted certificate authority that covers every host name of the site, serve the full chain, and automate renewal with an ACME client.",
+      "hostManagedTls": "TLS versions are managed by your hosting platform. Check its TLS settings and keep only TLS 1.2 and TLS 1.3 enabled.",
+      "iisTls": "On Windows Server, disable TLS 1.0 and TLS 1.1 in the Schannel protocol settings (registry or Group Policy), keep TLS 1.2 and 1.3 enabled, then restart the server.",
+      "hostManagedRedirect": "Your hosting platform terminates HTTPS. Turn on its “force HTTPS” or HTTPS-redirect option for this site.",
+      "hostServerHeader": "The Server header is set by your hosting platform and usually cannot be changed. Make sure it does not include a version number.",
+      "removeInApp": "Remove the {name} header where it is added: in the application or framework settings, or in a reverse proxy in front of it.",
+      "aspnetOnly": "Only ASP.NET sends this header. Turn it off in web.config (see the IIS tab) or in your ASP.NET application.",
+      "cookieInApp": "Set the Secure, HttpOnly and SameSite attributes where the application creates the cookie, usually in the framework’s session or cookie settings.",
+      "cookiePrefix": "Rename the cookie with the __Host- prefix and set it with Secure, Path=/ and no Domain attribute, or use __Secure- with Secure.",
+      "duplicateHeaders": "Send each security header once. Remove the duplicate from either the application or the server or CDN configuration.",
+      "cloudflareHeader": "In the Cloudflare dashboard, go to Rules → Overview, create a Response Header Transform Rule, and use “Set static” to set {name} to: {value}",
+      "cloudflareHsts": "In the Cloudflare dashboard, open SSL/TLS → Edge Certificates, enable HSTS, set Max Age to at least 12 months and turn on “Apply HSTS policy to subdomains”.",
+      "cloudflareRemoveHeader": "In the Cloudflare dashboard, create a Response Header Transform Rule that uses “Remove” for {name}, or remove it at your origin server.",
+      "cloudflareServer": "Cloudflare Transform Rules cannot change the Server header. Remove version information at your origin server.",
+      "cloudflareAlwaysHttps": "In the Cloudflare dashboard, open SSL/TLS → Edge Certificates and turn on Always Use HTTPS (the encryption mode must not be Off).",
+      "cloudflareMinTls": "In the Cloudflare dashboard, open SSL/TLS → Edge Certificates and set Minimum TLS Version to 1.2 or higher.",
+      "cloudflareCertificate": "In the Cloudflare dashboard, choose the Full (strict) encryption mode on the SSL/TLS Overview page, check that Edge Certificates shows an active certificate, and install a valid certificate on your origin."
+    }
+  },
+  "about": {
+    "title": "Methodology",
+    "intro": "How SecHeaders Lab inspects a site, which checks it runs, how the score and grade are calculated, and what it does not do.",
+    "what": {
+      "title": "What a scan does",
+      "fetch": "One normal GET request for the address you enter, following at most five redirects. Every redirect target is checked again before it is followed.",
+      "tls": "One TLS handshake on port 443 to read the certificate and the negotiated protocol. No application data is sent on it.",
+      "redirect": "One request to http:// on the same host to see whether it redirects to HTTPS.",
+      "never": "Nothing else: no crawling, no path guessing, no attack payloads, and only public addresses on ports 80 and 443."
+    },
+    "checks": {
+      "title": "Checks and weights",
+      "intro": "Each failed or weak check deducts points from 100. Informational findings never deduct points.",
+      "rule": "Check",
+      "severity": "Highest severity",
+      "maxPoints": "Max. points"
+    },
+    "grading": {
+      "title": "Score and grade",
+      "formula": "Score = 100 minus all deductions, never below 0. The grade follows the score:",
+      "grade": "Grade",
+      "minScore": "Score",
+      "below": "below {score}",
+      "aPlus": "A+ also requires no failed checks, HSTS for at least one year, and a strict Content-Security-Policy. Otherwise a score of 95 or more is an A.",
+      "capsTitle": "Grade caps",
+      "version": "Scoring specification version {version}."
+    },
+    "limits": {
+      "title": "Limitations",
+      "passive": "The scan is passive. It reports what a site sends to every visitor; it cannot find vulnerabilities in the application itself.",
+      "single": "Only the first page is inspected. Other pages, and visitors in other regions or behind other CDN nodes, may receive different headers.",
+      "meta": "Policies set with HTML meta tags are not read, because the page body is never downloaded.",
+      "compliance": "Results are informational and are not a penetration test or a compliance assessment."
+    },
+    "privacy": {
+      "title": "Privacy",
+      "body": "There are no accounts, no analytics and no tracking. Scanned addresses and results are not stored. The server logs only the time, the outcome, the duration and the scanned host name, without paths or query strings. The only cookie is an optional theme preference stored in your browser."
+    },
+    "terms": {
+      "title": "Terms of use",
+      "body": "Only scan sites that you own or are authorized to assess. The service is provided as is, without warranty, and its results must not be relied on as a security certification."
+    },
+    "standards": {
+      "title": "Standards and references",
+      "body": "Each finding links to the relevant OWASP and MDN documentation. The main sources are:",
+      "nca": "These checks support web-application and cryptography controls under the NCA Essential Cybersecurity Controls.",
+      "informational": "Informational only — not a compliance assessment."
+    }
   }
 }
