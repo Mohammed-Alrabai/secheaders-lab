@@ -30,7 +30,16 @@ async function trackCspViolations(page: Page): Promise<() => Promise<string[]>> 
     page.evaluate(() => (window as unknown as { __cspViolations: string[] }).__cspViolations)
 }
 
-const PAGES = ['/', '/about', '/scan?url=example.com', '/scan', '/does-not-exist'] as const
+const PAGES = [
+  '/',
+  '/about',
+  '/privacy',
+  '/terms',
+  '/cookies',
+  '/scan?url=example.com',
+  '/scan',
+  '/does-not-exist',
+] as const
 
 for (const locale of ['en', 'ar'] as const) {
   for (const scheme of ['light', 'dark'] as const) {

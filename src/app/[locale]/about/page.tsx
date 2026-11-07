@@ -11,6 +11,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { alternatesFor } from '@/i18n/alternates'
+import { Link } from '@/i18n/navigation'
 import { resolveLocaleParam } from '@/i18n/locale-param'
 import { ruleMeta } from '@/lib/scanner/rules'
 import { CAP_MAX_GRADE, GRADE_THRESHOLDS, SCORING_VERSION } from '@/lib/scanner/scoring'
@@ -179,6 +180,9 @@ export default async function AboutPage({ params }: AboutPageProps) {
           {t('privacy.title')}
         </h2>
         <p>{t('privacy.body')}</p>
+        <Link href="/privacy" className="w-fit text-link underline-offset-4 hover:underline">
+          {t('privacy.more')}
+        </Link>
       </section>
 
       <section aria-labelledby="terms" className="flex flex-col gap-3">
@@ -186,6 +190,9 @@ export default async function AboutPage({ params }: AboutPageProps) {
           {t('terms.title')}
         </h2>
         <p>{t('terms.body')}</p>
+        <Link href="/terms" className="w-fit text-link underline-offset-4 hover:underline">
+          {t('terms.more')}
+        </Link>
       </section>
 
       <section aria-labelledby="standards" className="flex flex-col gap-3">

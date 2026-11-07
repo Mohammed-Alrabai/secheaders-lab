@@ -44,7 +44,7 @@
 | ~~T-14~~ | ~~i18n copy for every message key~~ — done; `message-coverage.test.ts` enforces it | Done |
 | T-15 | The http→https check treats a connect failure on any http hop as "port 80 not served" (pass); only the first hop is expected to fail that way in practice | Agent (note) |
 | ~~T-16~~ | ~~platform 429 without `Retry-After`~~ — handled (status fallback) + e2e | Done |
-| T-17 | Footer GitHub link once the repository exists | Agent (Phase 6) |
+| ~~T-17~~ | ~~Footer GitHub link~~ — done (ADR-037) | Done |
 | T-18 | Optional: the brand SVGs carry a ~7.7 KB C2PA provenance block each (62% of the file); strip only if the user wants | User |
 | ~~T-19~~ | ~~Arabic copy review~~ — approved with Phase 4 | Done |
 | ~~T-20~~ | ~~Lighthouse target scope~~ — ADR-034 accepted | Done |
@@ -60,6 +60,8 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-07 — User request during Phase 6 (ADR-037): Arabic header subtitle removed; Privacy, Terms and Cookie pages (EN/AR) with validated section copy, cookie table from code, contact and related links, sitemap and canonical entries; first-visit cookie notice (informational, non-modal, `localStorage` dismissal, storage-blocked fallback); footer legal links + GitHub link. Tests: 1280 unit ✅ (99.8% statements); 75 e2e ✅ incl. legal pages, notice flow, keyboard, blocked storage, axe with the notice visible (EN/AR × light/dark) and axe on the new pages.
 
 - 2026-11-07 — 6.4: the injected script came from the "Powered by Netlify badge" project setting; disabled with the user's approval (agent clicked it in the Netlify UI after the user signed in). Script gone from all pages; 0 console errors and 0 DevTools CSP issues on `/en`, `/ar`, `/en/about`, `/ar/about`. Lighthouse live (mobile): `/en` 99/100/100/100, `/ar`, `/en/about`, `/ar/about` 100/100/100/100.
 

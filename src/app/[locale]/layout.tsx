@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 
 import '../globals.css'
 import { fontVariables } from '../fonts'
+import { CookieNotice } from '@/components/CookieNotice'
 import { Providers } from '@/components/Providers'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
@@ -73,6 +74,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
               {children}
             </main>
             <SiteFooter />
+            <CookieNotice />
           </Providers>
         </NextIntlClientProvider>
       </body>

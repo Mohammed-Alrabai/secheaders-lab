@@ -1,7 +1,16 @@
 import { defineConfig, devices } from '@playwright/test'
 
+import { COOKIE_NOTICE_KEY, COOKIE_NOTICE_VALUE } from './src/lib/cookie-notice'
+
 const PORT = 3100
 const baseURL = `http://localhost:${String(PORT)}`
+
+// The cookie notice (ADR-037) is dismissed by default so it never covers what a test clicks;
+// tests/e2e/legal.spec.ts starts from an empty state to cover the notice itself.
+const noticeDismissed = {
+  cookies: [],
+  origins: [{ origin: baseURL, localStorage: [{ name: COOKIE_NOTICE_KEY, value: COOKIE_NOTICE_VALUE }] }],
+}
 
 /**
  * E2E runs against the production server (`next start`), so `pnpm build` must run first.
@@ -17,6 +26,7 @@ export default defineConfig({
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
   use: {
     baseURL,
+    storageState: noticeDismissed,
     trace: 'retain-on-failure',
   },
   projects: [
