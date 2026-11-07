@@ -4,6 +4,7 @@
  */
 export const SCAN_ERROR_CODES = [
   'INVALID_URL',
+  'FORBIDDEN_ORIGIN',
   'PAYLOAD_TOO_LARGE',
   'UNSUPPORTED_MEDIA_TYPE',
   'BLOCKED_TARGET',
@@ -68,6 +69,8 @@ export function httpStatusFor(code: ScanErrorCode): number {
   switch (code) {
     case 'INVALID_URL':
       return 400
+    case 'FORBIDDEN_ORIGIN':
+      return 403
     case 'PAYLOAD_TOO_LARGE':
       return 413
     case 'UNSUPPORTED_MEDIA_TYPE':

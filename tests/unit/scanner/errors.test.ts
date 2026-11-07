@@ -37,6 +37,7 @@ describe('ScanError', () => {
 describe('httpStatusFor (02 §4)', () => {
   it.each([
     ['INVALID_URL', 400],
+    ['FORBIDDEN_ORIGIN', 403],
     ['PAYLOAD_TOO_LARGE', 413],
     ['UNSUPPORTED_MEDIA_TYPE', 415],
     ['BLOCKED_TARGET', 422],
