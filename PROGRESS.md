@@ -6,8 +6,8 @@
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 3 — complete, awaiting gate approval |
-| Last gate approved | Phase 2, approved by user 2026-11-07 |
+| Current phase | Phase 4 — complete, awaiting UI + Arabic copy review |
+| Last gate approved | Phase 3, approved by user 2026-11-07 |
 | Blockers | none |
 
 ## Phase checklist
@@ -15,8 +15,8 @@
 - [x] Phase 0 — Environment & scaffold (approved 2026-11-03)
 - [x] Phase 1 — Secure fetch layer (SSRF) — **security gate** (approved 2026-11-07)
 - [x] Phase 2 — Checks & scoring engine (approved 2026-11-07)
-- [x] Phase 3 — API endpoint (report posted 2026-11-07, awaiting approval)
-- [ ] Phase 4 — UI & i18n — **Arabic copy review gate**
+- [x] Phase 3 — API endpoint (approved 2026-11-07)
+- [x] Phase 4 — UI & i18n — **Arabic copy review gate** (report posted 2026-11-07, awaiting review)
 - [ ] Phase 5 — Report, self-hardening, E2E
 - [ ] Phase 6 — Docs, repository & deploy — **approval per step**
 
@@ -34,12 +34,15 @@
 | T-8 | Add explicit tests + denylist for 6to4, Teredo, `64:ff9b:1::/48` (strengthens SC-12) | Agent (Phase 1) |
 | T-9 | Dev-only advisories: `deepmerge` (low, via shadcn CLI) and `minimatch` (moderate, via typescript-eslint); re-check on each Dependabot run | Agent (ongoing) |
 | T-10 | Confirm Dependabot handles the pnpm 12 lockfile once the repo is on GitHub | Agent (Phase 6) |
-| T-11 | Header values arrive as latin1-decoded bytes (e.g. U+202E shows as `â\x80®`). The UI sanitizer (SC-31) must decode UTF-8 for display and then strip bidi/control chars; SSRF case 22 UI half is a Phase 4/5 test | Agent (Phase 4) |
+| ~~T-11~~ | ~~latin1 header bytes / bidi stripping in the UI~~ — done in `sanitize.ts` + e2e SSRF case 22 (Phase 4) | Done |
 | ~~T-12~~ | ~~rawHeaders truncation + cookie redaction~~ — done in `scan()` (Phase 2) | Done |
 | ~~T-13~~ | ~~ADR-013 HTTPS → HTTP fallback~~ — done in `scan()` (Phase 2) | Done |
-| T-14 | i18n copy for every `messageKey` / note emitted by the checks and for `remediation.<platform>.<rule>` instruction keys (en + ar) | Agent (Phase 4, task 4.6) |
+| ~~T-14~~ | ~~i18n copy for every message key~~ — done; `message-coverage.test.ts` enforces it | Done |
 | T-15 | The http→https check treats a connect failure on any http hop as "port 80 not served" (pass); only the first hop is expected to fail that way in practice | Agent (note) |
-| T-16 | UI must handle a platform 429 without `Retry-After` (Netlify does not document one) | Agent (Phase 4) |
+| ~~T-16~~ | ~~platform 429 without `Retry-After`~~ — handled (status fallback) + e2e | Done |
+| T-17 | Footer GitHub link once the repository exists | Agent (Phase 6) |
+| T-18 | Optional: the brand SVGs carry a ~7.7 KB C2PA provenance block each (62% of the file); strip only if the user wants | User |
+| T-19 | Arabic copy review by the user (Phase 4 gate); apply feedback before Phase 5 | User |
 
 ## Justified exceptions (`any`, `eslint-disable`, `@ts-expect-error`)
 
@@ -52,6 +55,11 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-07 — Phase 4 complete (pending the user's UI + Arabic review). shadcn components added: input, label, card, badge, tabs, collapsible, separator, skeleton, alert, dropdown-menu, table (no new packages; Base UI already present); `sonner`, `tooltip`, `progress`, `scroll-area` not installed (ADR-027). Layout + server-resolved theme (ADR-026), header/footer/skip link/language switch, home + `ScanForm` (client check proven to agree with the server policy), results page (`ScanRunner`, `ScanReport`, `FindingCard`, `FixTabs`, `CodeBlock`, `CopyButton`), loading/error states, methodology page rendered from `rules.ts`/`scoring.ts`, full EN/AR copy, `sanitize.ts` (SC-29…31, T-11). Tests: 1119 unit/integration ✅, 21 e2e ✅ (twice, Edge); lint, typecheck, build ✅; no horizontal overflow at 360 px on any page in either language. Notes:
+  - Bugs caught: Arabic «−20 نقطة» rendered as «20- نقطة» in RTL → rephrased «خصم 20 نقطة»; e2e load timeouts with 6 workers → 3 workers.
+  - Tool quirk: `\u` escapes in written files became literal bidi characters; replaced with numeric code points and a repo scan confirms no literal control/bidi/BOM characters.
+  - Our own `X-Frame-Options: DENY` blocks same-origin framing (observed during testing), as intended.
 
 - 2026-11-07 — Phase 3 complete. `schemas.ts` (strict request; strict `ScanResult` checked against the TS type via `satisfies`), `limits.ts` (dependency-free, client-safe), `logger.ts` (SC-37 fields only), `rate-limit.ts` (token bucket + best-effort client key), `api/scan-handler.ts` + `app/api/scan/route.ts` (Node runtime, force-dynamic, 405 for other methods), `version.ts`. ADR-024, ADR-025. 710 tests ✅, `src/lib/**` 100% lines / 98.7% branches; lint, typecheck, build ✅. Manual curl on the local production build: 405/415/403/413/400/429 as specified; one manual smoke scan of `example.com` (allowed by `CLAUDE.md` §6) returned F/26 in 1.4 s. Notes:
   - Bug caught by a contract test: the handler forwarded policy-invalid URLs to the scanner; it now validates SC-01…SC-09 itself before any scan work.

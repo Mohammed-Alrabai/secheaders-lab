@@ -155,3 +155,21 @@ Format per entry: **ADR-NNN — Title** · Date · Status (Accepted / Superseded
 **Context:** SC-25 requires rejecting a cross-origin `Origin`, but `02` §4 had no matching code.
 **Decision:** Add public code `FORBIDDEN_ORIGIN` → HTTP 403. Requests without `Origin` (non-browser clients) are allowed, as SC-25 states ("when present").
 **Consequences:** The contract gains one code; the UI never triggers it (same origin). Deploy previews need their origin allowed (T-6, Phase 6).
+
+### ADR-026 — Theme: client-written cookie, server-applied class, CSS for "system"
+2026-11-07 · Accepted
+**Context:** `06` §1 / `08` §6 require a server-resolved theme with no inline script (strict CSP) and no flash; ADR-017 requires our responses to carry no `Set-Cookie`.
+**Decision:** The theme menu writes `theme=light|dark` with `document.cookie` (SameSite=Lax, Secure on HTTPS, 1 year) and swaps the `<html>` class; the layout reads the cookie and renders the class on the next request. With no cookie, `@media (prefers-color-scheme: dark) :root:not(.light)` applies a copy of the dark tokens; a unit test keeps that copy identical to the `.dark` blocks. The Tailwind `dark:` variant covers both cases.
+**Consequences:** No script, no flash, no server `Set-Cookie`. The dark tokens exist twice in CSS (guarded by the test).
+
+### ADR-027 — Copy confirmations without `sonner`
+2026-11-07 · Accepted
+**Context:** `08` §6 lists `sonner` for copy toasts, but it injects `<style>` at runtime (T-7), which conflicts with a nonce-only `style-src-elem`. `06` §2 asks for a live-region announcement.
+**Decision:** Copy buttons swap their icon to a check mark and announce "Copied" in a polite `role="status"` region. `sonner`, `tooltip`, `progress` and `scroll-area` are not installed.
+**Consequences:** Fewer dependencies and no runtime style injection; T-7 is reduced to Base UI only.
+
+### ADR-028 — Reusable remediation instruction keys
+2026-11-07 · Accepted
+**Context:** Per-platform-per-rule instruction keys would need ~70 near-duplicate strings per language.
+**Decision:** 17 parameterised instruction texts (`remediation.steps.*`); Cloudflare wording follows Cloudflare's docs as checked on 2026-11-07 (Edge Certificates, Response Header Transform Rules; the unverified claim that Cloudflare rewrites `Server` was dropped).
+**Consequences:** Smaller, consistent copy; a test asserts every key is used and translated.
