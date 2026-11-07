@@ -215,3 +215,9 @@ Format per entry: **ADR-NNN — Title** · Date · Status (Accepted / Superseded
 **Context:** Every commit carried the user's personal Gmail address, which a public repository would expose; the user also chose not to publish an email in `SECURITY.md`.
 **Decision:** Before anything was pushed, the 51 local commits were rewritten (`git filter-branch --env-filter`, author and committer email only) to `110590720+Mohammed-Alrabai@users.noreply.github.com`; file trees verified identical. The address is set in the **repository-local** git config; the global config is unchanged.
 **Consequences:** Commit hashes before 2026-11-07 changed (none had been published). Future commits in this repository use the noreply address.
+
+### ADR-036 — Netlify configuration and deploy previews
+2026-11-07 · Accepted (Netlify docs checked 2026-11-07)
+**Context:** Netlify runs Next.js through its OpenNext adapter (route handlers in a serverless function, middleware/`proxy.ts` as an Edge Function without filesystem or native addons). Variables in `netlify.toml` reach builds only, not functions at runtime. pnpm is chosen from `packageManager` via Corepack; Netlify documents `PNPM_FLAGS=--shamefully-hoist` for Next.js.
+**Decision:** `netlify.toml` holds the build command, `PNPM_FLAGS` and the SC-24 rate-limit redirect rule for `/api/scan` (ADR-024). `NEXT_PUBLIC_SITE_URL` is set in the Netlify UI (Builds + Functions scopes) to the production origin for **every** deploy context. The proxy uses only Web Crypto, so it runs on the Edge runtime.
+**Consequences (T-6):** Deploy previews render normally, but scans from a preview origin fail closed with `FORBIDDEN_ORIGIN` (SC-25 is not relaxed). The rate-limit rule is verified empirically after the first deploy (T-3).

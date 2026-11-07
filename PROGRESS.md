@@ -31,7 +31,7 @@
 | T-3 | Netlify docs verified 2026-11-07 (ADR-024): 60 s sync limit, code-based rate limits on all plans (2 rules on free). Still to do at deploy: add the `netlify.toml` redirect rate-limit rule and confirm it blocks the 11th request/min on `/api/scan` | Agent (Phase 6) |
 | ~~T-4~~ | ~~Scoring spec gaps~~ — resolved 2026-11-07 (ADR-020…023) | Done |
 | ~~T-5~~ | ~~Remove obsolete `interest-cohort=()`~~ — approved and done (ADR-029) | Done |
-| T-6 | SC-25 Origin check vs Netlify deploy-preview origins | Agent (Phase 3) |
+| ~~T-6~~ | ~~SC-25 vs deploy previews~~ — previews fail closed on scans (ADR-036) | Done |
 | ~~T-7~~ | ~~Runtime `<style>` injection under nonce CSP~~ — none from Base UI; 0 violations (ADR-030) | Done |
 | T-8 | Add explicit tests + denylist for 6to4, Teredo, `64:ff9b:1::/48` (strengthens SC-12) | Agent (Phase 1) |
 | T-9 | Dev-only advisories: `deepmerge` (low, via shadcn CLI) and `minimatch` (moderate, via typescript-eslint); re-check on each Dependabot run | Agent (ongoing) |

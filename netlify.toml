@@ -1,0 +1,25 @@
+# Netlify configuration (docs checked 2026-11-07, ADR-024 and ADR-036).
+# Next.js runs through Netlify's OpenNext adapter with zero configuration.
+# Node.js 24 comes from `.nvmrc`; pnpm comes from `packageManager` via Corepack.
+# NEXT_PUBLIC_SITE_URL is set in the Netlify UI (scopes: Builds + Functions), because
+# variables declared in this file are not available to functions at runtime.
+
+[build]
+  command = "pnpm build"
+  publish = ".next"
+
+[build.environment]
+  # Documented by Netlify for Next.js with pnpm, to avoid import issues.
+  PNPM_FLAGS = "--shamefully-hoist"
+
+# SC-24 primary control: 10 scans per minute per client IP on the scan endpoint.
+# Netlify returns 429 above the limit; enforcement can lag by up to ~10 s.
+[[redirects]]
+  from = "/api/scan"
+  to = "/api/scan"
+  status = 200
+  force = true
+  [redirects.rate_limit]
+    window_limit = 10
+    window_size = 60
+    aggregate_by = ["ip", "domain"]
