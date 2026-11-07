@@ -28,7 +28,7 @@
 | ~~T-21~~ | ~~Private vulnerability reporting~~ — enabled by the user; "Report a vulnerability" visible on the Security tab | Done |
 | ~~T-22~~ | ~~README live link + CI badge~~ — done | Done |
 | ~~T-23~~ | ~~Netlify-injected script~~ — it was the "Powered by Netlify badge" (`/.netlify/scripts/hud?variant=public`); disabled in Project configuration → General with the user's approval; CSP unchanged | Done |
-| T-24 | Mozilla Observatory scan of the live site (third-party request, needs approval) | User |
+| ~~T-24~~ | ~~Mozilla Observatory~~ — **A+ (140)**, 12/12 tests passed, algorithm v6 (user approved) | Done |
 | T-2 | Provide LinkedIn profile URL for footer | User (Phase 6) — `https://www.linkedin.com/in/mohammed-alrabai` |
 | ~~T-3~~ | ~~Platform rate limit~~ — verified live 2026-11-07: after a quiet minute requests 1–12 passed, 13+ got Netlify 429 (no body, no `Retry-After`; ~10 s enforcement lag as documented) | Done |
 | ~~T-4~~ | ~~Scoring spec gaps~~ — resolved 2026-11-07 (ADR-020…023) | Done |
@@ -60,6 +60,8 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-07 — 6.4: Mozilla Observatory scan of the live site (user approved): **A+, score 140, 12/12 tests passed** (algorithm v6, scan id 134111686). NFR-02 met: A+ on SecHeaders Lab and on Observatory.
 
 - 2026-11-07 — Pushed legal pages, cookie notice and copy changes (`126c28f`, user approved): CI ✅, CodeQL ✅, Netlify deploy live. Live checks: all 9 pages 200 with correct titles (EN/AR), notice shown on first visit and gone after dismissal, no cookies set, 0 console errors and 0 DevTools issues, Arabic subtitle gone, sitemap 10 URLs, self-scan **A+ / 100**.
 
