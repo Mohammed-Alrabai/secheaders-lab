@@ -209,3 +209,9 @@ Format per entry: **ADR-NNN — Title** · Date · Status (Accepted / Superseded
 **Context:** Home and About in both locales score ≥ 95 on all four categories. The results page (`/en/scan?url=example.com`, live scan) scores Performance 89 (LCP 3.7 s: the largest element is the report, which can only render after the scan of a third-party site returns) and SEO 66 (`noindex` is required by `06` §6).
 **Decision:** Apply the "≥ 95 ×4" target to the indexable pages; record results-page scores as informational with Accessibility and Best Practices still required at 100.
 **Consequences:** No change to `noindex`; no artificial LCP tricks.
+
+### ADR-035 — Commit identity: GitHub noreply address
+2026-11-07 · Accepted (user approved, before the first push)
+**Context:** Every commit carried the user's personal Gmail address, which a public repository would expose; the user also chose not to publish an email in `SECURITY.md`.
+**Decision:** Before anything was pushed, the 51 local commits were rewritten (`git filter-branch --env-filter`, author and committer email only) to `110590720+Mohammed-Alrabai@users.noreply.github.com`; file trees verified identical. The address is set in the **repository-local** git config; the global config is unchanged.
+**Consequences:** Commit hashes before 2026-11-07 changed (none had been published). Future commits in this repository use the noreply address.

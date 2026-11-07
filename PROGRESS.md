@@ -59,6 +59,8 @@ Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08
 
 ## Log
 
+- 2026-11-07 — 6.2 prep: commit email rewritten to the GitHub noreply address across all 51 local commits and set in the local git config (ADR-035, user approved); trees verified identical, backup ref removed. GitHub user: `Mohammed-Alrabai`. `gh` CLI not installed; the user creates the repository on github.com.
+
 - 2026-11-07 — 6.1: `README.md` (EN + AR intro, screenshots, features, Mermaid flow, security design, scoring summary, stack, setup, testing, roadmap, disclaimer), `SECURITY.md` (GitHub private vulnerability reporting, scope, testing rules), `CHANGELOG.md` (Keep a Changelog, Unreleased). Screenshots in `docs/screenshots/` captured from one manual scan of `example.com` per locale/theme (allowed by `CLAUDE.md` §6) on the local production build: F / 26. Live demo link and CI badge wait for 6.2–6.4.
 
 - 2026-11-07 — Phase 5 complete (pending approval). Tasks:
