@@ -230,6 +230,39 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Soft chips (08 §4): tinted background, text in the same hue pulled toward the
+   foreground, so it is darker in light mode and lighter in dark mode. */
+@utility chip-success {
+  background-color: color-mix(in oklch, var(--success) 14%, transparent);
+  color: color-mix(in oklch, var(--success) 55%, var(--foreground));
+}
+
+@utility chip-warning {
+  background-color: color-mix(in oklch, var(--warning) 14%, transparent);
+  color: color-mix(in oklch, var(--warning) 55%, var(--foreground));
+}
+
+@utility chip-destructive {
+  background-color: color-mix(in oklch, var(--destructive) 14%, transparent);
+  color: color-mix(in oklch, var(--destructive) 55%, var(--foreground));
+}
+
+@utility chip-info {
+  background-color: color-mix(in oklch, var(--info) 14%, transparent);
+  color: color-mix(in oklch, var(--info) 55%, var(--foreground));
+}
+
+@utility chip-muted {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+/* Upstream values, URLs and code are always left-to-right and isolated (06 §4). */
+@utility ltr-isolate {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
