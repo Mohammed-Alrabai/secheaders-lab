@@ -3,9 +3,9 @@ import { isIP } from 'node:net'
 import ipaddr from 'ipaddr.js'
 
 import { ScanError } from './errors'
+import { MAX_URL_LENGTH } from './limits'
 
-/** SC-01: maximum accepted URL length (after trimming). */
-export const MAX_URL_LENGTH = 2048
+export { MAX_URL_LENGTH } from './limits'
 
 /** SC-05: only default ports may be targeted. */
 const ALLOWED_PORTS = new Set(['', '80', '443'])

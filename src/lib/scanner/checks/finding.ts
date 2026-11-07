@@ -1,4 +1,5 @@
 import { truncate } from '../header-utils'
+import { EVIDENCE_MAX } from '../limits'
 import { ruleMeta } from '../rules'
 import type {
   Evidence,
@@ -10,8 +11,7 @@ import type {
   Status,
 } from '../types'
 
-/** `02` §4: evidence values are truncated to 512 characters. */
-export const EVIDENCE_MAX = 512
+export { EVIDENCE_MAX } from '../limits'
 
 export interface FindingSpec {
   status: Status

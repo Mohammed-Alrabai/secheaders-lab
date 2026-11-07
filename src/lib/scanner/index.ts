@@ -2,6 +2,7 @@ import { runChecks } from './checks/index'
 import { type PinnedAddress, type Resolver, resolvePinnedAddress, systemResolver } from './dns'
 import { ScanError, type ScanErrorDetail, isScanError } from './errors'
 import { HeaderMap, redactSetCookie, truncate } from './header-utils'
+import { RAW_HEADER_MAX } from './limits'
 import {
   type ConnectorFactory,
   type SafeFetchDeps,
@@ -13,8 +14,7 @@ import { type TlsInspection, inspectTls } from './tls-inspect'
 import type { Finding, HttpRedirectCheck, ScanResult, Status } from './types'
 import { normalizeAndValidate } from './url-policy'
 
-/** SC-20: raw header values are truncated to 2 KB for display. */
-export const RAW_HEADER_MAX = 2048
+export { RAW_HEADER_MAX } from './limits'
 
 /** Transport failures on HTTPS after which plain HTTP is tried (ADR-013). */
 const HTTPS_FALLBACK_DETAILS = new Set<ScanErrorDetail | undefined>([
