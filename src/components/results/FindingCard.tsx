@@ -59,11 +59,13 @@ export function FindingCard({ finding, platform, onPlatformChange }: FindingCard
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2 text-xs">
-              <Badge className={cn('rounded-md', STATUS_CHIP.get(finding.status))}>
+              <Badge className={cn('print-exact rounded-md', STATUS_CHIP.get(finding.status))}>
                 {t(`status.${finding.status}`)}
               </Badge>
               {actionable ? (
-                <Badge className={cn('rounded-md', SEVERITY_CHIP.get(finding.severity))}>
+                <Badge
+                  className={cn('print-exact rounded-md', SEVERITY_CHIP.get(finding.severity))}
+                >
                   {t(`severity.${finding.severity}`)}
                 </Badge>
               ) : null}
@@ -113,7 +115,7 @@ export function FindingCard({ finding, platform, onPlatformChange }: FindingCard
           </CollapsibleTrigger>
         </div>
 
-        <CollapsibleContent keepMounted className="print-show flex flex-col gap-5 border-t p-5">
+        <CollapsibleContent keepMounted className="flex flex-col gap-5 border-t p-5">
           <section className="flex flex-col gap-2">
             <h4 className="font-heading text-sm font-semibold">{t('why')}</h4>
             <p className="leading-relaxed">{tRule('why')}</p>

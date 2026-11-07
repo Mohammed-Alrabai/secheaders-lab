@@ -36,6 +36,7 @@ export function CopyButton({ value, label, accessibleLabel, copiedLabel }: CopyB
         type="button"
         variant="outline"
         size={label ? 'sm' : 'icon-sm'}
+        className="print:hidden"
         aria-label={label ? undefined : (accessibleLabel ?? t('copy'))}
         onClick={() => {
           navigator.clipboard.writeText(value).then(

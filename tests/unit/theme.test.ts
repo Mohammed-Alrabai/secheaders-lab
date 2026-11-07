@@ -51,12 +51,19 @@ describe('globals.css dark tokens', () => {
       .filter(Boolean)
       .sort()
 
+  it('dark tokens never apply in print: every dark rule is screen-only', () => {
+    expect(css).not.toMatch(/^\.dark\s*\{/m)
+    expect(css).not.toMatch(/@media \(prefers-color-scheme: dark\)/)
+  })
+
   it('the system-dark block equals the .dark blocks exactly (no drift)', () => {
-    const dark = [...css.matchAll(/^\.dark\s*\{([^}]*)\}/gm)].flatMap((m) =>
+    const dark = [...css.matchAll(/^\s+\.dark\s*\{([^}]*)\}/gm)].flatMap((m) =>
       declarations(m[1] ?? ''),
     )
     const system =
-      /@media \(prefers-color-scheme: dark\) \{\s*:root:not\(\.light\) \{([^}]*)\}/.exec(css)
+      /@media screen and \(prefers-color-scheme: dark\) \{\s*:root:not\(\.light\) \{([^}]*)\}/.exec(
+        css,
+      )
     // 31 preset tokens (08 §2) + 9 extended tokens (08 §4).
     expect(dark).toHaveLength(40)
     expect(declarations(system?.[1] ?? '')).toEqual(dark.sort())

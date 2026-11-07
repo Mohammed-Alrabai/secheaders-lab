@@ -13,7 +13,7 @@ export function CodeBlock({ code, filename }: { code: string; filename: string }
       </figcaption>
       <pre
         dir="ltr"
-        className="overflow-x-auto rounded-md border bg-muted p-3 font-mono text-sm leading-relaxed ltr-isolate"
+        className="overflow-x-auto rounded-md border bg-muted p-3 font-mono text-sm leading-relaxed ltr-isolate print:overflow-visible print:break-all print:whitespace-pre-wrap"
       >
         <code>{code}</code>
       </pre>

@@ -53,6 +53,14 @@ export const ScanReport = forwardRef<HTMLHeadingElement, ScanReportProps>(functi
 
   return (
     <div className="flex flex-col gap-8">
+      {/* Print-only page header (06 §2): product, target and scan date. */}
+      <p className="hidden border-b pb-2 text-sm print:block">
+        <strong>SecHeaders Lab</strong> ·{' '}
+        <bdi dir="ltr" className="ltr-isolate">
+          {finalUrl}
+        </bdi>{' '}
+        · {formatDate(result.scannedAt, locale)}
+      </p>
       {/* Summary header */}
       <section
         aria-labelledby="summary-title"
@@ -60,7 +68,7 @@ export const ScanReport = forwardRef<HTMLHeadingElement, ScanReportProps>(functi
       >
         <div
           className={cn(
-            'flex size-28 shrink-0 items-center justify-center rounded-lg font-heading text-6xl font-bold',
+            'print-exact flex size-28 shrink-0 items-center justify-center rounded-lg font-heading text-6xl font-bold',
             GRADE_BADGE.get(result.grade),
           )}
           role="img"
@@ -144,7 +152,7 @@ export const ScanReport = forwardRef<HTMLHeadingElement, ScanReportProps>(functi
             <li
               key={status}
               className={cn(
-                'flex items-center gap-2 rounded-md px-3 py-2',
+                'print-exact flex items-center gap-2 rounded-md px-3 py-2',
                 STATUS_CHIP.get(status),
               )}
             >
