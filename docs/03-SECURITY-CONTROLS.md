@@ -74,10 +74,13 @@ Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY
 Referrer-Policy: strict-origin-when-cross-origin
-Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
 Cross-Origin-Opener-Policy: same-origin
 Cross-Origin-Resource-Policy: same-origin
 ```
+- `interest-cohort=()` was removed from Permissions-Policy (obsolete; Chrome logs a console error for it) with the user's approval on 2026-11-07 (ADR-029).
+- In `next dev` only, `script-src` also carries `'unsafe-eval'`, which React needs for debugging stacks; production never does.
+- JSON API responses send `default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'`.
 - No `X-Powered-By` (`poweredByHeader: false`). No `Server` version disclosure where controllable.
 - `style-src-attr 'unsafe-inline'` is approved (ADR-009) for inline `style` attributes emitted by shadcn/Radix/React SSR. Any further relaxation (e.g. `'unsafe-inline'` in `style-src-elem` or anything in `script-src`) requires asking the user. Do not silently weaken CSP.
 

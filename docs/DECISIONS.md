@@ -173,3 +173,15 @@ Format per entry: **ADR-NNN — Title** · Date · Status (Accepted / Superseded
 **Context:** Per-platform-per-rule instruction keys would need ~70 near-duplicate strings per language.
 **Decision:** 17 parameterised instruction texts (`remediation.steps.*`); Cloudflare wording follows Cloudflare's docs as checked on 2026-11-07 (Edge Certificates, Response Header Transform Rules; the unverified claim that Cloudflare rewrites `Server` was dropped).
 **Consequences:** Smaller, consistent copy; a test asserts every key is used and translated.
+
+### ADR-029 — Remove `interest-cohort` from our Permissions-Policy
+2026-11-07 · Accepted (user approved change to `03` §6)
+**Context:** FLoC was withdrawn; Chrome logs "Unrecognized feature: 'interest-cohort'" as a console error, which conflicts with the zero-console-error goal and Lighthouse Best Practices.
+**Decision:** Our Permissions-Policy is `camera=(), microphone=(), geolocation=(), payment=(), usb=()`.
+**Consequences:** No change to our own grade (HDR-PERMISSIONS only checks presence).
+
+### ADR-030 — Nonce CSP composed with next-intl in `proxy.ts`
+2026-11-07 · Accepted
+**Context:** Next.js applies a nonce it finds in the request's CSP header; our proxy also runs next-intl routing.
+**Decision:** The proxy builds the `03` §6 CSP with a 128-bit nonce, sets it (and `x-nonce`) on the request it passes to next-intl (which forwards request headers), then sets the same CSP on the response. Static security headers stay in `next.config.ts`; API and brand files get locked-down CSPs.
+**Verification:** Production build, all pages exercised: 0 CSP violations; positive controls show an injected inline event handler, a parser-inserted inline script and an inline `<style>` are each blocked and reported. Scripts created by already-running JavaScript are allowed by `'strict-dynamic'` by design. No runtime `<style>` injection from Base UI (T-7 closed).
