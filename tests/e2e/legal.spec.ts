@@ -66,7 +66,7 @@ test.describe('first-visit cookie notice (ADR-037)', () => {
     await page.goto('/en')
     const notice = page.getByTestId('cookie-notice')
     await expect(notice).toBeVisible()
-    await expect(notice.getByRole('heading', { name: 'Your privacy comes first' })).toBeVisible()
+    await expect(notice.getByRole('heading', { name: 'Cookies on this site' })).toBeVisible()
     // Showing the notice sets nothing: still no cookies at all.
     expect(await context.cookies()).toEqual([])
 
@@ -86,7 +86,9 @@ test.describe('first-visit cookie notice (ADR-037)', () => {
   test('is shown in Arabic, right to left, and links to the cookie policy', async ({ page }) => {
     await page.goto('/ar')
     const notice = page.getByTestId('cookie-notice')
-    await expect(notice.getByRole('heading', { name: 'خصوصيتك أولًا' })).toBeVisible()
+    await expect(
+      notice.getByRole('heading', { name: 'ملفات تعريف الارتباط في هذا الموقع' }),
+    ).toBeVisible()
     await notice.getByRole('link', { name: 'اقرأ سياسة ملفات تعريف الارتباط' }).click()
     await expect(page).toHaveURL(/\/ar\/cookies$/)
     // Following the policy link does not count as closing the notice.
@@ -121,7 +123,12 @@ test.describe('first-visit cookie notice (ADR-037)', () => {
       test(`axe: notice visible, ${locale} ${scheme}`, async ({ page }) => {
         await page.emulateMedia({ colorScheme: scheme })
         await page.goto(`/${locale}`)
-        await expect(page.getByTestId('cookie-notice')).toBeVisible()
+        const notice = page.getByTestId('cookie-notice')
+        await expect(notice).toBeVisible()
+        // Measure contrast after the fade-in, not while the notice is still translucent.
+        await notice.evaluate((el) =>
+          Promise.all(el.getAnimations({ subtree: true }).map((a) => a.finished)),
+        )
         const results = await new AxeBuilder({ page })
           .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
           .analyze()

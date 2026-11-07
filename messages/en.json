@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "SecHeaders Lab — passive website security review",
-    "description": "Grade a website's HTTP security headers, TLS, cookies and information disclosure from A+ to F, with copy-ready fixes for Nginx, Apache, IIS, Next.js, Netlify and Cloudflare."
+    "description": "Grade a website’s HTTP security headers, TLS, cookies and information disclosure from A+ to F, with copy-ready fixes for Nginx, Apache, IIS, Next.js, Netlify and Cloudflare."
   },
   "common": {
     "appName": "SecHeaders Lab",
@@ -23,7 +23,7 @@
     },
     "footer": {
       "disclaimer": "SecHeaders Lab performs a passive, read-only inspection of what a site already serves to every browser. It is not a penetration test and its results are informational. Only scan sites you are authorized to assess.",
-      "privacy": "No accounts, no analytics, no tracking. Scanned addresses and results are not stored.",
+      "privacy": "No accounts, no analytics, no tracking. Scan results and full addresses are not stored.",
       "methodology": "Methodology and scoring",
       "author": "Built by Mohammed Alrabai",
       "opensInNewTab": "(opens in a new tab)",
@@ -63,7 +63,7 @@
       "title": "What you get",
       "passive": {
         "title": "Passive and safe",
-        "body": "One normal page request and one TLS handshake. No probing, no payloads, nothing a regular visitor would not do."
+        "body": "One normal page request, one TLS handshake and one HTTP-to-HTTPS redirect check. No probing, no payloads, nothing a regular visitor would not do."
       },
       "fixes": {
         "title": "Fixes for your server",
@@ -77,7 +77,7 @@
     "how": {
       "title": "How it works",
       "step1": "Enter the address of a site you are allowed to assess.",
-      "step2": "We fetch its homepage once, read the response headers and inspect the TLS certificate.",
+      "step2": "We request the page once, read its response headers, inspect the TLS certificate and check the HTTP-to-HTTPS redirect.",
       "step3": "You get a score, a grade and a fix for every finding.",
       "methodologyLink": "Read the full methodology"
     }
@@ -255,7 +255,7 @@
   "rules": {
     "HDR-HSTS": {
       "title": "Strict-Transport-Security (HSTS)",
-      "why": "HSTS tells browsers to use only HTTPS for your site for a set time, even when someone types or follows an http:// link. It prevents downgrade and cookie-theft attacks on networks an attacker controls.",
+      "why": "HSTS tells browsers to use only HTTPS for your site for a set time, even when someone types or follows an http:// link. After the first secure visit, this protects visitors from downgrade and cookie-theft attacks on networks an attacker controls.",
       "states": {
         "notHttps": "The final page is served over plain HTTP, so HSTS cannot take effect.",
         "missing": "The header is missing.",
@@ -268,7 +268,7 @@
     },
     "HDR-CSP": {
       "title": "Content-Security-Policy (CSP)",
-      "why": "A CSP limits where scripts and other resources may load from. A strict policy is the strongest browser defence against cross-site scripting (XSS).",
+      "why": "A CSP limits where scripts and other resources may load from. A strict policy is one of the strongest browser defenses against cross-site scripting (XSS).",
       "states": {
         "missing": "No enforced Content-Security-Policy header was found.",
         "reportOnlyIgnored": "Only Content-Security-Policy-Report-Only is present; it reports violations but blocks nothing.",
@@ -293,7 +293,7 @@
     },
     "HDR-XCTO": {
       "title": "X-Content-Type-Options",
-      "why": "nosniff stops browsers from guessing a file’s type, which could otherwise turn an uploaded text file into script or style.",
+      "why": "The nosniff value stops browsers from guessing a file’s type, which could otherwise turn an uploaded text file into script or style.",
       "states": {
         "missing": "The header is missing.",
         "invalid": "The value is not nosniff.",
@@ -305,7 +305,7 @@
       "why": "Controls how much of the page address is sent to other sites when people follow links. Full URLs can leak tokens, IDs or private paths.",
       "states": {
         "missing": "Not set; the browser default applies.",
-        "invalid": "No valid policy value was recognised; the browser default applies.",
+        "invalid": "No valid policy value was recognized; the browser default applies.",
         "leaky": "{policy} sends the full URL to other sites.",
         "ok": "The policy {policy} limits what is shared."
       }
@@ -320,7 +320,7 @@
     },
     "HDR-COOP": {
       "title": "Cross-Origin-Opener-Policy (COOP)",
-      "why": "same-origin isolates your window from pages it opens or that open it, which reduces cross-window attacks and side-channel leaks.",
+      "why": "The same-origin value isolates your window from pages it opens and from the page that opened it, which reduces cross-window attacks and side-channel leaks.",
       "states": {
         "missing": "Not set (informational, no points deducted).",
         "ok": "Set."
@@ -336,7 +336,7 @@
       }
     },
     "HDR-DUPLICATE": {
-      "title": "Duplicated headers",
+      "title": "Duplicate headers",
       "why": "When a header is sent twice, browsers may use either value or combine them, so the effective policy becomes unclear.",
       "states": {
         "found": "Sent more than once: {headers}. The first value was evaluated."
@@ -364,7 +364,7 @@
     },
     "TLS-CERT-EXPIRY": {
       "title": "Certificate expiry",
-      "why": "An expired certificate takes the site offline for visitors. Automated renewal prevents this.",
+      "why": "When a certificate expires, browsers block the site with a full-page warning. Automated renewal prevents this.",
       "states": {
         "soon": "Expires in {days, plural, one {# day} other {# days}}; renew it now.",
         "month": "Expires in {days, plural, one {# day} other {# days}}; make sure renewal is automated.",
@@ -389,7 +389,7 @@
         "ok": "http:// redirects to HTTPS on the same site.",
         "noRedirect": "http:// does not redirect to HTTPS.",
         "otherSite": "http:// redirects to HTTPS on a different site.",
-        "httpUnavailable": "Port 80 is not served; only HTTPS is available, which is fine."
+        "httpUnavailable": "Port 80 is not reachable; the site is served over HTTPS only, which is fine."
       }
     },
     "CK-SECURE": {
@@ -423,7 +423,7 @@
     },
     "CK-PREFIX": {
       "title": "Cookie name prefixes",
-      "why": "The __Host- and __Secure- prefixes make browsers enforce secure attributes, but only when the cookie follows their rules.",
+      "why": "The __Host- and __Secure- prefixes make browsers reject a cookie unless it is set with the required secure attributes.",
       "states": {
         "noCookies": "No cookies are set on this page.",
         "ok": "Cookie prefixes are used correctly, or not used.",
@@ -485,14 +485,14 @@
       "fetch": "One normal GET request for the address you enter, following at most five redirects. Every redirect target is checked again before it is followed.",
       "tls": "One TLS handshake on port 443 to read the certificate and the negotiated protocol. No application data is sent on it.",
       "redirect": "One request to http:// on the same host to see whether it redirects to HTTPS.",
-      "never": "Nothing else: no crawling, no path guessing, no attack payloads, and only public addresses on ports 80 and 443."
+      "never": "Nothing else: no crawling, no path guessing and no attack payloads. Only public addresses on ports 80 and 443 are contacted."
     },
     "checks": {
       "title": "Checks and weights",
       "intro": "Each failed or weak check deducts points from 100. Informational findings never deduct points.",
       "rule": "Check",
       "severity": "Highest severity",
-      "maxPoints": "Max. points"
+      "maxPoints": "Max. deduction"
     },
     "grading": {
       "title": "Score and grade",
@@ -507,17 +507,17 @@
     "limits": {
       "title": "Limitations",
       "passive": "The scan is passive. It reports what a site sends to every visitor; it cannot find vulnerabilities in the application itself.",
-      "single": "Only the first page is inspected. Other pages, and visitors in other regions or behind other CDN nodes, may receive different headers.",
-      "meta": "Policies set with HTML meta tags are not read, because the page body is never downloaded.",
+      "single": "Only the page at the address you enter (after redirects) is inspected. Other pages, and visitors in other regions or behind other CDN nodes, may receive different headers.",
+      "meta": "Policies set with HTML meta tags are not read, because the page body is never read.",
       "compliance": "Results are informational and are not a penetration test or a compliance assessment."
     },
     "privacy": {
       "title": "Privacy",
-      "body": "There are no accounts, no analytics and no tracking. Scanned addresses and results are not stored. The server logs only the time, the outcome, the duration and the scanned host name, without paths or query strings. The only cookie is an optional theme preference stored in your browser.",
+      "body": "There are no accounts, no analytics and no tracking. Scan results and full addresses are not stored. The server logs only the time, the outcome, the duration, the scanned host name and the number of findings, without paths or query strings. The only cookie is an optional theme preference stored in your browser.",
       "more": "Read the full Privacy Policy"
     },
     "terms": {
-      "title": "Terms of use",
+      "title": "Terms of Use",
       "body": "Only scan sites that you own or are authorized to assess. The service is provided as is, without warranty, and its results must not be relied on as a security certification.",
       "more": "Read the full Terms of Use"
     },
@@ -529,7 +529,7 @@
     }
   },
   "cookieNotice": {
-    "title": "Your privacy comes first",
+    "title": "Cookies on this site",
     "body": "SecHeaders Lab uses no tracking, analytics or advertising cookies. A single optional cookie remembers whether you prefer the light or dark theme.",
     "accept": "Got it",
     "policy": "Read the Cookie Policy"
@@ -558,7 +558,7 @@
             "No accounts, sign-ups or passwords.",
             "No analytics, advertising, fingerprinting or tracking of any kind.",
             "No third-party scripts, fonts or embedded content. Every file is served from this site.",
-            "No record of the addresses you scan or of their results."
+            "No stored scan results, and no record of full addresses: the scan log keeps only the host name."
           ]
         },
         {
@@ -630,7 +630,7 @@
         {
           "title": "Results are guidance, not certification",
           "paragraphs": [
-            "A scan is not a penetration test, a vulnerability assessment or a compliance certification. It inspects only the first page and its response headers; other pages, regions or CDN locations may behave differently.",
+            "A scan is not a penetration test, a vulnerability assessment or a compliance certification. It inspects only the response for the address you enter; other pages, regions or CDN locations may behave differently.",
             "Use the results as guidance, and test every change in your own environment before relying on it."
           ]
         },
@@ -649,7 +649,7 @@
         {
           "title": "Security research",
           "paragraphs": [
-            "If you find a vulnerability in SecHeaders Lab, report it privately as described in the project’s security policy. Never test it against websites you do not own."
+            "If you find a vulnerability in SecHeaders Lab, report it privately as described in the project’s security policy. Do not exploit it, and never use it against websites you do not own."
           ]
         },
         {
@@ -668,7 +668,7 @@
         {
           "title": "What cookies are",
           "paragraphs": [
-            "Cookies are small text files that a website stores in your browser. Local storage is a similar browser feature that keeps small values on your device."
+            "Cookies are small pieces of text that a website asks your browser to store. Local storage is a similar browser feature that keeps small values on your device."
           ]
         },
         {

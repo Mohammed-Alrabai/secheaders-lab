@@ -25,5 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Own security headers that score A+: per-request nonce CSP with `'strict-dynamic'`, HSTS with preload,
   framing, MIME, referrer, permissions, COOP and CORP policies.
 - Open Graph images in English and Arabic, canonical and hreflang links, `robots.txt` and `sitemap.xml`.
+- Privacy Policy, Terms of Use and Cookie Policy pages in English and Arabic, and an informational
+  first-visit cookie notice (no tracking cookies; the site has one optional theme cookie).
 - Unit, integration and end-to-end test suites (including accessibility, CSP and keyboard-only tests) and CI
   with CodeQL, Semgrep, Gitleaks and `pnpm audit`.

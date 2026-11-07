@@ -58,7 +58,8 @@ Nginx, Apache, IIS, Next.js, Netlify or Cloudflare. It never probes, crawls or a
 - **Print / Save as PDF** report: A4, page numbers, failing findings expanded, your platform's fixes only.
 - **Bilingual** English and Arabic with proper RTL, light and dark themes, WCAG 2.2 AA.
 - **Transparent methodology** page generated from the same rule and scoring code the scanner uses.
-- **Private by design**: no accounts, no analytics, no stored scans, no third-party scripts or fonts.
+- **Private by design**: no accounts, no analytics, no stored scans, no third-party scripts or fonts, and
+  plain-language Privacy Policy, Terms of Use and Cookie Policy pages in both languages.
 
 ## How it works
 

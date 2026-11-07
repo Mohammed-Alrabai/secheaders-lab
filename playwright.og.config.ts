@@ -9,7 +9,9 @@ const baseURL = `http://localhost:${String(PORT)}`
 // tests/e2e/legal.spec.ts starts from an empty state to cover the notice itself.
 const noticeDismissed = {
   cookies: [],
-  origins: [{ origin: baseURL, localStorage: [{ name: COOKIE_NOTICE_KEY, value: COOKIE_NOTICE_VALUE }] }],
+  origins: [
+    { origin: baseURL, localStorage: [{ name: COOKIE_NOTICE_KEY, value: COOKIE_NOTICE_VALUE }] },
+  ],
 }
 
 /**

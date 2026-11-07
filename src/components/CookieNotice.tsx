@@ -49,7 +49,7 @@ export function CookieNotice() {
       aria-labelledby="cookie-notice-title"
       aria-describedby="cookie-notice-body"
       data-testid="cookie-notice"
-      className="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-lg rounded-xl border bg-popover p-4 text-popover-foreground shadow-xl ring-1 ring-foreground/5 duration-300 animate-in fade-in slide-in-from-bottom-4 motion-reduce:animate-none sm:inset-x-auto sm:end-6 sm:bottom-6 sm:p-5 print:hidden"
+      className="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-lg animate-in rounded-xl border bg-popover p-4 text-popover-foreground shadow-xl ring-1 ring-foreground/5 duration-300 fade-in slide-in-from-bottom-4 motion-reduce:animate-none sm:inset-x-auto sm:end-6 sm:bottom-6 sm:p-5 print:hidden"
     >
       <div className="flex gap-4">
         <span
