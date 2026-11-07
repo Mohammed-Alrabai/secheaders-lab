@@ -102,6 +102,8 @@
   --warning-foreground: oklch(0.279 0.077 45.635);
   --info: var(--primary);
   --info-foreground: var(--primary-foreground);
+  /* ADR-031: text accent (dark primary is too dark for text) */
+  --link: var(--primary);
 
   --grade-a-plus: oklch(0.527 0.154 150.069);
   --grade-a: oklch(0.627 0.194 149.214);
@@ -122,6 +124,7 @@
     --grade-b: oklch(0.841 0.238 128.85);
     --grade-c: oklch(0.828 0.189 84.429);
     --grade-d: oklch(0.75 0.183 55.934);
+    --link: var(--sidebar-primary);
   }
 }
 
@@ -170,6 +173,7 @@
     --grade-b: oklch(0.841 0.238 128.85);
     --grade-c: oklch(0.828 0.189 84.429);
     --grade-d: oklch(0.75 0.183 55.934);
+    --link: var(--sidebar-primary);
   }
 }
 
@@ -195,6 +199,7 @@
   --color-warning-foreground: var(--warning-foreground);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
+  --color-link: var(--link);
   --color-grade-a-plus: var(--grade-a-plus);
   --color-grade-a: var(--grade-a);
   --color-grade-b: var(--grade-b);
@@ -264,8 +269,8 @@
 }
 
 @utility chip-muted {
-  background-color: var(--muted);
-  color: var(--muted-foreground);
+  background-color: color-mix(in oklch, var(--muted-foreground) 14%, transparent);
+  color: color-mix(in oklch, var(--muted-foreground) 55%, var(--foreground));
 }
 
 /* Upstream values, URLs and code are always left-to-right and isolated (06 §4). */

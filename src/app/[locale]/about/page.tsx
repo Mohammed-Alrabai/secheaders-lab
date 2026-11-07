@@ -189,7 +189,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 href={source.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-primary underline-offset-4 hover:underline"
+                className="inline-flex items-center gap-1 text-link underline-offset-4 hover:underline"
               >
                 {source.label}
                 <ExternalLink strokeWidth={1.75} className="size-3.5" aria-hidden />

@@ -203,7 +203,7 @@ function CategorySection({
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-3">
       <h2 id={titleId} className="flex items-center gap-2 text-xl font-semibold">
-        <CategoryIcon category={category} className="size-5 text-primary" />
+        <CategoryIcon category={category} className="size-5 text-link" />
         {t(`categories.${category}`)}
       </h2>
       {open.map((f) => (
@@ -216,7 +216,7 @@ function CategorySection({
       ))}
       {passed.length > 0 ? (
         <Collapsible open={showPassed} onOpenChange={setShowPassed}>
-          <CollapsibleTrigger className="inline-flex items-center gap-1 rounded-md text-sm font-medium text-primary hover:underline print:hidden">
+          <CollapsibleTrigger className="inline-flex items-center gap-1 rounded-md text-sm font-medium text-link hover:underline print:hidden">
             {showPassed ? t('passed.hide') : t('passed.show', { count: passed.length })}
             <ChevronDown
               strokeWidth={1.75}
@@ -296,7 +296,7 @@ function RedirectChain({ result }: { result: ScanResult }) {
   return (
     <section aria-labelledby="redirects-title" className="flex break-inside-avoid flex-col gap-3">
       <h2 id="redirects-title" className="flex items-center gap-2 text-xl font-semibold">
-        <Route strokeWidth={1.75} className="size-5 text-primary" aria-hidden />
+        <Route strokeWidth={1.75} className="size-5 text-link" aria-hidden />
         {t('title')}
       </h2>
       {chain.length <= 1 ? <p className="text-muted-foreground">{t('none')}</p> : null}

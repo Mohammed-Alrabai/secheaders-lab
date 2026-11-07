@@ -94,7 +94,7 @@ export function FindingCard({ finding, platform, onPlatformChange }: FindingCard
               >
                 {finding.evidence?.header ? `${displayText(finding.evidence.header)}: ` : ''}
                 {evidenceValue === undefined ? (
-                  <span className="text-muted-foreground italic">{t('notPresent')}</span>
+                  <span className="italic">{t('notPresent')}</span>
                 ) : (
                   displayText(evidenceValue)
                 )}
@@ -102,7 +102,7 @@ export function FindingCard({ finding, platform, onPlatformChange }: FindingCard
             </div>
           ) : null}
 
-          <CollapsibleTrigger className="inline-flex w-fit items-center gap-1 rounded-md text-sm font-medium text-primary hover:underline print:hidden">
+          <CollapsibleTrigger className="inline-flex w-fit items-center gap-1 rounded-md text-sm font-medium text-link hover:underline print:hidden">
             {open ? t('details.hide') : t('details.show')}
             <ChevronDown
               strokeWidth={1.75}
@@ -133,7 +133,7 @@ export function FindingCard({ finding, platform, onPlatformChange }: FindingCard
                     href={ref.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-primary underline-offset-4 hover:underline"
+                    className="inline-flex items-center gap-1 text-link underline-offset-4 hover:underline"
                   >
                     {ref.label}
                     <ExternalLink strokeWidth={1.75} className="size-3.5" aria-hidden />

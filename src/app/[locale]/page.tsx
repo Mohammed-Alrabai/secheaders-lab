@@ -48,7 +48,7 @@ export default async function HomePage({ params }: HomePageProps) {
             <li key={key}>
               <Card className="h-full">
                 <CardHeader className="flex flex-row items-center gap-3">
-                  <Icon strokeWidth={1.75} className="size-6 shrink-0 text-primary" aria-hidden />
+                  <Icon strokeWidth={1.75} className="size-6 shrink-0 text-link" aria-hidden />
                   <CardTitle className="font-heading">{t(`features.${key}.title`)}</CardTitle>
                 </CardHeader>
                 <CardContent className="text-muted-foreground">
@@ -79,7 +79,7 @@ export default async function HomePage({ params }: HomePageProps) {
         </ol>
         <Link
           href="/about"
-          className="inline-flex w-fit items-center gap-1 text-primary underline-offset-4 hover:underline"
+          className="inline-flex w-fit items-center gap-1 text-link underline-offset-4 hover:underline"
         >
           {t('how.methodologyLink')}
           <ArrowRight strokeWidth={1.75} className="size-4 rtl:rotate-180" aria-hidden />

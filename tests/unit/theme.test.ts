@@ -64,8 +64,8 @@ describe('globals.css dark tokens', () => {
       /@media screen and \(prefers-color-scheme: dark\) \{\s*:root:not\(\.light\) \{([^}]*)\}/.exec(
         css,
       )
-    // 31 preset tokens (08 §2) + 9 extended tokens (08 §4).
-    expect(dark).toHaveLength(40)
+    // 31 preset tokens (08 §2) + 9 extended tokens (08 §4) + --link (ADR-031).
+    expect(dark).toHaveLength(41)
     expect(declarations(system?.[1] ?? '')).toEqual(dark.sort())
   })
 })
