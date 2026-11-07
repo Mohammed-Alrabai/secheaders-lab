@@ -1,12 +1,18 @@
 import { ArrowRight, Languages, ShieldCheck, Wrench } from 'lucide-react'
+import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 
 import { ScanForm } from '@/components/ScanForm'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link } from '@/i18n/navigation'
+import { alternatesFor } from '@/i18n/alternates'
 import { resolveLocaleParam } from '@/i18n/locale-param'
 import { checkUrlInput } from '@/lib/client-url-check'
 import { getEnv } from '@/lib/env'
+
+export async function generateMetadata({ params }: HomePageProps): Promise<Metadata> {
+  return { alternates: alternatesFor(await resolveLocaleParam(params), '') }
+}
 
 interface HomePageProps {
   params: Promise<{ locale: string }>

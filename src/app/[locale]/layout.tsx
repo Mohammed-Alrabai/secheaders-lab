@@ -9,7 +9,7 @@ import { Providers } from '@/components/Providers'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { resolveLocaleParam } from '@/i18n/locale-param'
-import { localeDirection, routing } from '@/i18n/routing'
+import { localeDirection } from '@/i18n/routing'
 import { getEnv } from '@/lib/env'
 import { THEME_COOKIE, parseThemePreference, themeClass } from '@/lib/theme'
 import { cn } from '@/lib/utils'
@@ -27,11 +27,6 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
     metadataBase: new URL(getEnv().siteUrl),
     title: { default: t('title'), template: `%s · SecHeaders Lab` },
     description: t('description'),
-    // `06` §6: per-locale canonical and hreflang alternates.
-    alternates: {
-      canonical: `/${locale}`,
-      languages: Object.fromEntries(routing.locales.map((l) => [l, `/${l}`])),
-    },
     openGraph: {
       type: 'website',
       siteName: 'SecHeaders Lab',

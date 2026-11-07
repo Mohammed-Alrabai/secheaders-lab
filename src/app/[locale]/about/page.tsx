@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { alternatesFor } from '@/i18n/alternates'
 import { resolveLocaleParam } from '@/i18n/locale-param'
 import { ruleMeta } from '@/lib/scanner/rules'
 import { CAP_MAX_GRADE, GRADE_THRESHOLDS, SCORING_VERSION } from '@/lib/scanner/scoring'
@@ -36,7 +37,7 @@ const SOURCES = [
 export async function generateMetadata({ params }: AboutPageProps): Promise<Metadata> {
   const locale = await resolveLocaleParam(params)
   const t = await getTranslations({ locale, namespace: 'about' })
-  return { title: t('title') }
+  return { title: t('title'), alternates: alternatesFor(locale, '/about') }
 }
 
 /** Methodology (FR-12, `06` §2): checks and weights are rendered from the code, not copied. */
