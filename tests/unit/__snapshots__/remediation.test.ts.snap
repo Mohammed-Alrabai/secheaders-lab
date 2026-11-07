@@ -1,0 +1,956 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`remediation snippets (FR-05, 07 task 2.6) > apache snapshot 1`] = `
+{
+  "CK-HTTPONLY": {
+    "code": "# Prefer setting these flags in the application; this rewrites every cookie.
+Header always edit Set-Cookie ^(.*)$ "$1; Secure; HttpOnly; SameSite=Lax"
+",
+    "filename": "VirtualHost (mod_headers)",
+    "kind": "code",
+    "language": "apache",
+  },
+  "CK-PREFIX": {
+    "kind": "instructions",
+    "messageKey": "remediation.apache.CK-PREFIX",
+  },
+  "CK-SAMESITE": {
+    "code": "# Prefer setting these flags in the application; this rewrites every cookie.
+Header always edit Set-Cookie ^(.*)$ "$1; Secure; HttpOnly; SameSite=Lax"
+",
+    "filename": "VirtualHost (mod_headers)",
+    "kind": "code",
+    "language": "apache",
+  },
+  "CK-SECURE": {
+    "code": "# Prefer setting these flags in the application; this rewrites every cookie.
+Header always edit Set-Cookie ^(.*)$ "$1; Secure; HttpOnly; SameSite=Lax"
+",
+    "filename": "VirtualHost (mod_headers)",
+    "kind": "code",
+    "language": "apache",
+  },
+  "HDR-COOP": {
+    "code": "Header always set Cross-Origin-Opener-Policy "same-origin"
+",
+    "filename": ".htaccess or VirtualHost (mod_headers)",
+    "kind": "code",
+    "language": "apache",
+  },
+  "HDR-CSP": {
+    "code": "# Tailor the sources to your site; deploy as Content-Security-Policy-Report-Only first.
+Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+",
+    "filename": ".htaccess or VirtualHost (mod_headers)",
+    "kind": "code",
+    "language": "apache",
+  },
+  "HDR-DUPLICATE": {
+    "kind": "instructions",
+    "messageKey": "remediation.apache.HDR-DUPLICATE",
+  },
+  "HDR-FRAME": {
+    "code": "# CSP frame-ancestors 'none' is the modern equivalent; sending both is fine.
+Header always set X-Frame-Options "DENY"
+",
+    "filename": ".htaccess or VirtualHost (mod_headers)",
+    "kind": "code",
+    "language": "apache",
+  },
+  "HDR-HSTS": {
+    "code": "# Keep "preload" only if you will submit the domain to the HSTS preload list.
+Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+",
+    "filename": ".htaccess or VirtualHost (mod_headers)",
+    "kind": "code",
+    "language": "apache",
+  },
+  "HDR-PERMISSIONS": {
+    "code": "Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+",
+    "filename": ".htaccess or VirtualHost (mod_headers)",
+    "kind": "code",
+    "language": "apache",
+  },
+  "HDR-REFERRER": {
+    "code": "Header always set Referrer-Policy "strict-origin-when-cross-origin"
+",
+    "filename": ".htaccess or VirtualHost (mod_headers)",
+    "kind": "code",
+    "language": "apache",
+  },
+  "HDR-XCTO": {
+    "code": "Header always set X-Content-Type-Options "nosniff"
+",
+    "filename": ".htaccess or VirtualHost (mod_headers)",
+    "kind": "code",
+    "language": "apache",
+  },
+  "HDR-XXSS": {
+    "code": "# The XSS auditor is obsolete; "0" disables it in legacy browsers. Rely on CSP.
+Header always set X-XSS-Protection "0"
+",
+    "filename": ".htaccess or VirtualHost (mod_headers)",
+    "kind": "code",
+    "language": "apache",
+  },
+  "INF-ASPNET": {
+    "kind": "instructions",
+    "messageKey": "remediation.apache.INF-ASPNET",
+  },
+  "INF-POWERED-BY": {
+    "code": "Header always unset X-Powered-By
+Header unset X-Powered-By
+",
+    "filename": "VirtualHost (mod_headers)",
+    "kind": "code",
+    "language": "apache",
+  },
+  "INF-SERVER": {
+    "code": "ServerTokens Prod
+ServerSignature Off
+",
+    "filename": "apache2.conf / httpd.conf",
+    "kind": "code",
+    "language": "apache",
+  },
+  "TLS-AVAILABLE": {
+    "kind": "instructions",
+    "messageKey": "remediation.apache.TLS-AVAILABLE",
+  },
+  "TLS-CERT-EXPIRY": {
+    "kind": "instructions",
+    "messageKey": "remediation.apache.TLS-CERT-EXPIRY",
+  },
+  "TLS-CERT-VALID": {
+    "kind": "instructions",
+    "messageKey": "remediation.apache.TLS-CERT-VALID",
+  },
+  "TLS-HTTP-REDIRECT": {
+    "code": "RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+",
+    "filename": ".htaccess or VirtualHost *:80 (mod_rewrite)",
+    "kind": "code",
+    "language": "apache",
+  },
+  "TLS-PROTOCOL": {
+    "code": "SSLProtocol -all +TLSv1.2 +TLSv1.3
+",
+    "filename": "ssl.conf or VirtualHost",
+    "kind": "code",
+    "language": "apache",
+  },
+}
+`;
+
+exports[`remediation snippets (FR-05, 07 task 2.6) > cloudflare snapshot 1`] = `
+{
+  "CK-HTTPONLY": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.CK-HTTPONLY",
+  },
+  "CK-PREFIX": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.CK-PREFIX",
+  },
+  "CK-SAMESITE": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.CK-SAMESITE",
+  },
+  "CK-SECURE": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.CK-SECURE",
+  },
+  "HDR-COOP": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.HDR-COOP",
+  },
+  "HDR-CSP": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.HDR-CSP",
+  },
+  "HDR-DUPLICATE": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.HDR-DUPLICATE",
+  },
+  "HDR-FRAME": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.HDR-FRAME",
+  },
+  "HDR-HSTS": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.HDR-HSTS",
+  },
+  "HDR-PERMISSIONS": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.HDR-PERMISSIONS",
+  },
+  "HDR-REFERRER": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.HDR-REFERRER",
+  },
+  "HDR-XCTO": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.HDR-XCTO",
+  },
+  "HDR-XXSS": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.HDR-XXSS",
+  },
+  "INF-ASPNET": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.INF-ASPNET",
+  },
+  "INF-POWERED-BY": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.INF-POWERED-BY",
+  },
+  "INF-SERVER": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.INF-SERVER",
+  },
+  "TLS-AVAILABLE": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.TLS-AVAILABLE",
+  },
+  "TLS-CERT-EXPIRY": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.TLS-CERT-EXPIRY",
+  },
+  "TLS-CERT-VALID": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.TLS-CERT-VALID",
+  },
+  "TLS-HTTP-REDIRECT": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.TLS-HTTP-REDIRECT",
+  },
+  "TLS-PROTOCOL": {
+    "kind": "instructions",
+    "messageKey": "remediation.cloudflare.TLS-PROTOCOL",
+  },
+}
+`;
+
+exports[`remediation snippets (FR-05, 07 task 2.6) > iis snapshot 1`] = `
+{
+  "CK-HTTPONLY": {
+    "code": "<system.web>
+  <httpCookies requireSSL="true" httpOnlyCookies="true" sameSite="Lax" />
+</system.web>
+",
+    "filename": "web.config (ASP.NET)",
+    "kind": "code",
+    "language": "xml",
+  },
+  "CK-PREFIX": {
+    "kind": "instructions",
+    "messageKey": "remediation.iis.CK-PREFIX",
+  },
+  "CK-SAMESITE": {
+    "code": "<system.web>
+  <httpCookies requireSSL="true" httpOnlyCookies="true" sameSite="Lax" />
+</system.web>
+",
+    "filename": "web.config (ASP.NET)",
+    "kind": "code",
+    "language": "xml",
+  },
+  "CK-SECURE": {
+    "code": "<system.web>
+  <httpCookies requireSSL="true" httpOnlyCookies="true" sameSite="Lax" />
+</system.web>
+",
+    "filename": "web.config (ASP.NET)",
+    "kind": "code",
+    "language": "xml",
+  },
+  "HDR-COOP": {
+    "code": "<system.webServer>
+  <httpProtocol>
+    <customHeaders>
+      <add name="Cross-Origin-Opener-Policy" value="same-origin" />
+    </customHeaders>
+  </httpProtocol>
+</system.webServer>
+",
+    "filename": "web.config",
+    "kind": "code",
+    "language": "xml",
+  },
+  "HDR-CSP": {
+    "code": "<!-- Tailor the sources to your site; deploy as Content-Security-Policy-Report-Only first. -->
+<system.webServer>
+  <httpProtocol>
+    <customHeaders>
+      <add name="Content-Security-Policy" value="default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'" />
+    </customHeaders>
+  </httpProtocol>
+</system.webServer>
+",
+    "filename": "web.config",
+    "kind": "code",
+    "language": "xml",
+  },
+  "HDR-DUPLICATE": {
+    "kind": "instructions",
+    "messageKey": "remediation.iis.HDR-DUPLICATE",
+  },
+  "HDR-FRAME": {
+    "code": "<!-- CSP frame-ancestors 'none' is the modern equivalent; sending both is fine. -->
+<system.webServer>
+  <httpProtocol>
+    <customHeaders>
+      <add name="X-Frame-Options" value="DENY" />
+    </customHeaders>
+  </httpProtocol>
+</system.webServer>
+",
+    "filename": "web.config",
+    "kind": "code",
+    "language": "xml",
+  },
+  "HDR-HSTS": {
+    "code": "<!-- Keep "preload" only if you will submit the domain to the HSTS preload list. -->
+<system.webServer>
+  <httpProtocol>
+    <customHeaders>
+      <add name="Strict-Transport-Security" value="max-age=63072000; includeSubDomains; preload" />
+    </customHeaders>
+  </httpProtocol>
+</system.webServer>
+",
+    "filename": "web.config",
+    "kind": "code",
+    "language": "xml",
+  },
+  "HDR-PERMISSIONS": {
+    "code": "<system.webServer>
+  <httpProtocol>
+    <customHeaders>
+      <add name="Permissions-Policy" value="camera=(), microphone=(), geolocation=(), payment=(), usb=()" />
+    </customHeaders>
+  </httpProtocol>
+</system.webServer>
+",
+    "filename": "web.config",
+    "kind": "code",
+    "language": "xml",
+  },
+  "HDR-REFERRER": {
+    "code": "<system.webServer>
+  <httpProtocol>
+    <customHeaders>
+      <add name="Referrer-Policy" value="strict-origin-when-cross-origin" />
+    </customHeaders>
+  </httpProtocol>
+</system.webServer>
+",
+    "filename": "web.config",
+    "kind": "code",
+    "language": "xml",
+  },
+  "HDR-XCTO": {
+    "code": "<system.webServer>
+  <httpProtocol>
+    <customHeaders>
+      <add name="X-Content-Type-Options" value="nosniff" />
+    </customHeaders>
+  </httpProtocol>
+</system.webServer>
+",
+    "filename": "web.config",
+    "kind": "code",
+    "language": "xml",
+  },
+  "HDR-XXSS": {
+    "code": "<!-- The XSS auditor is obsolete; "0" disables it in legacy browsers. Rely on CSP. -->
+<system.webServer>
+  <httpProtocol>
+    <customHeaders>
+      <add name="X-XSS-Protection" value="0" />
+    </customHeaders>
+  </httpProtocol>
+</system.webServer>
+",
+    "filename": "web.config",
+    "kind": "code",
+    "language": "xml",
+  },
+  "INF-ASPNET": {
+    "code": "<system.web>
+  <httpRuntime enableVersionHeader="false" />
+</system.web>
+<!-- ASP.NET MVC: also set MvcHandler.DisableMvcResponseHeader = true in Application_Start. -->
+",
+    "filename": "web.config (ASP.NET)",
+    "kind": "code",
+    "language": "xml",
+  },
+  "INF-POWERED-BY": {
+    "code": "<system.webServer>
+  <httpProtocol>
+    <customHeaders>
+      <remove name="X-Powered-By" />
+    </customHeaders>
+  </httpProtocol>
+</system.webServer>
+",
+    "filename": "web.config",
+    "kind": "code",
+    "language": "xml",
+  },
+  "INF-SERVER": {
+    "code": "<system.webServer>
+  <security>
+    <requestFiltering removeServerHeader="true" />
+  </security>
+</system.webServer>
+",
+    "filename": "web.config (IIS 10+)",
+    "kind": "code",
+    "language": "xml",
+  },
+  "TLS-AVAILABLE": {
+    "kind": "instructions",
+    "messageKey": "remediation.iis.TLS-AVAILABLE",
+  },
+  "TLS-CERT-EXPIRY": {
+    "kind": "instructions",
+    "messageKey": "remediation.iis.TLS-CERT-EXPIRY",
+  },
+  "TLS-CERT-VALID": {
+    "kind": "instructions",
+    "messageKey": "remediation.iis.TLS-CERT-VALID",
+  },
+  "TLS-HTTP-REDIRECT": {
+    "code": "<system.webServer>
+  <rewrite>
+    <rules>
+      <rule name="HTTPS redirect" stopProcessing="true">
+        <match url="(.*)" />
+        <conditions><add input="{HTTPS}" pattern="off" /></conditions>
+        <action type="Redirect" url="https://{HTTP_HOST}/{R:1}" redirectType="Permanent" />
+      </rule>
+    </rules>
+  </rewrite>
+</system.webServer>
+",
+    "filename": "web.config (URL Rewrite module)",
+    "kind": "code",
+    "language": "xml",
+  },
+  "TLS-PROTOCOL": {
+    "kind": "instructions",
+    "messageKey": "remediation.iis.TLS-PROTOCOL",
+  },
+}
+`;
+
+exports[`remediation snippets (FR-05, 07 task 2.6) > netlify snapshot 1`] = `
+{
+  "CK-HTTPONLY": {
+    "kind": "instructions",
+    "messageKey": "remediation.netlify.CK-HTTPONLY",
+  },
+  "CK-PREFIX": {
+    "kind": "instructions",
+    "messageKey": "remediation.netlify.CK-PREFIX",
+  },
+  "CK-SAMESITE": {
+    "kind": "instructions",
+    "messageKey": "remediation.netlify.CK-SAMESITE",
+  },
+  "CK-SECURE": {
+    "kind": "instructions",
+    "messageKey": "remediation.netlify.CK-SECURE",
+  },
+  "HDR-COOP": {
+    "code": "/*
+  Cross-Origin-Opener-Policy: same-origin
+",
+    "filename": "_headers",
+    "kind": "code",
+    "language": "text",
+  },
+  "HDR-CSP": {
+    "code": "# Tailor the sources to your site; deploy as Content-Security-Policy-Report-Only first.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'
+",
+    "filename": "_headers",
+    "kind": "code",
+    "language": "text",
+  },
+  "HDR-DUPLICATE": {
+    "kind": "instructions",
+    "messageKey": "remediation.netlify.HDR-DUPLICATE",
+  },
+  "HDR-FRAME": {
+    "code": "# CSP frame-ancestors 'none' is the modern equivalent; sending both is fine.
+/*
+  X-Frame-Options: DENY
+",
+    "filename": "_headers",
+    "kind": "code",
+    "language": "text",
+  },
+  "HDR-HSTS": {
+    "code": "# Keep "preload" only if you will submit the domain to the HSTS preload list.
+/*
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+",
+    "filename": "_headers",
+    "kind": "code",
+    "language": "text",
+  },
+  "HDR-PERMISSIONS": {
+    "code": "/*
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+",
+    "filename": "_headers",
+    "kind": "code",
+    "language": "text",
+  },
+  "HDR-REFERRER": {
+    "code": "/*
+  Referrer-Policy: strict-origin-when-cross-origin
+",
+    "filename": "_headers",
+    "kind": "code",
+    "language": "text",
+  },
+  "HDR-XCTO": {
+    "code": "/*
+  X-Content-Type-Options: nosniff
+",
+    "filename": "_headers",
+    "kind": "code",
+    "language": "text",
+  },
+  "HDR-XXSS": {
+    "code": "# The XSS auditor is obsolete; "0" disables it in legacy browsers. Rely on CSP.
+/*
+  X-XSS-Protection: 0
+",
+    "filename": "_headers",
+    "kind": "code",
+    "language": "text",
+  },
+  "INF-ASPNET": {
+    "kind": "instructions",
+    "messageKey": "remediation.netlify.INF-ASPNET",
+  },
+  "INF-POWERED-BY": {
+    "kind": "instructions",
+    "messageKey": "remediation.netlify.INF-POWERED-BY",
+  },
+  "INF-SERVER": {
+    "kind": "instructions",
+    "messageKey": "remediation.netlify.INF-SERVER",
+  },
+  "TLS-AVAILABLE": {
+    "kind": "instructions",
+    "messageKey": "remediation.netlify.TLS-AVAILABLE",
+  },
+  "TLS-CERT-EXPIRY": {
+    "kind": "instructions",
+    "messageKey": "remediation.netlify.TLS-CERT-EXPIRY",
+  },
+  "TLS-CERT-VALID": {
+    "kind": "instructions",
+    "messageKey": "remediation.netlify.TLS-CERT-VALID",
+  },
+  "TLS-HTTP-REDIRECT": {
+    "kind": "instructions",
+    "messageKey": "remediation.netlify.TLS-HTTP-REDIRECT",
+  },
+  "TLS-PROTOCOL": {
+    "kind": "instructions",
+    "messageKey": "remediation.netlify.TLS-PROTOCOL",
+  },
+}
+`;
+
+exports[`remediation snippets (FR-05, 07 task 2.6) > nextjs snapshot 1`] = `
+{
+  "CK-HTTPONLY": {
+    "code": "import { cookies } from 'next/headers'
+
+const store = await cookies()
+store.set('session', value, { secure: true, httpOnly: true, sameSite: 'lax', path: '/' })
+",
+    "filename": "Route Handler or Server Action",
+    "kind": "code",
+    "language": "ts",
+  },
+  "CK-PREFIX": {
+    "code": "import { cookies } from 'next/headers'
+
+// __Host- requires Secure, Path=/ and no Domain attribute.
+const store = await cookies()
+store.set('__Host-session', value, { secure: true, httpOnly: true, sameSite: 'lax', path: '/' })
+",
+    "filename": "Route Handler or Server Action",
+    "kind": "code",
+    "language": "ts",
+  },
+  "CK-SAMESITE": {
+    "code": "import { cookies } from 'next/headers'
+
+const store = await cookies()
+store.set('session', value, { secure: true, httpOnly: true, sameSite: 'lax', path: '/' })
+",
+    "filename": "Route Handler or Server Action",
+    "kind": "code",
+    "language": "ts",
+  },
+  "CK-SECURE": {
+    "code": "import { cookies } from 'next/headers'
+
+const store = await cookies()
+store.set('session', value, { secure: true, httpOnly: true, sameSite: 'lax', path: '/' })
+",
+    "filename": "Route Handler or Server Action",
+    "kind": "code",
+    "language": "ts",
+  },
+  "HDR-COOP": {
+    "code": "const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [{ key: 'Cross-Origin-Opener-Policy', value: "same-origin" }],
+      },
+    ]
+  },
+}
+
+export default nextConfig
+",
+    "filename": "next.config.ts",
+    "kind": "code",
+    "language": "ts",
+  },
+  "HDR-CSP": {
+    "code": "// Tailor the sources to your site; deploy as Content-Security-Policy-Report-Only first.
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [{ key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'" }],
+      },
+    ]
+  },
+}
+
+export default nextConfig
+",
+    "filename": "next.config.ts",
+    "kind": "code",
+    "language": "ts",
+  },
+  "HDR-DUPLICATE": {
+    "kind": "instructions",
+    "messageKey": "remediation.nextjs.HDR-DUPLICATE",
+  },
+  "HDR-FRAME": {
+    "code": "// CSP frame-ancestors 'none' is the modern equivalent; sending both is fine.
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [{ key: 'X-Frame-Options', value: "DENY" }],
+      },
+    ]
+  },
+}
+
+export default nextConfig
+",
+    "filename": "next.config.ts",
+    "kind": "code",
+    "language": "ts",
+  },
+  "HDR-HSTS": {
+    "code": "// Keep "preload" only if you will submit the domain to the HSTS preload list.
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [{ key: 'Strict-Transport-Security', value: "max-age=63072000; includeSubDomains; preload" }],
+      },
+    ]
+  },
+}
+
+export default nextConfig
+",
+    "filename": "next.config.ts",
+    "kind": "code",
+    "language": "ts",
+  },
+  "HDR-PERMISSIONS": {
+    "code": "const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [{ key: 'Permissions-Policy', value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()" }],
+      },
+    ]
+  },
+}
+
+export default nextConfig
+",
+    "filename": "next.config.ts",
+    "kind": "code",
+    "language": "ts",
+  },
+  "HDR-REFERRER": {
+    "code": "const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [{ key: 'Referrer-Policy', value: "strict-origin-when-cross-origin" }],
+      },
+    ]
+  },
+}
+
+export default nextConfig
+",
+    "filename": "next.config.ts",
+    "kind": "code",
+    "language": "ts",
+  },
+  "HDR-XCTO": {
+    "code": "const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [{ key: 'X-Content-Type-Options', value: "nosniff" }],
+      },
+    ]
+  },
+}
+
+export default nextConfig
+",
+    "filename": "next.config.ts",
+    "kind": "code",
+    "language": "ts",
+  },
+  "HDR-XXSS": {
+    "code": "// The XSS auditor is obsolete; "0" disables it in legacy browsers. Rely on CSP.
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [{ key: 'X-XSS-Protection', value: "0" }],
+      },
+    ]
+  },
+}
+
+export default nextConfig
+",
+    "filename": "next.config.ts",
+    "kind": "code",
+    "language": "ts",
+  },
+  "INF-ASPNET": {
+    "kind": "instructions",
+    "messageKey": "remediation.nextjs.INF-ASPNET",
+  },
+  "INF-POWERED-BY": {
+    "code": "const nextConfig = {
+  poweredByHeader: false,
+}
+
+export default nextConfig
+",
+    "filename": "next.config.ts",
+    "kind": "code",
+    "language": "ts",
+  },
+  "INF-SERVER": {
+    "kind": "instructions",
+    "messageKey": "remediation.nextjs.INF-SERVER",
+  },
+  "TLS-AVAILABLE": {
+    "kind": "instructions",
+    "messageKey": "remediation.nextjs.TLS-AVAILABLE",
+  },
+  "TLS-CERT-EXPIRY": {
+    "kind": "instructions",
+    "messageKey": "remediation.nextjs.TLS-CERT-EXPIRY",
+  },
+  "TLS-CERT-VALID": {
+    "kind": "instructions",
+    "messageKey": "remediation.nextjs.TLS-CERT-VALID",
+  },
+  "TLS-HTTP-REDIRECT": {
+    "kind": "instructions",
+    "messageKey": "remediation.nextjs.TLS-HTTP-REDIRECT",
+  },
+  "TLS-PROTOCOL": {
+    "kind": "instructions",
+    "messageKey": "remediation.nextjs.TLS-PROTOCOL",
+  },
+}
+`;
+
+exports[`remediation snippets (FR-05, 07 task 2.6) > nginx snapshot 1`] = `
+{
+  "CK-HTTPONLY": {
+    "code": "proxy_cookie_flags ~ secure httponly samesite=lax;
+",
+    "filename": "nginx.conf (location proxying to the app, nginx >= 1.19.3)",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "CK-PREFIX": {
+    "kind": "instructions",
+    "messageKey": "remediation.nginx.CK-PREFIX",
+  },
+  "CK-SAMESITE": {
+    "code": "proxy_cookie_flags ~ secure httponly samesite=lax;
+",
+    "filename": "nginx.conf (location proxying to the app, nginx >= 1.19.3)",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "CK-SECURE": {
+    "code": "proxy_cookie_flags ~ secure httponly samesite=lax;
+",
+    "filename": "nginx.conf (location proxying to the app, nginx >= 1.19.3)",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "HDR-COOP": {
+    "code": "add_header Cross-Origin-Opener-Policy "same-origin" always;
+",
+    "filename": "nginx.conf (server block)",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "HDR-CSP": {
+    "code": "# Tailor the sources to your site; deploy as Content-Security-Policy-Report-Only first.
+add_header Content-Security-Policy "default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'" always;
+",
+    "filename": "nginx.conf (server block)",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "HDR-DUPLICATE": {
+    "kind": "instructions",
+    "messageKey": "remediation.nginx.HDR-DUPLICATE",
+  },
+  "HDR-FRAME": {
+    "code": "# CSP frame-ancestors 'none' is the modern equivalent; sending both is fine.
+add_header X-Frame-Options "DENY" always;
+",
+    "filename": "nginx.conf (server block)",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "HDR-HSTS": {
+    "code": "# Keep "preload" only if you will submit the domain to the HSTS preload list.
+add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+",
+    "filename": "nginx.conf (server block)",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "HDR-PERMISSIONS": {
+    "code": "add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()" always;
+",
+    "filename": "nginx.conf (server block)",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "HDR-REFERRER": {
+    "code": "add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+",
+    "filename": "nginx.conf (server block)",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "HDR-XCTO": {
+    "code": "add_header X-Content-Type-Options "nosniff" always;
+",
+    "filename": "nginx.conf (server block)",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "HDR-XXSS": {
+    "code": "# The XSS auditor is obsolete; "0" disables it in legacy browsers. Rely on CSP.
+add_header X-XSS-Protection "0" always;
+",
+    "filename": "nginx.conf (server block)",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "INF-ASPNET": {
+    "kind": "instructions",
+    "messageKey": "remediation.nginx.INF-ASPNET",
+  },
+  "INF-POWERED-BY": {
+    "code": "proxy_hide_header X-Powered-By;
+fastcgi_hide_header X-Powered-By;
+",
+    "filename": "nginx.conf",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "INF-SERVER": {
+    "code": "server_tokens off;
+",
+    "filename": "nginx.conf (http block)",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "TLS-AVAILABLE": {
+    "kind": "instructions",
+    "messageKey": "remediation.nginx.TLS-AVAILABLE",
+  },
+  "TLS-CERT-EXPIRY": {
+    "kind": "instructions",
+    "messageKey": "remediation.nginx.TLS-CERT-EXPIRY",
+  },
+  "TLS-CERT-VALID": {
+    "kind": "instructions",
+    "messageKey": "remediation.nginx.TLS-CERT-VALID",
+  },
+  "TLS-HTTP-REDIRECT": {
+    "code": "server {
+    listen 80;
+    listen [::]:80;
+    server_name example.com www.example.com;
+    return 301 https://$host$request_uri;
+}
+",
+    "filename": "nginx.conf",
+    "kind": "code",
+    "language": "nginx",
+  },
+  "TLS-PROTOCOL": {
+    "code": "ssl_protocols TLSv1.2 TLSv1.3;
+",
+    "filename": "nginx.conf (server block)",
+    "kind": "code",
+    "language": "nginx",
+  },
+}
+`;
