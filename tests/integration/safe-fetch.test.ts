@@ -184,6 +184,36 @@ describe('SC-17 redirects', () => {
     expect(result.status).toBe(200)
   })
 
+  it('stopBefore returns the validated next hop without requesting it', async () => {
+    route = (req, res) => {
+      if (req.url === '/') redirect(res, '/step')
+      else redirect(res, 'https://www.example.com/secure')
+    }
+    const log: Parameters<typeof localConnectorFactory>[2] = []
+    const result = await safeFetch('http://example.com/', deps({}, log), {
+      stopBefore: (next) => next.protocol === 'https:',
+    })
+    expect(result.finalUrl.href).toBe('https://www.example.com/secure')
+    expect(result.status).toBe(302)
+    expect(result.chain.map((h) => h.url)).toEqual([
+      'http://example.com/',
+      'http://example.com/step',
+    ])
+    expect(log.map((l) => l.url)).toEqual(['http://example.com/', 'http://example.com/step'])
+  })
+
+  it('stopBefore still applies the policy to the next hop', async () => {
+    route = (_req, res) => {
+      redirect(res, 'https://169.254.169.254/')
+    }
+    const error = await failure(
+      safeFetch('http://example.com/', deps(), {
+        stopBefore: (next) => next.protocol === 'https:',
+      }),
+    )
+    expect(error.code).toBe('BLOCKED_TARGET')
+  })
+
   it('allows exactly 5 redirects', async () => {
     route = (req, res) => {
       const n = Number(req.url?.slice(1) ?? '0')

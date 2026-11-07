@@ -205,6 +205,7 @@ function locationOf(headers: Record<string, string | string[] | undefined>): str
 export async function safeFetch(
   input: string | URL,
   deps: SafeFetchDeps,
+  options: SafeFetchOptions = {},
 ): Promise<SafeFetchResult> {
   let url = typeof input === 'string' ? normalizeAndValidate(input) : assertUrlPolicy(input)
   const visited = new Set<string>()
@@ -223,8 +224,21 @@ export async function safeFetch(
       return { finalUrl: url, status, chain, headers: flattenHeaders(headers), pinned }
     }
     if (hop >= MAX_REDIRECTS) throw new ScanError('TARGET_UNREACHABLE', 'TOO_MANY_REDIRECTS')
-    url = nextHop(location, url)
+    const next = nextHop(location, url) // validated before any decision is taken on it
+    if (options.stopBefore?.(next)) {
+      return { finalUrl: next, status, chain, headers: flattenHeaders(headers), pinned }
+    }
+    url = next
   }
+}
+
+export interface SafeFetchOptions {
+  /**
+   * Return without requesting the next hop when this returns true. The returned `finalUrl`
+   * is that (policy-checked) hop; `status`, `headers` and `pinned` describe the last
+   * response actually received. Used by the http→https check (TLS-HTTP-REDIRECT).
+   */
+  stopBefore?: (next: URL) => boolean
 }
 
 /**
