@@ -149,6 +149,7 @@ Format per entry: **ADR-NNN — Title** · Date · Status (Accepted / Superseded
 **Context (verified in Netlify docs 2026-11-07):** Code-based rate-limit rules exist on all plans (free plan: 2 per project) and return HTTP 429; Netlify does not document a `Retry-After` on that response. Rules are declared in a Netlify Function's `config.rateLimit` or on a `netlify.toml` redirect (`[redirects.rate_limit]`), not inside a Next.js Route Handler, and can take up to ~10 s to start blocking. Synchronous functions have a fixed 60 s limit, which fits the 8 s scan budget. No client-IP request header is documented for Next.js handlers.
 **Decision:** Primary: a `netlify.toml` redirect rule for `/api/scan` with `window_limit = 10`, `window_size = 60`, `aggregate_by = ["ip", "domain"]`, verified empirically at deploy (T-3). Secondary: the per-instance token bucket in `rate-limit.ts`, keyed best-effort by `x-nf-client-connection-ip` / first `x-forwarded-for`; the key is never logged or stored.
 **Consequences:** The app's own 429 carries `Retry-After`; the platform's may not, so the UI must not depend on it. The secondary limiter can be bypassed by spoofed headers or instance spread; it only slows a single client.
+**Verification (2026-11-07, live):** after a quiet minute, requests 1–12 to `/api/scan` passed and 13+ received Netlify's 429 (empty body, no `Retry-After`), consistent with the documented ~10 s enforcement lag.
 
 ### ADR-025 — `FORBIDDEN_ORIGIN` (403) for the same-origin check
 2026-11-07 · Accepted

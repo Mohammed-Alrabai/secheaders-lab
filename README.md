@@ -8,7 +8,15 @@
 </p>
 
 <p align="center">
-  Live demo: <em>coming with v1.0.0</em> · English · العربية
+  <a href="https://secheaders-lab.netlify.app/en"><strong>Live demo</strong></a> ·
+  <a href="https://secheaders-lab.netlify.app/en">English</a> ·
+  <a href="https://secheaders-lab.netlify.app/ar">العربية</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Mohammed-Alrabai/secheaders-lab/actions/workflows/ci.yml"><img src="https://github.com/Mohammed-Alrabai/secheaders-lab/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status"></a>
+  <a href="https://github.com/Mohammed-Alrabai/secheaders-lab/actions/workflows/codeql.yml"><img src="https://github.com/Mohammed-Alrabai/secheaders-lab/actions/workflows/codeql.yml/badge.svg?branch=main" alt="CodeQL status"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
 </p>
 
 ---
