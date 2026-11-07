@@ -10,6 +10,7 @@ import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { resolveLocaleParam } from '@/i18n/locale-param'
 import { localeDirection, routing } from '@/i18n/routing'
+import { getEnv } from '@/lib/env'
 import { THEME_COOKIE, parseThemePreference, themeClass } from '@/lib/theme'
 import { cn } from '@/lib/utils'
 
@@ -21,11 +22,29 @@ interface LocaleLayoutProps {
 export async function generateMetadata({ params }: LocaleLayoutProps): Promise<Metadata> {
   const locale = await resolveLocaleParam(params)
   const t = await getTranslations({ locale, namespace: 'meta' })
+  const image = { url: `/og/${locale}.png`, width: 1200, height: 630, alt: t('title') }
   return {
+    metadataBase: new URL(getEnv().siteUrl),
     title: { default: t('title'), template: `%s · SecHeaders Lab` },
     description: t('description'),
+    // `06` §6: per-locale canonical and hreflang alternates.
     alternates: {
+      canonical: `/${locale}`,
       languages: Object.fromEntries(routing.locales.map((l) => [l, `/${l}`])),
+    },
+    openGraph: {
+      type: 'website',
+      siteName: 'SecHeaders Lab',
+      title: t('title'),
+      description: t('description'),
+      locale: locale === 'ar' ? 'ar' : 'en',
+      images: [image],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('title'),
+      description: t('description'),
+      images: [image],
     },
   }
 }
