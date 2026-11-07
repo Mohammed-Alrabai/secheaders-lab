@@ -1,14 +1,86 @@
 {
+  "meta": {
+    "title": "SecHeaders Lab — passive website security review",
+    "description": "Grade a website's HTTP security headers, TLS, cookies and information disclosure from A+ to F, with copy-ready fixes for Nginx, Apache, IIS, Next.js, Netlify and Cloudflare."
+  },
   "common": {
-    "appName": "SecHeaders Lab"
+    "appName": "SecHeaders Lab",
+    "subtitle": "Security headers lab",
+    "homeLink": "SecHeaders Lab home",
+    "navLabel": "Main",
+    "skipToContent": "Skip to content",
+    "nav": {
+      "about": "Methodology"
+    },
+    "language": {
+      "switchTo": "Switch to Arabic",
+      "other": "العربية"
+    },
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "footer": {
+      "disclaimer": "SecHeaders Lab performs a passive, read-only inspection of what a site already serves to every browser. It is not a penetration test and its results are informational. Only scan sites you are authorized to assess.",
+      "privacy": "No accounts, no analytics, no tracking. Scanned addresses and results are not stored.",
+      "methodology": "Methodology and scoring",
+      "author": "Built by Mohammed Alrabai",
+      "opensInNewTab": "(opens in a new tab)"
+    }
   },
   "home": {
-    "metaTitle": "SecHeaders Lab — passive website security review",
-    "tagline": "Passive website security review",
-    "placeholder": "The scanner is under construction."
+    "title": "Grade your website's security headers in seconds",
+    "lead": "A passive review of HTTP security headers, TLS, cookies and information disclosure, with a grade from A+ to F and copy-ready fixes for your server.",
+    "form": {
+      "label": "Website address",
+      "placeholder": "example.com",
+      "hint": "Enter a domain or a full URL. Only the public response that every browser receives is read.",
+      "submit": "Scan",
+      "errorSummary": "Check the address and try again.",
+      "errors": {
+        "empty": "Enter a website address.",
+        "tooLong": "The address is longer than 2,048 characters.",
+        "controlChars": "The address contains characters that are not allowed.",
+        "scheme": "Only http:// and https:// addresses can be scanned.",
+        "credentials": "Remove the user name and password from the address.",
+        "port": "Only the standard ports 80 and 443 can be scanned.",
+        "ipLiteral": "Enter a domain name, not an IP address.",
+        "hostname": "Enter a full domain name such as example.com.",
+        "reserved": "Local and internal names cannot be scanned."
+      }
+    },
+    "examples": {
+      "label": "Try:",
+      "self": "this site"
+    },
+    "features": {
+      "title": "What you get",
+      "passive": {
+        "title": "Passive and safe",
+        "body": "One normal page request and one TLS handshake. No probing, no payloads, nothing a regular visitor would not do."
+      },
+      "fixes": {
+        "title": "Fixes for your server",
+        "body": "Every finding explains why it matters and gives copy-ready configuration for Nginx, Apache, IIS, Next.js, Netlify and Cloudflare."
+      },
+      "bilingual": {
+        "title": "English and Arabic",
+        "body": "The whole tool and its printable report work in both languages, with proper right-to-left layout."
+      }
+    },
+    "how": {
+      "title": "How it works",
+      "step1": "Enter the address of a site you are allowed to assess.",
+      "step2": "We fetch its homepage once, read the response headers and inspect the TLS certificate.",
+      "step3": "You get a score, a grade and a fix for every finding.",
+      "methodologyLink": "Read the full methodology"
+    }
   },
   "notFound": {
     "title": "Page not found",
-    "description": "The page you are looking for does not exist."
+    "description": "The page you are looking for does not exist.",
+    "home": "Go to the home page"
   }
 }

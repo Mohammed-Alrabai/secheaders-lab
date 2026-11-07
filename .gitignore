@@ -45,3 +45,6 @@ Thumbs.db
 
 # process-local corepack shims (ADR-011)
 .corepack-bin/
+
+# local preview config for the Claude desktop app
+.claude/launch.json
