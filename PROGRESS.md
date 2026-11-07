@@ -27,7 +27,7 @@
 | ~~T-1~~ | ~~SECURITY.md contact~~ — user chose GitHub private vulnerability reporting only (no public email) | Done |
 | ~~T-21~~ | ~~Private vulnerability reporting~~ — enabled by the user; "Report a vulnerability" visible on the Security tab | Done |
 | ~~T-22~~ | ~~README live link + CI badge~~ — done | Done |
-| T-23 | Netlify injects `/.netlify/scripts/hud?variant=public` (`data-account-tier="free"`) after `</html>`; our CSP blocks it (correct) but it logs a console error → live Best Practices 92. Not documented in Netlify docs; needs a dashboard setting check by the user. CSP is not relaxed | User |
+| ~~T-23~~ | ~~Netlify-injected script~~ — it was the "Powered by Netlify badge" (`/.netlify/scripts/hud?variant=public`); disabled in Project configuration → General with the user's approval; CSP unchanged | Done |
 | T-24 | Mozilla Observatory scan of the live site (third-party request, needs approval) | User |
 | T-2 | Provide LinkedIn profile URL for footer | User (Phase 6) — `https://www.linkedin.com/in/mohammed-alrabai` |
 | ~~T-3~~ | ~~Platform rate limit~~ — verified live 2026-11-07: after a quiet minute requests 1–12 passed, 13+ got Netlify 429 (no body, no `Retry-After`; ~10 s enforcement lag as documented) | Done |
@@ -60,6 +60,8 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-07 — 6.4: the injected script came from the "Powered by Netlify badge" project setting; disabled with the user's approval (agent clicked it in the Netlify UI after the user signed in). Script gone from all pages; 0 console errors and 0 DevTools CSP issues on `/en`, `/ar`, `/en/about`, `/ar/about`. Lighthouse live (mobile): `/en` 99/100/100/100, `/ar`, `/en/about`, `/ar/about` 100/100/100/100.
 
 - 2026-11-07 — 6.3 / 6.4: deployed by the user to https://secheaders-lab.netlify.app (`NEXT_PUBLIC_SITE_URL` set in the UI, all scopes/contexts). Live checks: pages, robots, sitemap, OG image and brand files 200; security headers present (Netlify sets HSTS `max-age=31536000` instead of our two years — still meets A+); live self-scan **A+ / 100**; `example.com` F / 26 in 43 ms; live API rejects foreign origin (403), `localhost`, metadata IP, decimal IP, port 8080, `file:`, extra fields (400) and wrong content type (415); platform rate limit verified (T-3); `lang`/`dir` correct on all pages. Lighthouse live `/en`: 99 / 100 / 92 / 100 — Best Practices lost only to the Netlify-injected script (T-23). README: live link and CI/CodeQL badges.
 

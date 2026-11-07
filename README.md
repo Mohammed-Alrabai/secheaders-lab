@@ -198,8 +198,8 @@ corepack pnpm start
 Before the first end-to-end run, install a browser with `pnpm exec playwright install chromium`, or reuse an
 installed Edge or Chrome by setting `PLAYWRIGHT_CHANNEL` to `msedge` or `chrome`.
 
-Lighthouse on the local production build (mobile profile), home and methodology pages in both languages:
-Performance 98–100, Accessibility 100, Best Practices 100, SEO 100.
+Lighthouse on the live site (mobile profile), home and methodology pages in both languages:
+Performance 99–100, Accessibility 100, Best Practices 100, SEO 100.
 
 ## Project documentation
 
