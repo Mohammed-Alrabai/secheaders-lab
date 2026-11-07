@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { runChecks } from '@/lib/scanner/checks/index'
 import {
   CAP_MAX_GRADE,
+  GRADE_THRESHOLDS,
   SCORING_VERSION,
   capsFor,
   computeScore,
@@ -111,6 +112,14 @@ describe('grade thresholds (04 §2)', () => {
     [0, false, 'F'],
   ] as const)('score %i (A+ eligible: %s) → %s', (score, eligible, grade) => {
     expect(thresholdGrade(score, eligible)).toBe(grade)
+  })
+
+  it('treats an out-of-range negative score as F', () => {
+    expect(thresholdGrade(-1, false)).toBe('F')
+  })
+
+  it('exposes thresholds best-first for the methodology page', () => {
+    expect(GRADE_THRESHOLDS.map(([g]) => g)).toEqual(['A+', 'A', 'B', 'C', 'D', 'F'])
   })
 })
 

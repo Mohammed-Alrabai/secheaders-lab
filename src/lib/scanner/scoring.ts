@@ -47,13 +47,21 @@ export function meetsAPlusRequirements(findings: readonly Finding[]): boolean {
   )
 }
 
+/** `04` §2: minimum score per grade, best first. A+ also needs the extra requirements. */
+export const GRADE_THRESHOLDS: readonly (readonly [Grade, number])[] = [
+  ['A+', 95],
+  ['A', 90],
+  ['B', 80],
+  ['C', 70],
+  ['D', 60],
+  ['F', 0],
+]
+
 /** `04` §2 thresholds. A score ≥ 95 is A+ only when the extra requirements hold. */
 export function thresholdGrade(score: number, aPlusEligible: boolean): Grade {
-  if (score >= 95) return aPlusEligible ? 'A+' : 'A'
-  if (score >= 90) return 'A'
-  if (score >= 80) return 'B'
-  if (score >= 70) return 'C'
-  if (score >= 60) return 'D'
+  for (const [grade, min] of GRADE_THRESHOLDS) {
+    if (score >= min && (grade !== 'A+' || aPlusEligible)) return grade
+  }
   return 'F'
 }
 
