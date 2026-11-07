@@ -72,7 +72,7 @@ secheaders-lab/
 │     │  ├─ safe-fetch.ts
 │     │  ├─ tls-inspect.ts
 │     │  ├─ header-utils.ts    # parsing (case-insensitive, multi-value, CSP parser)
-│     │  ├─ checks/            # one file per rule group: hsts.ts csp.ts frame.ts xcto.ts referrer.ts permissions.ts tls.ts cookies.ts disclosure.ts
+│     │  ├─ checks/            # hsts.ts csp.ts headers.ts (frame, xcto, referrer, permissions, coop, xxss, duplicates) tls.ts cookies.ts disclosure.ts finding.ts index.ts
 │     │  ├─ rules.ts           # registry: RuleId → meta (category, severity, references)
 │     │  └─ scoring.ts
 │     ├─ remediation/          # snippets per RuleId × Platform
@@ -110,10 +110,12 @@ interface Finding {
   evidence?: { header?: string; value?: string; detail?: string }; // values truncated to 512 chars
   messageKey: string;        // i18n key variant, e.g. "HDR-HSTS.missing"
   params?: Record<string, string | number>; // interpolation values
+  notes?: { messageKey: string; params?: Record<string, string | number> }[]; // extra info lines (e.g. "HDR-CSP.noBaseUri"), added in Phase 2
 }
 
 interface ScanResult {
   schemaVersion: 1;
+  scoringVersion: number;    // SCORING_VERSION of 04 (added in Phase 2)
   scannedAt: string;         // ISO 8601
   durationMs: number;
   target: {

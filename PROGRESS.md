@@ -6,15 +6,15 @@
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 1 — complete, awaiting security gate approval |
-| Last gate approved | Phase 0, approved by user 2026-11-03 |
+| Current phase | Phase 2 — complete, awaiting gate approval |
+| Last gate approved | Phase 1 (security gate), approved by user 2026-11-07 |
 | Blockers | none |
 
 ## Phase checklist
 
 - [x] Phase 0 — Environment & scaffold (approved 2026-11-03)
-- [x] Phase 1 — Secure fetch layer (SSRF) — **security gate** (report posted 2026-11-03, awaiting approval)
-- [ ] Phase 2 — Checks & scoring engine
+- [x] Phase 1 — Secure fetch layer (SSRF) — **security gate** (approved 2026-11-07)
+- [x] Phase 2 — Checks & scoring engine (report posted 2026-11-07, awaiting approval)
 - [ ] Phase 3 — API endpoint
 - [ ] Phase 4 — UI & i18n — **Arabic copy review gate**
 - [ ] Phase 5 — Report, self-hardening, E2E
@@ -27,7 +27,7 @@
 | T-1 | Provide contact email for SECURITY.md | User (Phase 6) |
 | T-2 | Provide LinkedIn profile URL for footer | User (Phase 6) — `https://www.linkedin.com/in/mohammed-alrabai` |
 | T-3 | Verify Netlify function timeout & rate-limit config (incl. free-tier availability) | Agent (Phase 3/6) |
-| T-4 | Spec gaps to resolve with user before Phase 2: PSL for TLS-HTTP-REDIRECT, CSP `strict-dynamic` + multiple-CSP evaluation, HSTS 180d–1y with includeSubDomains, CSP pass without `base-uri`, finding granularity for cookie rules, example 2 cookie `Secure` | User + Agent (Phase 1/2) |
+| ~~T-4~~ | ~~Scoring spec gaps~~ — resolved 2026-11-07 (ADR-020…023) | Done |
 | T-5 | Remove obsolete `interest-cohort=()` from own Permissions-Policy (needs approval, `03` §6) | User (Phase 5) |
 | T-6 | SC-25 Origin check vs Netlify deploy-preview origins | Agent (Phase 3) |
 | T-7 | Verify `sonner` / Radix runtime `<style>` injection under nonce CSP | Agent (Phase 5) |
@@ -35,8 +35,10 @@
 | T-9 | Dev-only advisories: `deepmerge` (low, via shadcn CLI) and `minimatch` (moderate, via typescript-eslint); re-check on each Dependabot run | Agent (ongoing) |
 | T-10 | Confirm Dependabot handles the pnpm 12 lockfile once the repo is on GitHub | Agent (Phase 6) |
 | T-11 | Header values arrive as latin1-decoded bytes (e.g. U+202E shows as `â\x80®`). The UI sanitizer (SC-31) must decode UTF-8 for display and then strip bidi/control chars; SSRF case 22 UI half is a Phase 4/5 test | Agent (Phase 4) |
-| T-12 | SC-20 display truncation (2 KB per value) and `set-cookie` value redaction (ADR-015) happen when building `ScanResult.rawHeaders` | Agent (Phase 2, task 2.5) |
-| T-13 | ADR-013 fallback: `safeFetch` reports TLS failures as `TARGET_UNREACHABLE` / `TLS_FAILURE`; `scan()` must catch that detail and retry `http://` | Agent (Phase 2, task 2.5) |
+| ~~T-12~~ | ~~rawHeaders truncation + cookie redaction~~ — done in `scan()` (Phase 2) | Done |
+| ~~T-13~~ | ~~ADR-013 HTTPS → HTTP fallback~~ — done in `scan()` (Phase 2) | Done |
+| T-14 | i18n copy for every `messageKey` / note emitted by the checks and for `remediation.<platform>.<rule>` instruction keys (en + ar) | Agent (Phase 4, task 4.6) |
+| T-15 | The http→https check treats a connect failure on any http hop as "port 80 not served" (pass); only the first hop is expected to fail that way in practice | Agent (note) |
 
 ## Justified exceptions (`any`, `eslint-disable`, `@ts-expect-error`)
 
@@ -49,6 +51,13 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-07 — Phase 2 complete. T-4 resolved with the user (ADR-020…023); `tldts` 7.4.19 added (approved). Delivered `types.ts`, `rules.ts` (21 MDN/OWASP URLs verified to load; ASVS IDs left as `TODO(verify-ref)`), `header-utils.ts`, `checks/*`, `scoring.ts` (`SCORING_VERSION = 1`), `scan()` in `index.ts`, `remediation/`. 647 tests ✅; `src/lib/**` 100% lines, 98.7% branches; lint, typecheck, build ✅. Notes:
+  - Bug caught by tests: `tldts` ignores the PSL private section by default (`a.github.io` ≡ `b.github.io`); fixed with `allowPrivateDomains: true`.
+  - Contract additions in `02` §4: `ScanResult.scoringVersion`, `Finding.notes`. Pass/info findings carry `severity: 'info'`.
+  - `safeFetch` gained `stopBefore` so the http→https check validates but never requests the https target.
+  - Header rule checks are grouped in `checks/headers.ts` instead of one file each.
+  - `security/detect-object-injection`: registry and remediation lookups use `Map`s instead of disabling the rule.
 
 - 2026-11-03 — Phase 1 complete. Added `undici` 8.12.3, `ipaddr.js` 2.5.0, `selfsigned` 5.5.0 (dev) from the approved list. Modules: `errors.ts` (1.1), `url-policy.ts` (1.2), `ip-policy.ts` (1.3), `dns.ts` (1.4), `safe-fetch.ts` (1.5), `tls-inspect.ts` (1.6), test helpers (1.7), SSRF matrix 24/24 + extra cases (1.8). 383 tests ✅; `src/lib/scanner/**` 100% lines / 100% branches; lint, typecheck, build ✅. ADR-018, ADR-019. Notes:
   - SC-10: Node 24 deprecates `verbatim: true`; the identical `order: 'verbatim'` is used.
