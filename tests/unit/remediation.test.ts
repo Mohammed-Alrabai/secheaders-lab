@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
-import { PLATFORMS, RECOMMENDED_HEADERS, type Platform, remediationFor } from '@/lib/remediation'
+import {
+  INSTRUCTION_KEYS,
+  PLATFORMS,
+  RECOMMENDED_HEADERS,
+  type Platform,
+  remediationFor,
+} from '@/lib/remediation'
 import { RULE_IDS } from '@/lib/scanner/types'
 
 describe('remediation snippets (FR-05, 07 task 2.6)', () => {
@@ -12,9 +18,21 @@ describe('remediation snippets (FR-05, 07 task 2.6)', () => {
         expect(snippet.code.endsWith('\n')).toBe(true)
         expect(snippet.filename.length).toBeGreaterThan(0)
       } else {
-        expect(snippet.messageKey).toBe(`remediation.${platform}.${rule}`)
+        const key = snippet.messageKey.replace('remediation.steps.', '')
+        expect(INSTRUCTION_KEYS as readonly string[], `${rule}/${platform}`).toContain(key)
       }
     }
+  })
+
+  it('every instruction key is used somewhere', () => {
+    const used = new Set<string>()
+    for (const platform of PLATFORMS) {
+      for (const rule of RULE_IDS) {
+        const s = remediationFor(rule, platform)
+        if (s.kind === 'instructions') used.add(s.messageKey.replace('remediation.steps.', ''))
+      }
+    }
+    expect([...used].sort()).toEqual([...INSTRUCTION_KEYS].sort())
   })
 
   it.each(PLATFORMS)('%s snapshot', (platform) => {
@@ -50,7 +68,18 @@ describe('remediation snippets (FR-05, 07 task 2.6)', () => {
   it('platform-managed fixes point to localized instructions', () => {
     expect(remediationFor('HDR-HSTS', 'cloudflare')).toEqual({
       kind: 'instructions',
-      messageKey: 'remediation.cloudflare.HDR-HSTS',
+      messageKey: 'remediation.steps.cloudflareHsts',
+    })
+    expect(remediationFor('HDR-XCTO', 'cloudflare')).toEqual({
+      kind: 'instructions',
+      messageKey: 'remediation.steps.cloudflareHeader',
+      params: { name: 'X-Content-Type-Options', value: 'nosniff' },
+    })
+    expect(remediationFor('INF-ASPNET', 'cloudflare')).toMatchObject({
+      params: { name: 'X-AspNet-Version' },
+    })
+    expect(remediationFor('TLS-PROTOCOL', 'iis')).toMatchObject({
+      messageKey: 'remediation.steps.iisTls',
     })
     expect(remediationFor('TLS-CERT-EXPIRY', 'nginx').kind).toBe('instructions')
     expect(remediationFor('CK-SECURE', 'netlify').kind).toBe('instructions')

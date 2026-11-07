@@ -12,7 +12,29 @@ export type Snippet =
       code: string
     }
   /** Prose steps (dashboards, host-managed settings); text lives in `messages/*.json`. */
-  | { kind: 'instructions'; messageKey: string }
+  | { kind: 'instructions'; messageKey: string; params?: Record<string, string> }
+
+/** Reusable instruction texts, at `remediation.steps.<key>` in the message files. */
+export const INSTRUCTION_KEYS = [
+  'certificate',
+  'hostManagedTls',
+  'iisTls',
+  'hostManagedRedirect',
+  'hostServerHeader',
+  'removeInApp',
+  'aspnetOnly',
+  'cookieInApp',
+  'cookiePrefix',
+  'duplicateHeaders',
+  'cloudflareHeader',
+  'cloudflareHsts',
+  'cloudflareRemoveHeader',
+  'cloudflareServer',
+  'cloudflareAlwaysHttps',
+  'cloudflareMinTls',
+  'cloudflareCertificate',
+] as const
+export type InstructionKey = (typeof INSTRUCTION_KEYS)[number]
 
 /**
  * Recommended secure baselines (`02` §3 remediation). CSP must be tailored per site; the
@@ -55,10 +77,45 @@ const code = (
   lines: string[],
 ): Snippet => ({ kind: 'code', language, filename, code: `${lines.join('\n')}\n` })
 
-const steps = (platform: Platform, rule: RuleId): Snippet => ({
+const instructions = (key: InstructionKey, params?: Record<string, string>): Snippet => ({
   kind: 'instructions',
-  messageKey: `remediation.${platform}.${rule}`,
+  messageKey: `remediation.steps.${key}`,
+  ...(params ? { params } : {}),
 })
+
+const CERTIFICATE_RULES = new Set<RuleId>(['TLS-AVAILABLE', 'TLS-CERT-VALID', 'TLS-CERT-EXPIRY'])
+const COOKIE_FLAG_RULES = new Set<RuleId>(['CK-SECURE', 'CK-HTTPONLY', 'CK-SAMESITE'])
+const REMOVABLE_HEADER = new Map<RuleId, string>([
+  ['INF-POWERED-BY', 'X-Powered-By'],
+  ['INF-ASPNET', 'X-AspNet-Version'],
+])
+
+/** Cloudflare fixes are dashboard settings, never config files. */
+function cloudflareSteps(rule: RuleId): Snippet {
+  const header = HEADER_MAP.get(rule)
+  if (rule === 'HDR-HSTS') return instructions('cloudflareHsts')
+  if (header) return instructions('cloudflareHeader', { name: header[0], value: header[1] })
+  if (CERTIFICATE_RULES.has(rule)) return instructions('cloudflareCertificate')
+  if (rule === 'TLS-PROTOCOL') return instructions('cloudflareMinTls')
+  if (rule === 'TLS-HTTP-REDIRECT') return instructions('cloudflareAlwaysHttps')
+  if (rule === 'INF-SERVER') return instructions('cloudflareServer')
+  const removable = REMOVABLE_HEADER.get(rule)
+  if (removable) return instructions('cloudflareRemoveHeader', { name: removable })
+  return genericSteps(rule, 'cloudflare')
+}
+
+/** Platform-independent steps for fixes that are not a config snippet. */
+function genericSteps(rule: RuleId, platform: Platform): Snippet {
+  if (CERTIFICATE_RULES.has(rule)) return instructions('certificate')
+  if (rule === 'TLS-PROTOCOL') return instructions(platform === 'iis' ? 'iisTls' : 'hostManagedTls')
+  if (rule === 'TLS-HTTP-REDIRECT') return instructions('hostManagedRedirect')
+  if (rule === 'INF-SERVER') return instructions('hostServerHeader')
+  if (rule === 'INF-POWERED-BY') return instructions('removeInApp', { name: 'X-Powered-By' })
+  if (rule === 'INF-ASPNET') return instructions('aspnetOnly')
+  if (COOKIE_FLAG_RULES.has(rule)) return instructions('cookieInApp')
+  if (rule === 'CK-PREFIX') return instructions('cookiePrefix')
+  return instructions('duplicateHeaders')
+}
 
 function headerSnippet(
   rule: RuleId,
@@ -107,7 +164,7 @@ function headerSnippet(
     case 'netlify':
       return code('text', '_headers', [...(note ? [`# ${note}`] : []), '/*', `  ${name}: ${value}`])
     case 'cloudflare':
-      return steps('cloudflare', rule)
+      return cloudflareSteps(rule)
     default: {
       const exhaustive: never = platform
       throw new Error(`Unknown platform: ${String(exhaustive)}`)
@@ -142,8 +199,9 @@ function cookieSnippet(rule: RuleId, platform: Platform): Snippet {
         "store.set('session', value, { secure: true, httpOnly: true, sameSite: 'lax', path: '/' })",
       ])
     case 'netlify':
+      return instructions('cookieInApp')
     case 'cloudflare':
-      return steps(platform, rule)
+      return cloudflareSteps(rule)
     default: {
       const exhaustive: never = platform
       throw new Error(`Unknown platform: ${String(exhaustive)}`)
@@ -246,7 +304,7 @@ function otherSnippet(rule: RuleId, platform: Platform): Snippet {
         '<!-- ASP.NET MVC: also set MvcHandler.DisableMvcResponseHeader = true in Application_Start. -->',
       ])
     default:
-      return steps(platform, rule)
+      return platform === 'cloudflare' ? cloudflareSteps(rule) : genericSteps(rule, platform)
   }
 }
 

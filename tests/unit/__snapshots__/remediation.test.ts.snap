@@ -12,7 +12,7 @@ Header always edit Set-Cookie ^(.*)$ "$1; Secure; HttpOnly; SameSite=Lax"
   },
   "CK-PREFIX": {
     "kind": "instructions",
-    "messageKey": "remediation.apache.CK-PREFIX",
+    "messageKey": "remediation.steps.cookiePrefix",
   },
   "CK-SAMESITE": {
     "code": "# Prefer setting these flags in the application; this rewrites every cookie.
@@ -47,7 +47,7 @@ Header always set Content-Security-Policy "default-src 'self'; script-src 'self'
   },
   "HDR-DUPLICATE": {
     "kind": "instructions",
-    "messageKey": "remediation.apache.HDR-DUPLICATE",
+    "messageKey": "remediation.steps.duplicateHeaders",
   },
   "HDR-FRAME": {
     "code": "# CSP frame-ancestors 'none' is the modern equivalent; sending both is fine.
@@ -96,7 +96,7 @@ Header always set X-XSS-Protection "0"
   },
   "INF-ASPNET": {
     "kind": "instructions",
-    "messageKey": "remediation.apache.INF-ASPNET",
+    "messageKey": "remediation.steps.aspnetOnly",
   },
   "INF-POWERED-BY": {
     "code": "Header always unset X-Powered-By
@@ -116,15 +116,15 @@ ServerSignature Off
   },
   "TLS-AVAILABLE": {
     "kind": "instructions",
-    "messageKey": "remediation.apache.TLS-AVAILABLE",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-CERT-EXPIRY": {
     "kind": "instructions",
-    "messageKey": "remediation.apache.TLS-CERT-EXPIRY",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-CERT-VALID": {
     "kind": "instructions",
-    "messageKey": "remediation.apache.TLS-CERT-VALID",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-HTTP-REDIRECT": {
     "code": "RewriteEngine On
@@ -149,87 +149,121 @@ exports[`remediation snippets (FR-05, 07 task 2.6) > cloudflare snapshot 1`] = `
 {
   "CK-HTTPONLY": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.CK-HTTPONLY",
+    "messageKey": "remediation.steps.cookieInApp",
   },
   "CK-PREFIX": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.CK-PREFIX",
+    "messageKey": "remediation.steps.cookiePrefix",
   },
   "CK-SAMESITE": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.CK-SAMESITE",
+    "messageKey": "remediation.steps.cookieInApp",
   },
   "CK-SECURE": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.CK-SECURE",
+    "messageKey": "remediation.steps.cookieInApp",
   },
   "HDR-COOP": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.HDR-COOP",
+    "messageKey": "remediation.steps.cloudflareHeader",
+    "params": {
+      "name": "Cross-Origin-Opener-Policy",
+      "value": "same-origin",
+    },
   },
   "HDR-CSP": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.HDR-CSP",
+    "messageKey": "remediation.steps.cloudflareHeader",
+    "params": {
+      "name": "Content-Security-Policy",
+      "value": "default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'",
+    },
   },
   "HDR-DUPLICATE": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.HDR-DUPLICATE",
+    "messageKey": "remediation.steps.duplicateHeaders",
   },
   "HDR-FRAME": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.HDR-FRAME",
+    "messageKey": "remediation.steps.cloudflareHeader",
+    "params": {
+      "name": "X-Frame-Options",
+      "value": "DENY",
+    },
   },
   "HDR-HSTS": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.HDR-HSTS",
+    "messageKey": "remediation.steps.cloudflareHsts",
   },
   "HDR-PERMISSIONS": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.HDR-PERMISSIONS",
+    "messageKey": "remediation.steps.cloudflareHeader",
+    "params": {
+      "name": "Permissions-Policy",
+      "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+    },
   },
   "HDR-REFERRER": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.HDR-REFERRER",
+    "messageKey": "remediation.steps.cloudflareHeader",
+    "params": {
+      "name": "Referrer-Policy",
+      "value": "strict-origin-when-cross-origin",
+    },
   },
   "HDR-XCTO": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.HDR-XCTO",
+    "messageKey": "remediation.steps.cloudflareHeader",
+    "params": {
+      "name": "X-Content-Type-Options",
+      "value": "nosniff",
+    },
   },
   "HDR-XXSS": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.HDR-XXSS",
+    "messageKey": "remediation.steps.cloudflareHeader",
+    "params": {
+      "name": "X-XSS-Protection",
+      "value": "0",
+    },
   },
   "INF-ASPNET": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.INF-ASPNET",
+    "messageKey": "remediation.steps.cloudflareRemoveHeader",
+    "params": {
+      "name": "X-AspNet-Version",
+    },
   },
   "INF-POWERED-BY": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.INF-POWERED-BY",
+    "messageKey": "remediation.steps.cloudflareRemoveHeader",
+    "params": {
+      "name": "X-Powered-By",
+    },
   },
   "INF-SERVER": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.INF-SERVER",
+    "messageKey": "remediation.steps.cloudflareServer",
   },
   "TLS-AVAILABLE": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.TLS-AVAILABLE",
+    "messageKey": "remediation.steps.cloudflareCertificate",
   },
   "TLS-CERT-EXPIRY": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.TLS-CERT-EXPIRY",
+    "messageKey": "remediation.steps.cloudflareCertificate",
   },
   "TLS-CERT-VALID": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.TLS-CERT-VALID",
+    "messageKey": "remediation.steps.cloudflareCertificate",
   },
   "TLS-HTTP-REDIRECT": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.TLS-HTTP-REDIRECT",
+    "messageKey": "remediation.steps.cloudflareAlwaysHttps",
   },
   "TLS-PROTOCOL": {
     "kind": "instructions",
-    "messageKey": "remediation.cloudflare.TLS-PROTOCOL",
+    "messageKey": "remediation.steps.cloudflareMinTls",
   },
 }
 `;
@@ -247,7 +281,7 @@ exports[`remediation snippets (FR-05, 07 task 2.6) > iis snapshot 1`] = `
   },
   "CK-PREFIX": {
     "kind": "instructions",
-    "messageKey": "remediation.iis.CK-PREFIX",
+    "messageKey": "remediation.steps.cookiePrefix",
   },
   "CK-SAMESITE": {
     "code": "<system.web>
@@ -296,7 +330,7 @@ exports[`remediation snippets (FR-05, 07 task 2.6) > iis snapshot 1`] = `
   },
   "HDR-DUPLICATE": {
     "kind": "instructions",
-    "messageKey": "remediation.iis.HDR-DUPLICATE",
+    "messageKey": "remediation.steps.duplicateHeaders",
   },
   "HDR-FRAME": {
     "code": "<!-- CSP frame-ancestors 'none' is the modern equivalent; sending both is fine. -->
@@ -415,15 +449,15 @@ exports[`remediation snippets (FR-05, 07 task 2.6) > iis snapshot 1`] = `
   },
   "TLS-AVAILABLE": {
     "kind": "instructions",
-    "messageKey": "remediation.iis.TLS-AVAILABLE",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-CERT-EXPIRY": {
     "kind": "instructions",
-    "messageKey": "remediation.iis.TLS-CERT-EXPIRY",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-CERT-VALID": {
     "kind": "instructions",
-    "messageKey": "remediation.iis.TLS-CERT-VALID",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-HTTP-REDIRECT": {
     "code": "<system.webServer>
@@ -444,7 +478,7 @@ exports[`remediation snippets (FR-05, 07 task 2.6) > iis snapshot 1`] = `
   },
   "TLS-PROTOCOL": {
     "kind": "instructions",
-    "messageKey": "remediation.iis.TLS-PROTOCOL",
+    "messageKey": "remediation.steps.iisTls",
   },
 }
 `;
@@ -453,19 +487,19 @@ exports[`remediation snippets (FR-05, 07 task 2.6) > netlify snapshot 1`] = `
 {
   "CK-HTTPONLY": {
     "kind": "instructions",
-    "messageKey": "remediation.netlify.CK-HTTPONLY",
+    "messageKey": "remediation.steps.cookieInApp",
   },
   "CK-PREFIX": {
     "kind": "instructions",
-    "messageKey": "remediation.netlify.CK-PREFIX",
+    "messageKey": "remediation.steps.cookiePrefix",
   },
   "CK-SAMESITE": {
     "kind": "instructions",
-    "messageKey": "remediation.netlify.CK-SAMESITE",
+    "messageKey": "remediation.steps.cookieInApp",
   },
   "CK-SECURE": {
     "kind": "instructions",
-    "messageKey": "remediation.netlify.CK-SECURE",
+    "messageKey": "remediation.steps.cookieInApp",
   },
   "HDR-COOP": {
     "code": "/*
@@ -486,7 +520,7 @@ exports[`remediation snippets (FR-05, 07 task 2.6) > netlify snapshot 1`] = `
   },
   "HDR-DUPLICATE": {
     "kind": "instructions",
-    "messageKey": "remediation.netlify.HDR-DUPLICATE",
+    "messageKey": "remediation.steps.duplicateHeaders",
   },
   "HDR-FRAME": {
     "code": "# CSP frame-ancestors 'none' is the modern equivalent; sending both is fine.
@@ -541,35 +575,38 @@ exports[`remediation snippets (FR-05, 07 task 2.6) > netlify snapshot 1`] = `
   },
   "INF-ASPNET": {
     "kind": "instructions",
-    "messageKey": "remediation.netlify.INF-ASPNET",
+    "messageKey": "remediation.steps.aspnetOnly",
   },
   "INF-POWERED-BY": {
     "kind": "instructions",
-    "messageKey": "remediation.netlify.INF-POWERED-BY",
+    "messageKey": "remediation.steps.removeInApp",
+    "params": {
+      "name": "X-Powered-By",
+    },
   },
   "INF-SERVER": {
     "kind": "instructions",
-    "messageKey": "remediation.netlify.INF-SERVER",
+    "messageKey": "remediation.steps.hostServerHeader",
   },
   "TLS-AVAILABLE": {
     "kind": "instructions",
-    "messageKey": "remediation.netlify.TLS-AVAILABLE",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-CERT-EXPIRY": {
     "kind": "instructions",
-    "messageKey": "remediation.netlify.TLS-CERT-EXPIRY",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-CERT-VALID": {
     "kind": "instructions",
-    "messageKey": "remediation.netlify.TLS-CERT-VALID",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-HTTP-REDIRECT": {
     "kind": "instructions",
-    "messageKey": "remediation.netlify.TLS-HTTP-REDIRECT",
+    "messageKey": "remediation.steps.hostManagedRedirect",
   },
   "TLS-PROTOCOL": {
     "kind": "instructions",
-    "messageKey": "remediation.netlify.TLS-PROTOCOL",
+    "messageKey": "remediation.steps.hostManagedTls",
   },
 }
 `;
@@ -656,7 +693,7 @@ export default nextConfig
   },
   "HDR-DUPLICATE": {
     "kind": "instructions",
-    "messageKey": "remediation.nextjs.HDR-DUPLICATE",
+    "messageKey": "remediation.steps.duplicateHeaders",
   },
   "HDR-FRAME": {
     "code": "// CSP frame-ancestors 'none' is the modern equivalent; sending both is fine.
@@ -771,7 +808,7 @@ export default nextConfig
   },
   "INF-ASPNET": {
     "kind": "instructions",
-    "messageKey": "remediation.nextjs.INF-ASPNET",
+    "messageKey": "remediation.steps.aspnetOnly",
   },
   "INF-POWERED-BY": {
     "code": "const nextConfig = {
@@ -786,27 +823,27 @@ export default nextConfig
   },
   "INF-SERVER": {
     "kind": "instructions",
-    "messageKey": "remediation.nextjs.INF-SERVER",
+    "messageKey": "remediation.steps.hostServerHeader",
   },
   "TLS-AVAILABLE": {
     "kind": "instructions",
-    "messageKey": "remediation.nextjs.TLS-AVAILABLE",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-CERT-EXPIRY": {
     "kind": "instructions",
-    "messageKey": "remediation.nextjs.TLS-CERT-EXPIRY",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-CERT-VALID": {
     "kind": "instructions",
-    "messageKey": "remediation.nextjs.TLS-CERT-VALID",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-HTTP-REDIRECT": {
     "kind": "instructions",
-    "messageKey": "remediation.nextjs.TLS-HTTP-REDIRECT",
+    "messageKey": "remediation.steps.hostManagedRedirect",
   },
   "TLS-PROTOCOL": {
     "kind": "instructions",
-    "messageKey": "remediation.nextjs.TLS-PROTOCOL",
+    "messageKey": "remediation.steps.hostManagedTls",
   },
 }
 `;
@@ -822,7 +859,7 @@ exports[`remediation snippets (FR-05, 07 task 2.6) > nginx snapshot 1`] = `
   },
   "CK-PREFIX": {
     "kind": "instructions",
-    "messageKey": "remediation.nginx.CK-PREFIX",
+    "messageKey": "remediation.steps.cookiePrefix",
   },
   "CK-SAMESITE": {
     "code": "proxy_cookie_flags ~ secure httponly samesite=lax;
@@ -855,7 +892,7 @@ add_header Content-Security-Policy "default-src 'self'; script-src 'self'; objec
   },
   "HDR-DUPLICATE": {
     "kind": "instructions",
-    "messageKey": "remediation.nginx.HDR-DUPLICATE",
+    "messageKey": "remediation.steps.duplicateHeaders",
   },
   "HDR-FRAME": {
     "code": "# CSP frame-ancestors 'none' is the modern equivalent; sending both is fine.
@@ -904,7 +941,7 @@ add_header X-XSS-Protection "0" always;
   },
   "INF-ASPNET": {
     "kind": "instructions",
-    "messageKey": "remediation.nginx.INF-ASPNET",
+    "messageKey": "remediation.steps.aspnetOnly",
   },
   "INF-POWERED-BY": {
     "code": "proxy_hide_header X-Powered-By;
@@ -923,15 +960,15 @@ fastcgi_hide_header X-Powered-By;
   },
   "TLS-AVAILABLE": {
     "kind": "instructions",
-    "messageKey": "remediation.nginx.TLS-AVAILABLE",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-CERT-EXPIRY": {
     "kind": "instructions",
-    "messageKey": "remediation.nginx.TLS-CERT-EXPIRY",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-CERT-VALID": {
     "kind": "instructions",
-    "messageKey": "remediation.nginx.TLS-CERT-VALID",
+    "messageKey": "remediation.steps.certificate",
   },
   "TLS-HTTP-REDIRECT": {
     "code": "server {
