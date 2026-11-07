@@ -12,6 +12,8 @@ export function CodeBlock({ code, filename }: { code: string; filename: string }
         <CopyButton value={code} accessibleLabel={t('actions.copyCode')} />
       </figcaption>
       <pre
+        tabIndex={0}
+        aria-label={filename}
         dir="ltr"
         className="overflow-x-auto rounded-md border bg-muted p-3 font-mono text-sm leading-relaxed ltr-isolate print:overflow-visible print:break-all print:whitespace-pre-wrap"
       >

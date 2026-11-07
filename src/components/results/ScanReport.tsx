@@ -336,7 +336,12 @@ function RawHeaders({ result }: { result: ScanResult }) {
         </h2>
         <CollapsibleContent className="mt-3 flex flex-col gap-2">
           <p className="text-sm text-muted-foreground">{t('note')}</p>
-          <div className="overflow-x-auto rounded-md border">
+          <div
+            tabIndex={0}
+            role="region"
+            aria-label={t('title', { count: result.rawHeaders.length })}
+            className="overflow-x-auto rounded-md border"
+          >
             <Table dir="ltr" className="font-mono text-xs ltr-isolate">
               <TableHeader>
                 <TableRow>

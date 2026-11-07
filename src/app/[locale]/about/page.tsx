@@ -75,7 +75,12 @@ export default async function AboutPage({ params }: AboutPageProps) {
         {CATEGORIES.map((category) => (
           <div key={category} className="flex flex-col gap-2">
             <h3 className="text-lg font-semibold">{tResults(`categories.${category}`)}</h3>
-            <div className="overflow-x-auto rounded-md border">
+            <div
+              tabIndex={0}
+              role="region"
+              aria-label={tResults(`categories.${category}`)}
+              className="overflow-x-auto rounded-md border"
+            >
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -114,7 +119,12 @@ export default async function AboutPage({ params }: AboutPageProps) {
           {t('grading.title')}
         </h2>
         <p>{t('grading.formula')}</p>
-        <div className="overflow-x-auto rounded-md border">
+        <div
+          tabIndex={0}
+          role="region"
+          aria-label={t('grading.title')}
+          className="overflow-x-auto rounded-md border"
+        >
           <Table>
             <TableHeader>
               <TableRow>

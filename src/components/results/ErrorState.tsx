@@ -24,8 +24,8 @@ export function ErrorState({ code, retryAfterSeconds, onRetry, defaultUrl }: Err
 
   return (
     <div className="flex flex-col gap-8">
-      <Alert variant="destructive">
-        <CircleX strokeWidth={1.75} aria-hidden />
+      <Alert>
+        <CircleX strokeWidth={1.75} className="text-destructive" aria-hidden />
         <AlertTitle>
           <h2>{t(`${code}.title`)}</h2>
         </AlertTitle>
