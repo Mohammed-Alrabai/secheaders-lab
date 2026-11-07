@@ -141,6 +141,7 @@ Errors — body `{ "error": { "code": ErrorCode } }`, never stack traces, resolv
 | HTTP | code | When |
 |---|---|---|
 | 400 | `INVALID_URL` | Fails parsing / policy (scheme, port, credentials, length, IP literal) |
+| 403 | `FORBIDDEN_ORIGIN` | `Origin` present and not equal to `NEXT_PUBLIC_SITE_URL` (SC-25, ADR-025) |
 | 413 | `PAYLOAD_TOO_LARGE` | Body > 4 KB |
 | 415 | `UNSUPPORTED_MEDIA_TYPE` | Not JSON |
 | 422 | `BLOCKED_TARGET` | Resolves to non-public address, or a redirect does |

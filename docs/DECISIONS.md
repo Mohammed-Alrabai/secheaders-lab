@@ -143,3 +143,15 @@ Format per entry: **ADR-NNN — Title** · Date · Status (Accepted / Superseded
 **Context:** `Finding.id` is a RuleId and caps are per rule, but `04` §4.3 phrased conditions per cookie.
 **Decision:** Each CK rule yields one finding; evidence lists offending cookie names (never values); status is the worst across cookies; deduction is the per-cookie sum capped by the rule cap. Worked example 2's cookie has `Secure` (otherwise its stated 62 would be 57).
 **Consequences:** Stable result shape; UI lists cookie names inside one card per rule.
+
+### ADR-024 — Rate limiting: Netlify platform rule primary, in-memory bucket secondary
+2026-11-07 · Accepted (implements SC-24; platform part configured in Phase 6 with approval)
+**Context (verified in Netlify docs 2026-11-07):** Code-based rate-limit rules exist on all plans (free plan: 2 per project) and return HTTP 429; Netlify does not document a `Retry-After` on that response. Rules are declared in a Netlify Function's `config.rateLimit` or on a `netlify.toml` redirect (`[redirects.rate_limit]`), not inside a Next.js Route Handler, and can take up to ~10 s to start blocking. Synchronous functions have a fixed 60 s limit, which fits the 8 s scan budget. No client-IP request header is documented for Next.js handlers.
+**Decision:** Primary: a `netlify.toml` redirect rule for `/api/scan` with `window_limit = 10`, `window_size = 60`, `aggregate_by = ["ip", "domain"]`, verified empirically at deploy (T-3). Secondary: the per-instance token bucket in `rate-limit.ts`, keyed best-effort by `x-nf-client-connection-ip` / first `x-forwarded-for`; the key is never logged or stored.
+**Consequences:** The app's own 429 carries `Retry-After`; the platform's may not, so the UI must not depend on it. The secondary limiter can be bypassed by spoofed headers or instance spread; it only slows a single client.
+
+### ADR-025 — `FORBIDDEN_ORIGIN` (403) for the same-origin check
+2026-11-07 · Accepted
+**Context:** SC-25 requires rejecting a cross-origin `Origin`, but `02` §4 had no matching code.
+**Decision:** Add public code `FORBIDDEN_ORIGIN` → HTTP 403. Requests without `Origin` (non-browser clients) are allowed, as SC-25 states ("when present").
+**Consequences:** The contract gains one code; the UI never triggers it (same origin). Deploy previews need their origin allowed (T-6, Phase 6).

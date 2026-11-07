@@ -6,16 +6,16 @@
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 2 — complete, awaiting gate approval |
-| Last gate approved | Phase 1 (security gate), approved by user 2026-11-07 |
+| Current phase | Phase 3 — complete, awaiting gate approval |
+| Last gate approved | Phase 2, approved by user 2026-11-07 |
 | Blockers | none |
 
 ## Phase checklist
 
 - [x] Phase 0 — Environment & scaffold (approved 2026-11-03)
 - [x] Phase 1 — Secure fetch layer (SSRF) — **security gate** (approved 2026-11-07)
-- [x] Phase 2 — Checks & scoring engine (report posted 2026-11-07, awaiting approval)
-- [ ] Phase 3 — API endpoint
+- [x] Phase 2 — Checks & scoring engine (approved 2026-11-07)
+- [x] Phase 3 — API endpoint (report posted 2026-11-07, awaiting approval)
 - [ ] Phase 4 — UI & i18n — **Arabic copy review gate**
 - [ ] Phase 5 — Report, self-hardening, E2E
 - [ ] Phase 6 — Docs, repository & deploy — **approval per step**
@@ -26,7 +26,7 @@
 |---|---|---|
 | T-1 | Provide contact email for SECURITY.md | User (Phase 6) |
 | T-2 | Provide LinkedIn profile URL for footer | User (Phase 6) — `https://www.linkedin.com/in/mohammed-alrabai` |
-| T-3 | Verify Netlify function timeout & rate-limit config (incl. free-tier availability) | Agent (Phase 3/6) |
+| T-3 | Netlify docs verified 2026-11-07 (ADR-024): 60 s sync limit, code-based rate limits on all plans (2 rules on free). Still to do at deploy: add the `netlify.toml` redirect rate-limit rule and confirm it blocks the 11th request/min on `/api/scan` | Agent (Phase 6) |
 | ~~T-4~~ | ~~Scoring spec gaps~~ — resolved 2026-11-07 (ADR-020…023) | Done |
 | T-5 | Remove obsolete `interest-cohort=()` from own Permissions-Policy (needs approval, `03` §6) | User (Phase 5) |
 | T-6 | SC-25 Origin check vs Netlify deploy-preview origins | Agent (Phase 3) |
@@ -39,6 +39,7 @@
 | ~~T-13~~ | ~~ADR-013 HTTPS → HTTP fallback~~ — done in `scan()` (Phase 2) | Done |
 | T-14 | i18n copy for every `messageKey` / note emitted by the checks and for `remediation.<platform>.<rule>` instruction keys (en + ar) | Agent (Phase 4, task 4.6) |
 | T-15 | The http→https check treats a connect failure on any http hop as "port 80 not served" (pass); only the first hop is expected to fail that way in practice | Agent (note) |
+| T-16 | UI must handle a platform 429 without `Retry-After` (Netlify does not document one) | Agent (Phase 4) |
 
 ## Justified exceptions (`any`, `eslint-disable`, `@ts-expect-error`)
 
@@ -51,6 +52,10 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-07 — Phase 3 complete. `schemas.ts` (strict request; strict `ScanResult` checked against the TS type via `satisfies`), `limits.ts` (dependency-free, client-safe), `logger.ts` (SC-37 fields only), `rate-limit.ts` (token bucket + best-effort client key), `api/scan-handler.ts` + `app/api/scan/route.ts` (Node runtime, force-dynamic, 405 for other methods), `version.ts`. ADR-024, ADR-025. 710 tests ✅, `src/lib/**` 100% lines / 98.7% branches; lint, typecheck, build ✅. Manual curl on the local production build: 405/415/403/413/400/429 as specified; one manual smoke scan of `example.com` (allowed by `CLAUDE.md` §6) returned F/26 in 1.4 s. Notes:
+  - Bug caught by a contract test: the handler forwarded policy-invalid URLs to the scanner; it now validates SC-01…SC-09 itself before any scan work.
+  - Malformed JSON / schema failures map to `INVALID_URL` (400), the only 400 code in `02` §4.
 
 - 2026-11-07 — Phase 2 complete. T-4 resolved with the user (ADR-020…023); `tldts` 7.4.19 added (approved). Delivered `types.ts`, `rules.ts` (21 MDN/OWASP URLs verified to load; ASVS IDs left as `TODO(verify-ref)`), `header-utils.ts`, `checks/*`, `scoring.ts` (`SCORING_VERSION = 1`), `scan()` in `index.ts`, `remediation/`. 647 tests ✅; `src/lib/**` 100% lines, 98.7% branches; lint, typecheck, build ✅. Notes:
   - Bug caught by tests: `tldts` ignores the PSL private section by default (`a.github.io` ≡ `b.github.io`); fixed with `allowPrivateDomains: true`.
