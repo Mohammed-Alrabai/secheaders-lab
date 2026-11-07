@@ -6,8 +6,8 @@
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 5 — complete, awaiting approval |
-| Last gate approved | Phase 4, approved by user 2026-11-07 |
+| Current phase | Phase 6 — Docs, repository & deploy (in progress) |
+| Last gate approved | Phase 5, approved by user 2026-11-07 |
 | Blockers | none |
 
 ## Phase checklist
@@ -17,14 +17,16 @@
 - [x] Phase 2 — Checks & scoring engine (approved 2026-11-07)
 - [x] Phase 3 — API endpoint (approved 2026-11-07)
 - [x] Phase 4 — UI & i18n — **Arabic copy review gate** (approved 2026-11-07)
-- [x] Phase 5 — Report, self-hardening, E2E (report posted 2026-11-07, awaiting approval)
+- [x] Phase 5 — Report, self-hardening, E2E (approved 2026-11-07)
 - [ ] Phase 6 — Docs, repository & deploy — **approval per step**
 
 ## Open TODOs
 
 | ID | Item | Owner |
 |---|---|---|
-| T-1 | Provide contact email for SECURITY.md | User (Phase 6) |
+| ~~T-1~~ | ~~SECURITY.md contact~~ — user chose GitHub private vulnerability reporting only (no public email) | Done |
+| T-21 | Enable GitHub private vulnerability reporting when the repository is created (SECURITY.md links to it) | Agent (6.2, needs approval) |
+| T-22 | Add the live demo link and CI badge to README after deploy | Agent (6.4) |
 | T-2 | Provide LinkedIn profile URL for footer | User (Phase 6) — `https://www.linkedin.com/in/mohammed-alrabai` |
 | T-3 | Netlify docs verified 2026-11-07 (ADR-024): 60 s sync limit, code-based rate limits on all plans (2 rules on free). Still to do at deploy: add the `netlify.toml` redirect rate-limit rule and confirm it blocks the 11th request/min on `/api/scan` | Agent (Phase 6) |
 | ~~T-4~~ | ~~Scoring spec gaps~~ — resolved 2026-11-07 (ADR-020…023) | Done |
@@ -43,7 +45,7 @@
 | T-17 | Footer GitHub link once the repository exists | Agent (Phase 6) |
 | T-18 | Optional: the brand SVGs carry a ~7.7 KB C2PA provenance block each (62% of the file); strip only if the user wants | User |
 | ~~T-19~~ | ~~Arabic copy review~~ — approved with Phase 4 | Done |
-| T-20 | Lighthouse target scope for the results page (ADR-034, proposed) | User (Phase 5 gate) |
+| ~~T-20~~ | ~~Lighthouse target scope~~ — ADR-034 accepted | Done |
 
 ## Justified exceptions (`any`, `eslint-disable`, `@ts-expect-error`)
 
@@ -57,13 +59,15 @@ Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08
 
 ## Log
 
+- 2026-11-07 — 6.1: `README.md` (EN + AR intro, screenshots, features, Mermaid flow, security design, scoring summary, stack, setup, testing, roadmap, disclaimer), `SECURITY.md` (GitHub private vulnerability reporting, scope, testing rules), `CHANGELOG.md` (Keep a Changelog, Unreleased). Screenshots in `docs/screenshots/` captured from one manual scan of `example.com` per locale/theme (allowed by `CLAUDE.md` §6) on the local production build: F / 26. Live demo link and CI badge wait for 6.2–6.4.
+
 - 2026-11-07 — Phase 5 complete (pending approval). Tasks:
   - 5.1 Print / Save as PDF (FR-09): A4, page numbers, print header (product, target, date), failing/warning findings expanded, selected platform's fix only, controls hidden, light palette always (dark tokens screen-only). E2E saves EN/AR PDFs to `test-results/`.
   - 5.2 Nonce CSP per request in `proxy.ts` (ADR-030), final own headers from `03` §6; `interest-cohort` removed (ADR-029, approved). API and `/brand` get locked-down CSPs.
   - 5.2b Contrast test for every `08` §4 pairing in both themes (`--link` token, ADR-031); OG images EN/AR rendered by the browser (ADR-032); canonical + hreflang per page, `robots.txt`, `sitemap.xml`.
   - 5.3 E2E: axe WCAG 2.2 AA on 5 pages × 2 locales × 2 themes, keyboard-only flow, CSP violations + DevTools CSP issues, print.
   - 5.4 The headers our production server actually sends score 100 / A+ (e2e) and the configured set scores 100 / A+ (unit).
-  - 5.5 Lighthouse 13.6.0 (`pnpm dlx`, approved; Chrome headless, mobile profile, local production build). Perf / A11y / BP / SEO: `/en` 100/100/100/100, `/ar` 100/100/100/100, `/en/about` 100/100/100/100, `/ar/about` 98/100/100/100, `/en/scan?url=example.com` 89/100/100/66 (live scan LCP 3.7 s; `noindex` by design) — ADR-034 proposed.
+  - 5.5 Lighthouse 13.6.0 (`pnpm dlx`, approved; Chrome headless, mobile profile, local production build). Perf / A11y / BP / SEO: `/en` 100/100/100/100, `/ar` 100/100/100/100, `/en/about` 100/100/100/100, `/ar/about` 98/100/100/100, `/en/scan?url=example.com` 89/100/100/66 (live scan LCP 3.7 s; `noindex` by design) — ADR-034 accepted.
   - Gate: lint, typecheck, build ✅; 1173 unit/integration tests ✅ (99.8% statements, 98.9% branches); 46 e2e ✅ (Edge).
   - Bugs caught: print override lost to preflight's `!important [hidden]` (early cascade layer); dark palette leaking into print; dark `--primary` text at 2.6:1; destructive alert text contrast; scroll regions not keyboard-reachable; unknown paths lost `lang`/`dir` (localized catch-all); `/about` canonicalized to home; Zod's eval probe logged a CSP issue (ADR-033, test now catches DevTools CSP issues).
 

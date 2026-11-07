@@ -205,7 +205,7 @@ Format per entry: **ADR-NNN — Title** · Date · Status (Accepted / Superseded
 **Consequences:** No eval attempt anywhere; CSP unchanged. Parsing a ~20 KB result without JIT is negligible.
 
 ### ADR-034 — Lighthouse target scope (NFR-01)
-2026-11-07 · Proposed (needs the user's decision)
+2026-11-07 · Accepted (user approved with the Phase 5 gate)
 **Context:** Home and About in both locales score ≥ 95 on all four categories. The results page (`/en/scan?url=example.com`, live scan) scores Performance 89 (LCP 3.7 s: the largest element is the report, which can only render after the scan of a third-party site returns) and SEO 66 (`noindex` is required by `06` §6).
-**Proposal:** Apply the "≥ 95 ×4" target to the indexable pages; record results-page scores as informational with Accessibility and Best Practices still required at 100.
+**Decision:** Apply the "≥ 95 ×4" target to the indexable pages; record results-page scores as informational with Accessibility and Best Practices still required at 100.
 **Consequences:** No change to `noindex`; no artificial LCP tricks.
