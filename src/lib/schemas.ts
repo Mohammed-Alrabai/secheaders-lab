@@ -4,6 +4,10 @@ import { SCAN_ERROR_CODES } from './scanner/errors'
 import { EVIDENCE_MAX, MAX_URL_LENGTH, RAW_HEADER_MAX } from './scanner/limits'
 import { CAP_IDS, RULE_IDS, type ScanResult } from './scanner/types'
 
+// The page CSP forbids eval (`03` §6). Without this, Zod probes `Function('')` on first
+// parse in the browser; the probe is blocked and logged as a CSP issue (ADR-033).
+z.config({ jitless: true })
+
 /** SC-23: request body — exactly `{ url }`, unknown fields rejected. */
 export const ScanRequestSchema = z.strictObject({
   url: z.string().min(1).max(MAX_URL_LENGTH),

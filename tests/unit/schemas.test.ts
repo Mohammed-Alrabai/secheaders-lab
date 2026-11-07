@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { z } from 'zod'
 
 import { ErrorBodySchema, ScanRequestSchema, ScanResultSchema } from '@/lib/schemas'
 import { runChecks } from '@/lib/scanner/checks/index'
@@ -83,5 +84,11 @@ describe('ErrorBodySchema (SC-26)', () => {
       ErrorBodySchema.safeParse({ error: { code: 'BLOCKED_TARGET', detail: 'x' } }).success,
     ).toBe(false)
     expect(ErrorBodySchema.safeParse({ error: { code: 'NOPE' } }).success).toBe(false)
+  })
+})
+
+describe('Zod runtime config (ADR-033)', () => {
+  it('runs jitless so the browser never probes eval under the page CSP', () => {
+    expect(z.config().jitless).toBe(true)
   })
 })

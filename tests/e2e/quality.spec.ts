@@ -66,6 +66,15 @@ for (const locale of ['en', 'ar'] as const) {
 
 test('no CSP violations while using every page (nonce CSP, 03 §6)', async ({ page }) => {
   const violations = await trackCspViolations(page)
+  // DevTools issues also catch blocked eval probes inside try/catch (ADR-033), which do
+  // not always surface as `securitypolicyviolation` events.
+  const cdp = await page.context().newCDPSession(page)
+  const issues: string[] = []
+  cdp.on('Audits.issueAdded', ({ issue }) => {
+    if (issue.code === 'ContentSecurityPolicyIssue')
+      issues.push(JSON.stringify(issue.details.contentSecurityPolicyIssueDetails))
+  })
+  await cdp.send('Audits.enable')
   await mockScan(page)
   await page.goto('/en')
   await page.getByRole('button', { name: 'Theme' }).click()
@@ -77,6 +86,7 @@ test('no CSP violations while using every page (nonce CSP, 03 §6)', async ({ pa
   await page.getByRole('tab', { name: 'IIS' }).first().click()
   await page.goto('/ar/about')
   expect(await violations()).toEqual([])
+  expect(issues).toEqual([])
   const csp = (await page.request.get('/ar/about')).headers()['content-security-policy']
   expect(csp).toMatch(/script-src 'self' 'nonce-[A-Za-z0-9+/=]{24}' 'strict-dynamic';/)
 })
