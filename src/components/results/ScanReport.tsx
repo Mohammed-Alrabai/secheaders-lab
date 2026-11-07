@@ -97,8 +97,7 @@ export const ScanReport = forwardRef<HTMLHeadingElement, ScanReportProps>(functi
             <CopyButton value={finalUrl} accessibleLabel={t('actions.copyUrl')} />
           </div>
           <p className="text-sm text-muted-foreground">
-            {t('summary.scannedAt', { date: formatDate(result.scannedAt, locale) })} ·{' '}
-            {t('summary.duration', { seconds: (result.durationMs / 1000).toFixed(1) })}
+            {t('summary.scannedAt', { date: formatDate(result.scannedAt, locale) })}
           </p>
         </div>
         <div className="flex flex-wrap gap-2 print:hidden">

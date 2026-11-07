@@ -122,7 +122,7 @@ test.describe('error states (FR-13)', () => {
       }),
     )
     await page.goto('/en/scan?url=example.com')
-    await expect(page.getByRole('heading', { name: 'Target not allowed' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'This site can’t be scanned' })).toBeVisible()
     await expect(page.getByLabel('Website address')).toHaveValue('example.com')
   })
 

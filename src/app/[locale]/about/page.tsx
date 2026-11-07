@@ -14,7 +14,7 @@ import { alternatesFor } from '@/i18n/alternates'
 import { Link } from '@/i18n/navigation'
 import { resolveLocaleParam } from '@/i18n/locale-param'
 import { ruleMeta } from '@/lib/scanner/rules'
-import { CAP_MAX_GRADE, GRADE_THRESHOLDS, SCORING_VERSION } from '@/lib/scanner/scoring'
+import { CAP_MAX_GRADE, GRADE_THRESHOLDS } from '@/lib/scanner/scoring'
 import { CAP_IDS, type Category, RULE_IDS } from '@/lib/scanner/types'
 
 interface AboutPageProps {
@@ -158,9 +158,6 @@ export default async function AboutPage({ params }: AboutPageProps) {
             </li>
           ))}
         </ul>
-        <p className="text-sm text-muted-foreground">
-          {t('grading.version', { version: SCORING_VERSION })}
-        </p>
       </section>
 
       <section aria-labelledby="limits" className="flex flex-col gap-3">

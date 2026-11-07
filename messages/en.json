@@ -22,8 +22,8 @@
       "system": "System"
     },
     "footer": {
-      "disclaimer": "SecHeaders Lab performs a passive, read-only inspection of what a site already serves to every browser. It is not a penetration test and its results are informational. Only scan sites you are authorized to assess.",
-      "privacy": "No accounts, no analytics, no tracking. Scan results and full addresses are not stored.",
+      "disclaimer": "SecHeaders Lab only reads what a site already sends to every visitor. It is not a penetration test, and its results are for guidance. Only scan sites you are authorized to assess.",
+      "privacy": "No accounts, no tracking, and scan results are never saved.",
       "methodology": "Methodology and scoring",
       "author": "Built by Mohammed Alrabai",
       "opensInNewTab": "(opens in a new tab)",
@@ -36,11 +36,11 @@
   },
   "home": {
     "title": "Grade your website’s security headers in seconds",
-    "lead": "A passive review of HTTP security headers, TLS, cookies and information disclosure, with a grade from A+ to F and copy-ready fixes for your server.",
+    "lead": "Check your site’s HTTP security headers, HTTPS setup, cookies and information leaks. Get a grade from A+ to F and ready-to-copy fixes for your server.",
     "form": {
       "label": "Website address",
       "placeholder": "example.com",
-      "hint": "Enter a domain or a full URL. Only the public response that every browser receives is read.",
+      "hint": "Enter a domain such as example.com, or a full URL.",
       "submit": "Scan",
       "errorSummary": "Check the address and try again.",
       "errors": {
@@ -62,8 +62,8 @@
     "features": {
       "title": "What you get",
       "passive": {
-        "title": "Passive and safe",
-        "body": "One normal page request, one TLS handshake and one HTTP-to-HTTPS redirect check. No probing, no payloads, nothing a regular visitor would not do."
+        "title": "Safe on live sites",
+        "body": "The scan only reads what your site already shows to every visitor. Nothing is changed, stored or attacked."
       },
       "fixes": {
         "title": "Fixes for your server",
@@ -71,13 +71,13 @@
       },
       "bilingual": {
         "title": "English and Arabic",
-        "body": "The whole tool and its printable report work in both languages, with proper right-to-left layout."
+        "body": "Use the tool and share its printable report in English or Arabic."
       }
     },
     "how": {
       "title": "How it works",
       "step1": "Enter the address of a site you are allowed to assess.",
-      "step2": "We request the page once, read its response headers, inspect the TLS certificate and check the HTTP-to-HTTPS redirect.",
+      "step2": "We check its security headers, HTTPS setup and cookies in a few seconds.",
       "step3": "You get a score, a grade and a fix for every finding.",
       "methodologyLink": "Read the full methodology"
     }
@@ -94,16 +94,15 @@
     "loading": {
       "scanning": "Scanning {host}…",
       "steps": {
-        "resolving": "Resolving the address…",
-        "connecting": "Connecting…",
-        "analyzing": "Analyzing the response…"
+        "resolving": "Finding the site…",
+        "connecting": "Connecting securely…",
+        "analyzing": "Checking the response…"
       }
     },
     "summary": {
       "gradeLabel": "Grade {grade}",
       "finalUrl": "Final URL",
       "scannedAt": "Scanned {date}",
-      "duration": "took {seconds} s",
       "heading": "Report for {host}"
     },
     "actions": {
@@ -186,7 +185,7 @@
       "validUntil": "Valid until",
       "daysRemaining": "{days, plural, =0 {expires today} one {# day left} other {# days left}}",
       "expired": "expired",
-      "unavailable": "No TLS connection could be made on port 443."
+      "unavailable": "Could not open an HTTPS connection to this site."
     },
     "redirects": {
       "title": "Redirect chain",
@@ -194,7 +193,7 @@
     },
     "rawHeaders": {
       "title": "Raw response headers ({count})",
-      "note": "Shown as plain text, each value truncated to 2 KB. Cookie values are hidden.",
+      "note": "Long values are shortened, and cookie values are hidden for privacy.",
       "name": "Header",
       "value": "Value"
     }
@@ -205,27 +204,27 @@
     "retryAfter": "{seconds, plural, one {You can try again in # second.} other {You can try again in # seconds.}}",
     "INVALID_URL": {
       "title": "This address can’t be scanned",
-      "description": "It is not a valid public web address, or it points to a local, internal or IP address. Only public domain names on ports 80 and 443 can be scanned."
+      "description": "Enter a public website address such as example.com. Local addresses, IP addresses and custom ports are not supported."
     },
     "FORBIDDEN_ORIGIN": {
       "title": "Request blocked",
-      "description": "Scans can only be started from this site."
+      "description": "Scans can only be started from SecHeaders Lab. Reload the page and try again."
     },
     "PAYLOAD_TOO_LARGE": {
-      "title": "Request too large",
-      "description": "The scan request is larger than allowed."
+      "title": "Request not accepted",
+      "description": "Reload the page and try again."
     },
     "UNSUPPORTED_MEDIA_TYPE": {
-      "title": "Unsupported request",
-      "description": "The scan request was not sent in the expected format."
+      "title": "Request not accepted",
+      "description": "Reload the page and try again."
     },
     "BLOCKED_TARGET": {
-      "title": "Target not allowed",
-      "description": "The domain resolves to a private, internal or reserved network address, or redirected to one. Such targets are never scanned."
+      "title": "This site can’t be scanned",
+      "description": "This address leads to a private or internal network. Only public websites can be scanned."
     },
     "DNS_NOT_FOUND": {
       "title": "Domain not found",
-      "description": "The domain has no public address records. Check the spelling."
+      "description": "We couldn’t find this domain. Check the spelling and try again."
     },
     "RATE_LIMITED": {
       "title": "Too many scans",
@@ -233,11 +232,11 @@
     },
     "TARGET_UNREACHABLE": {
       "title": "Site unreachable",
-      "description": "The site could not be reached over HTTPS or HTTP, refused the connection, or sent a response that could not be read."
+      "description": "The site didn’t respond or refused the connection. Check that it is online, then try again."
     },
     "TARGET_TIMEOUT": {
       "title": "The scan took too long",
-      "description": "The site did not respond within the time limit."
+      "description": "The site took too long to respond. Try again in a moment."
     },
     "INTERNAL": {
       "title": "Something went wrong",
@@ -359,7 +358,7 @@
         "notYetValid": "The certificate is not valid yet.",
         "hostnameMismatch": "The certificate does not cover this host name.",
         "untrusted": "The certificate is not issued by a trusted authority (for example, it is self-signed).",
-        "notEvaluated": "Not evaluated because HTTPS is not available."
+        "notEvaluated": "Could not be checked because HTTPS is not available."
       }
     },
     "TLS-CERT-EXPIRY": {
@@ -369,7 +368,7 @@
         "soon": "Expires in {days, plural, one {# day} other {# days}}; renew it now.",
         "month": "Expires in {days, plural, one {# day} other {# days}}; make sure renewal is automated.",
         "ok": "Expires in {days, plural, one {# day} other {# days}}.",
-        "notEvaluated": "Not evaluated."
+        "notEvaluated": "Could not be checked."
       }
     },
     "TLS-PROTOCOL": {
@@ -379,7 +378,7 @@
         "old": "The server negotiated {protocol}, which is deprecated.",
         "tls12": "{protocol} was negotiated.",
         "tls13": "{protocol} was negotiated (modern).",
-        "notEvaluated": "Not evaluated."
+        "notEvaluated": "Could not be checked."
       }
     },
     "TLS-HTTP-REDIRECT": {
@@ -436,7 +435,7 @@
       "states": {
         "absent": "No Server header is sent.",
         "version": "The Server header reveals a version number.",
-        "present": "The Server header names the software but no version (informational)."
+        "present": "The Server header names the software but not its version."
       }
     },
     "INF-POWERED-BY": {
@@ -501,8 +500,7 @@
       "minScore": "Score",
       "below": "below {score}",
       "aPlus": "A+ also requires no failed checks, HSTS for at least one year, and a strict Content-Security-Policy. Otherwise a score of 95 or more is an A.",
-      "capsTitle": "Grade caps",
-      "version": "Scoring specification version {version}."
+      "capsTitle": "Grade caps"
     },
     "limits": {
       "title": "Limitations",
@@ -513,7 +511,7 @@
     },
     "privacy": {
       "title": "Privacy",
-      "body": "There are no accounts, no analytics and no tracking. Scan results and full addresses are not stored. The server logs only the time, the outcome, the duration, the scanned host name and the number of findings, without paths or query strings. The only cookie is an optional theme preference stored in your browser.",
+      "body": "There are no accounts, no analytics and no tracking, and scan results are never stored. The only cookie is an optional theme preference.",
       "more": "Read the full Privacy Policy"
     },
     "terms": {
