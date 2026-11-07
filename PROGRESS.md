@@ -37,7 +37,7 @@
 | ~~T-7~~ | ~~Runtime `<style>` injection under nonce CSP~~ — none from Base UI; 0 violations (ADR-030) | Done |
 | T-8 | Add explicit tests + denylist for 6to4, Teredo, `64:ff9b:1::/48` (strengthens SC-12) | Agent (Phase 1) |
 | T-9 | Dev-only advisories: `deepmerge` (low, via shadcn CLI) and `minimatch` (moderate, via typescript-eslint); re-check on each Dependabot run | Agent (ongoing) |
-| T-10 | Confirm Dependabot handles the pnpm 12 lockfile once the repo is on GitHub | Agent (Phase 6) |
+| ~~T-10~~ | ~~Dependabot with the pnpm 12 lockfile~~ — works: PR #2 updated `pnpm-lock.yaml` and passed `--frozen-lockfile` | Done |
 | ~~T-11~~ | ~~latin1 header bytes / bidi stripping in the UI~~ — done in `sanitize.ts` + e2e SSRF case 22 (Phase 4) | Done |
 | ~~T-12~~ | ~~rawHeaders truncation + cookie redaction~~ — done in `scan()` (Phase 2) | Done |
 | ~~T-13~~ | ~~ADR-013 HTTPS → HTTP fallback~~ — done in `scan()` (Phase 2) | Done |
@@ -60,6 +60,8 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-07 — Dependabot PRs merged (user approved, `58320a8`): #2 next/eslint-config-next 16.4.5, tailwindcss/@tailwindcss/postcss 4.3.4, lucide-react 1.68.0; #1 codeql-action 4.39.3 (SHA `33d7b85` verified as the peeled `v4.39.3` tag). Tested merged onto current main before pushing: install, lint, typecheck, coverage, build, audit, 75 e2e ✅; Tailwind 4.3.4 drops `lightningcss`/`magic-string`, built CSS differs by 12 bytes of 92 KB. CI ✅, CodeQL ✅, both PRs closed as merged; live site re-verified (console clean, notice OK, self-scan A+ / 100).
 
 - 2026-11-07 — 6.4: Mozilla Observatory scan of the live site (user approved): **A+, score 140, 12/12 tests passed** (algorithm v6, scan id 134111686). NFR-02 met: A+ on SecHeaders Lab and on Observatory.
 
