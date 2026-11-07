@@ -31,7 +31,7 @@
     }
   },
   "home": {
-    "title": "Grade your website's security headers in seconds",
+    "title": "Grade your website’s security headers in seconds",
     "lead": "A passive review of HTTP security headers, TLS, cookies and information disclosure, with a grade from A+ to F and copy-ready fixes for your server.",
     "form": {
       "label": "Website address",

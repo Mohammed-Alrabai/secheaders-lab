@@ -10,6 +10,8 @@ const baseURL = `http://localhost:${String(PORT)}`
 export default defineConfig({
   testDir: 'tests/e2e',
   fullyParallel: true,
+  // One `next start` serves every worker; a few workers keep it responsive on laptops and CI.
+  workers: 3,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
@@ -35,6 +37,7 @@ export default defineConfig({
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
-    env: { NEXT_TELEMETRY_DISABLED: '1' },
+    // Production mode requires the site origin (env.ts); it is also the allowed Origin (SC-25).
+    env: { NEXT_TELEMETRY_DISABLED: '1', NEXT_PUBLIC_SITE_URL: baseURL },
   },
 })

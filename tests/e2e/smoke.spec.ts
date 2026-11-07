@@ -10,7 +10,7 @@ test('/en renders left-to-right in English', async ({ page }) => {
   expect(response?.ok()).toBe(true)
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
   await expect(page.locator('html')).toHaveAttribute('dir', 'ltr')
-  await expect(page.locator('h1')).toHaveText('SecHeaders Lab')
+  await expect(page.locator('h1')).toHaveText('Grade your website’s security headers in seconds')
 })
 
 test('/ar renders right-to-left in Arabic', async ({ page }) => {
@@ -18,7 +18,7 @@ test('/ar renders right-to-left in Arabic', async ({ page }) => {
   expect(response?.ok()).toBe(true)
   await expect(page.locator('html')).toHaveAttribute('lang', 'ar')
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
-  await expect(page.locator('h1')).toHaveText('SecHeaders Lab')
+  await expect(page.getByRole('img', { name: 'SecHeaders Lab' }).first()).toBeAttached()
 })
 
 test('unknown locale returns 404', async ({ page }) => {
