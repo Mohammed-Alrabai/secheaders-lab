@@ -6,7 +6,7 @@
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 6 — Docs, repository & deploy (in progress) |
+| Current phase | Phase 6 — complete, awaiting approval |
 | Last gate approved | Phase 5, approved by user 2026-11-07 |
 | Blockers | none |
 
@@ -18,7 +18,7 @@
 - [x] Phase 3 — API endpoint (approved 2026-11-07)
 - [x] Phase 4 — UI & i18n — **Arabic copy review gate** (approved 2026-11-07)
 - [x] Phase 5 — Report, self-hardening, E2E (approved 2026-11-07)
-- [ ] Phase 6 — Docs, repository & deploy — **approval per step**
+- [x] Phase 6 — Docs, repository & deploy — **approval per step** (report posted 2026-11-08, awaiting approval)
 
 ## Open TODOs
 
@@ -60,6 +60,8 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-08 — 6.6: LinkedIn Projects entry (1,103 characters), two Featured items (live site, repository) and a launch post in English and Arabic handed to the user in chat; the user publishes them. Phase 6 complete.
 
 - 2026-11-08 — 6.5 done: annotated tag `v1.0.0` on `b2d3b64` pushed; CI ✅, CodeQL ✅, live self-scan A+ / 100. GitHub release "SecHeaders Lab v1.0.0" published (marked Latest); its description was set from `docs/releases/v1.0.0.md` via the GitHub UI after the user signed in. Release notes unwrapped to one line per paragraph because GitHub release pages render single line breaks.
 
