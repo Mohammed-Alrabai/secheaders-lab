@@ -25,7 +25,9 @@ export default defineConfig({
   workers: 3,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
-  reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
+  reporter: process.env.CI
+    ? [['github'], ['html', { open: 'never' }], ['json', { outputFile: 'reports/e2e.json' }]]
+    : 'list',
   use: {
     baseURL,
     storageState: noticeDismissed,

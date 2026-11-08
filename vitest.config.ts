@@ -16,7 +16,8 @@ export default defineConfig({
       provider: 'v8',
       include: ['src/lib/**/*.ts'],
       exclude: ['src/**/*.d.ts'],
-      reporter: ['text', 'html', 'lcov'],
+      // json-summary feeds the CI job summary (ADR-042).
+      reporter: ['text', 'html', 'lcov', 'json-summary'],
       thresholds: {
         lines: 85,
         'src/lib/scanner/**': { lines: 95, branches: 95 },
