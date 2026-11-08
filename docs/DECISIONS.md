@@ -240,3 +240,21 @@ Format per entry: **ADR-NNN — Title** · Date · Status (Accepted / Superseded
 **Context:** The user shared a static review of the repository (read at the user's request from outside the project folder; it is not committed). Checked against the code, three findings were confirmed: (1) the ADR-013 fallback cloned the full input URL, so a path and query (which may carry tokens) were sent over plain HTTP, contrary to ADR-013's own `http://<host>/`; existing tests only used root inputs. (2) The TLS-HTTP-REDIRECT probe stopped before HTTPS hops only, so `http://a.com/` → `http://b.net/` sent a request to an unrelated site. (3) A request body stream that errored or was cancelled escaped the handler as an unhandled rejection instead of a typed, `no-store` error. The review's rate-limit concern is already covered by ADR-024 (platform rule verified live); its SaaS, AI and queue roadmap is out of scope for this release.
 **Decision:** (1) The fallback requests only `http://<host>/`. (2) The probe also stops before any hop to another site (same host or same registrable domain, PSL private section included, via the shared `scanner/site.ts`); the stopped hop is policy-checked but never requested. (3) Body read failures return `400 INVALID_URL` with `no-store`; the stream error text is discarded. Each fix has a regression test that failed before the change.
 **Consequences:** No scoring change: a cross-site HTTP hop was a 10-point TLS-HTTP-REDIRECT fail before and still is (state `noRedirect`, since HTTPS on the same site is never reached). A scan whose HTTPS fails now scores the site's root over HTTP, not the submitted path. No public API or message change. README test counts corrected (they still showed the Phase 5 numbers).
+
+### ADR-040 — Download the report as JSON (PRD §7, v1.1)
+2026-11-08 · Accepted (user approved the v1.1 items)
+**Context:** `01` §7 lists a downloadable JSON result for v1.1. The external review (ADR-039) asked that exports not expose more than the page does.
+**Decision:** A "Download JSON" action beside Print saves the `ScanResult` the page already shows, built in the browser with a `Blob` and an `<a download>`: no request, no storage. Name `secheaders-<host>-<YYYY-MM-DD>.json` (host reduced to `[a-z0-9.-]`, UTC date). The content is exactly the validated API result, so cookie values stay redacted (ADR-015). Logic in `src/lib/report-export.ts`, unit- and e2e-tested.
+**Consequences:** No API, schema or scoring change. The export contains the URL the user entered, as the share link already does.
+
+### ADR-041 — IP policy checked against the IANA special-purpose registries
+2026-11-08 · Accepted (user approved the v1.1 items)
+**Context:** The review (SEC-05) asked for an auditable check of the hard-coded ranges. The explicit lists in `ip-policy.ts` exist so that a change in ipaddr.js tables can never silently open a range (SC-12).
+**Decision:** `tests/fixtures/iana-special-purpose.ts` lists every IPv4/IPv6 block the official IANA registries (CSV, retrieved 2026-11-08) do not mark globally reachable. Each block is sampled (first, middle, last) against `isPublicAddress` and against the explicit lists alone. The test found that `2001::/23` (IETF protocol assignments) was refused only by ipaddr.js `range()`; it is now in the explicit list. IPv4-mapped IPv6 stays judged as its IPv4 (SC-12).
+**Consequences:** No behaviour change (the library already refused those addresses); SC-12 is now enforced without relying on the library for that block. The fixture must be refreshed when the registries change.
+
+### ADR-042 — Test counts and coverage in the CI job summary
+2026-11-08 · Accepted (user approved the v1.1 items)
+**Context:** The review (TD-05) noted that configured checks are not evidence of a passing run. README numbers had also drifted (ADR-039).
+**Decision:** In CI, Vitest writes a JSON report and a coverage `json-summary`, Playwright a JSON report, and `scripts/ci-summary.mjs` (Node built-ins, local files only) appends a Markdown table to `$GITHUB_STEP_SUMMARY`, even when a step failed. Reports go to the git-ignored `reports/` folder because Playwright clears `test-results/`.
+**Consequences:** Every CI run shows its own test counts and coverage on the run page. No new dependencies.

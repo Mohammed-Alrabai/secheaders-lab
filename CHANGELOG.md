@@ -8,6 +8,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-08
+
+### Added
+
+- **Download JSON** on the results page: the full result as a file, built in the browser (no request, nothing
+  stored), named `secheaders-<host>-<date>.json`. English and Arabic labels.
+- The IP policy is tested against the official IANA IPv4 and IPv6 special-purpose registries.
+- Every CI run writes its test counts and coverage to the run page.
+
+### Changed
+
+- The explicit IPv6 block list now includes `2001::/23` (IETF protocol assignments). Those addresses were
+  already refused; the list no longer depends on the IP library for them.
+
 ## [1.0.1] - 2026-11-08
 
 Security hardening from an external review of the repository. No scoring or API changes.
@@ -48,6 +62,7 @@ First public release, live at https://secheaders-lab.netlify.app.
 - Unit, integration and end-to-end test suites (including accessibility, CSP and keyboard-only tests) and CI
   with CodeQL, Semgrep, Gitleaks and `pnpm audit`.
 
-[Unreleased]: https://github.com/Mohammed-Alrabai/secheaders-lab/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/Mohammed-Alrabai/secheaders-lab/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/Mohammed-Alrabai/secheaders-lab/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/Mohammed-Alrabai/secheaders-lab/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Mohammed-Alrabai/secheaders-lab/releases/tag/v1.0.0
