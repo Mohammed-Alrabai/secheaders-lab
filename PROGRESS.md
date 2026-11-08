@@ -6,8 +6,8 @@
 
 | Field | Value |
 |---|---|
-| Current phase | Phase 6 — complete, awaiting approval |
-| Last gate approved | Phase 5, approved by user 2026-11-07 |
+| Current phase | All phases complete — v1.0.0 released |
+| Last gate approved | Phase 6, approved by user 2026-11-08 |
 | Blockers | none |
 
 ## Phase checklist
@@ -18,7 +18,7 @@
 - [x] Phase 3 — API endpoint (approved 2026-11-07)
 - [x] Phase 4 — UI & i18n — **Arabic copy review gate** (approved 2026-11-07)
 - [x] Phase 5 — Report, self-hardening, E2E (approved 2026-11-07)
-- [x] Phase 6 — Docs, repository & deploy — **approval per step** (report posted 2026-11-08, awaiting approval)
+- [x] Phase 6 — Docs, repository & deploy — **approval per step** (approved 2026-11-08)
 
 ## Open TODOs
 
