@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-08
+
+First public release, live at https://secheaders-lab.netlify.app.
+
 ### Added
 
 - Passive scan of a public website: one `GET` request (up to 5 validated redirects), a TLS handshake and an
@@ -29,3 +33,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   first-visit cookie notice (no tracking cookies; the site has one optional theme cookie).
 - Unit, integration and end-to-end test suites (including accessibility, CSP and keyboard-only tests) and CI
   with CodeQL, Semgrep, Gitleaks and `pnpm audit`.
+
+[Unreleased]: https://github.com/Mohammed-Alrabai/secheaders-lab/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/Mohammed-Alrabai/secheaders-lab/releases/tag/v1.0.0

@@ -61,6 +61,8 @@ Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08
 
 ## Log
 
+- 2026-11-08 — 6.5 prepared: version 1.0.0 (`package.json`, so the scanner User-Agent reads `SecHeadersLab/1.0.0`), CHANGELOG entry dated with compare links, release notes in `docs/releases/v1.0.0.md`. Lint, typecheck, tests, build ✅. Tag and GitHub release pending user approval.
+
 - 2026-11-07 — Dependabot PRs merged (user approved, `58320a8`): #2 next/eslint-config-next 16.4.5, tailwindcss/@tailwindcss/postcss 4.3.4, lucide-react 1.68.0; #1 codeql-action 4.39.3 (SHA `33d7b85` verified as the peeled `v4.39.3` tag). Tested merged onto current main before pushing: install, lint, typecheck, coverage, build, audit, 75 e2e ✅; Tailwind 4.3.4 drops `lightningcss`/`magic-string`, built CSS differs by 12 bytes of 92 KB. CI ✅, CodeQL ✅, both PRs closed as merged; live site re-verified (console clean, notice OK, self-scan A+ / 100).
 
 - 2026-11-07 — 6.4: Mozilla Observatory scan of the live site (user approved): **A+, score 140, 12/12 tests passed** (algorithm v6, scan id 134111686). NFR-02 met: A+ on SecHeaders Lab and on Observatory.
