@@ -8,6 +8,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-08
+
+Security hardening from an external review of the repository. No scoring or API changes.
+
+### Fixed
+
+- When HTTPS fails, the HTTP fallback now requests only the site's root (`http://<host>/`), as documented in
+  ADR-013. Previously the submitted path and query, which may carry tokens, were sent over plain HTTP.
+- The HTTP-to-HTTPS redirect check no longer sends a request to a different site: it stops before any redirect
+  that leaves the scanned site (tenants of shared hosts such as `github.io` count as different sites).
+- A request body that fails or is cancelled while it is read now returns a `400` error with `no-store` instead
+  of an unhandled server error.
+- README test counts.
+
 ## [1.0.0] - 2026-11-08
 
 First public release, live at https://secheaders-lab.netlify.app.
@@ -34,5 +48,6 @@ First public release, live at https://secheaders-lab.netlify.app.
 - Unit, integration and end-to-end test suites (including accessibility, CSP and keyboard-only tests) and CI
   with CodeQL, Semgrep, Gitleaks and `pnpm audit`.
 
-[Unreleased]: https://github.com/Mohammed-Alrabai/secheaders-lab/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/Mohammed-Alrabai/secheaders-lab/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/Mohammed-Alrabai/secheaders-lab/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Mohammed-Alrabai/secheaders-lab/releases/tag/v1.0.0
