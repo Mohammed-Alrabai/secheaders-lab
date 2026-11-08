@@ -34,7 +34,9 @@ const toHttps: Handler = (req, res) => {
 
 beforeAll(async () => {
   ca = await createTestCa()
-  const leaf = await issueLeaf(ca, { hostnames: ['example.com', 'www.example.com'] })
+  const leaf = await issueLeaf(ca, {
+    hostnames: ['example.com', 'www.example.com', 'a.github.io'],
+  })
   httpsServer = await startHttpsServer((req, res) => {
     httpsRoute(req, res)
   }, leaf)
@@ -182,6 +184,99 @@ describe('scan() end to end (02 §2)', () => {
     expect(result.grade).toBe('A+')
   })
 
+  describe('ADR-039 the http:// probe never requests another site', () => {
+    const OTHER = 'other.example.net'
+    const resolver = () =>
+      new MockResolver()
+        .set('example.com', [PUBLIC_IP])
+        .set('www.example.com', [PUBLIC_IP])
+        .set(OTHER, [PUBLIC_IP])
+        .set('a.github.io', [PUBLIC_IP])
+        .set('b.github.io', [PUBLIC_IP])
+
+    /** Records the Host header of every request the probe or page fetch makes. */
+    function recordHosts(next: Handler): { hosts: string[]; handler: Handler } {
+      const hosts: string[] = []
+      return {
+        hosts,
+        handler: (req, res) => {
+          hosts.push(req.headers.host ?? '')
+          next(req, res)
+        },
+      }
+    }
+
+    const redirectFinding = (result: Awaited<ReturnType<typeof scan>>) =>
+      result.findings.find((f) => f.id === 'TLS-HTTP-REDIRECT')
+
+    it('follows a same-host http:// hop, then stops at HTTPS → pass', async () => {
+      httpsRoute = sendPerfect
+      const http = recordHosts((req, res) => {
+        if (req.url === '/') redirect(res, 'http://example.com/start', 301)
+        else toHttps(req, res)
+      })
+      httpRoute = http.handler
+      const result = await scan('example.com', deps({ resolver: resolver() }))
+      expect(http.hosts).toEqual(['example.com', 'example.com'])
+      expect(redirectFinding(result)?.messageKey).toBe('TLS-HTTP-REDIRECT.ok')
+    })
+
+    it('follows a same-site http:// hop (www) → pass', async () => {
+      httpsRoute = sendPerfect
+      const http = recordHosts((req, res) => {
+        if (req.headers.host === 'example.com') redirect(res, 'http://www.example.com/', 301)
+        else toHttps(req, res)
+      })
+      httpRoute = http.handler
+      const result = await scan('example.com', deps({ resolver: resolver() }))
+      expect(http.hosts).toEqual(['example.com', 'www.example.com'])
+      expect(redirectFinding(result)?.messageKey).toBe('TLS-HTTP-REDIRECT.ok')
+    })
+
+    it('stops before an http:// hop to another registrable domain → fail, no request sent', async () => {
+      httpsRoute = sendPerfect
+      const http = recordHosts((req, res) => {
+        if (req.headers.host === 'example.com') redirect(res, `http://${OTHER}/landing`, 302)
+        else toHttps(req, res)
+      })
+      httpRoute = http.handler
+      const result = await scan('example.com', deps({ resolver: resolver() }))
+      expect(http.hosts).toEqual(['example.com'])
+      expect(redirectFinding(result)).toMatchObject({
+        status: 'fail',
+        deduction: 10,
+        messageKey: 'TLS-HTTP-REDIRECT.noRedirect',
+        evidence: { detail: `http://${OTHER}/landing` },
+      })
+    })
+
+    it('stops before an https:// hop to another site without requesting it → otherSite', async () => {
+      const https = recordHosts(sendPerfect)
+      httpsRoute = https.handler
+      httpRoute = (_req, res) => {
+        redirect(res, `https://${OTHER}/`, 301)
+      }
+      const result = await scan('example.com', deps({ resolver: resolver() }))
+      expect(https.hosts).not.toContain(OTHER)
+      expect(redirectFinding(result)).toMatchObject({
+        status: 'fail',
+        messageKey: 'TLS-HTTP-REDIRECT.otherSite',
+      })
+    })
+
+    it('treats tenants of a shared host as different sites (a.github.io → b.github.io)', async () => {
+      httpsRoute = sendPerfect
+      const http = recordHosts((req, res) => {
+        if (req.headers.host === 'a.github.io') redirect(res, 'http://b.github.io/', 301)
+        else toHttps(req, res)
+      })
+      httpRoute = http.handler
+      const result = await scan('a.github.io', deps({ resolver: resolver() }))
+      expect(http.hosts).toEqual(['a.github.io'])
+      expect(redirectFinding(result)?.messageKey).toBe('TLS-HTTP-REDIRECT.noRedirect')
+    })
+  })
+
   it('TLS-HTTP-REDIRECT fails when http:// redirects into a blocked target', async () => {
     httpsRoute = sendPerfect
     httpRoute = (_req, res) => {
@@ -215,6 +310,24 @@ describe('ADR-013 HTTPS → HTTP fallback', () => {
     expect(result.capsApplied).toEqual(['CAP-NO-HTTPS', 'CAP-NO-CSP'])
     expect(result.grade).toBe('F')
     expect(result.findings.find((f) => f.id === 'HDR-HSTS')?.messageKey).toBe('HDR-HSTS.notHttps')
+  })
+
+  it('falls back to http://<host>/ only: the input path and query never travel over HTTP', async () => {
+    const seen: string[] = []
+    httpRoute = (req, res) => {
+      seen.push(req.url ?? '')
+      res.end('plain')
+    }
+    const https = await closedPort()
+    const result = await scan(
+      'https://example.com/account/reset?token=secret-123&email=user%40example.com',
+      deps({}, { https, http: 0 }),
+    )
+    expect(result.target.finalUrl).toBe('http://example.com/')
+    expect(result.target.redirectChain).toEqual([{ url: 'http://example.com/', status: 200 }])
+    expect(seen.length).toBeGreaterThan(0)
+    expect(seen.every((path) => path === '/')).toBe(true)
+    expect(JSON.stringify(result.target.redirectChain)).not.toContain('secret-123')
   })
 
   it('both HTTPS and HTTP unreachable → TARGET_UNREACHABLE with the HTTPS reason', async () => {

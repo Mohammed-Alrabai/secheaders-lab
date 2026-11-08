@@ -1,5 +1,4 @@
-import { getDomain } from 'tldts'
-
+import { registrableDomain } from '../site'
 import type { CheckInput, Finding } from '../types'
 
 import { finding } from './finding'
@@ -105,14 +104,6 @@ function checkProtocol(protocol: string | null): Finding {
     params: { protocol },
     ...(evidence ? { evidence } : {}),
   })
-}
-
-/**
- * Registrable domain per the Public Suffix List, including its private section: tenants of
- * shared hosts (`a.github.io` vs `b.github.io`) are different owners (ADR-020).
- */
-function registrableDomain(hostname: string): string | null {
-  return getDomain(hostname, { allowPrivateDomains: true })
 }
 
 /** TLS-HTTP-REDIRECT (`04` §4.2, ADR-020): http:// must reach https:// on the same site. */
