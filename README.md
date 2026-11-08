@@ -191,9 +191,9 @@ corepack pnpm start
 |---|---|
 | `pnpm lint` | ESLint with zero warnings allowed |
 | `pnpm typecheck` | Route type generation and `tsc --noEmit` |
-| `pnpm test` | 1,173 unit and integration tests (local servers, mocked DNS, no internet) |
+| `pnpm test` | 1,298 unit and integration tests (local servers, mocked DNS, no internet) |
 | `pnpm test:coverage` | Same, with coverage thresholds (scanner core ≥ 95%; currently ~99%) |
-| `pnpm test:e2e` | 46 Playwright tests: user flows, error states, print, axe on 20 page/locale/theme combinations, CSP, keyboard-only use, own headers A+ |
+| `pnpm test:e2e` | 75 Playwright tests: user flows, error states, print, axe on 32 page/locale/theme combinations, CSP, keyboard-only use, own headers A+ |
 | `pnpm check` | Lint, typecheck, coverage and build together |
 
 Before the first end-to-end run, install a browser with `pnpm exec playwright install chromium`, or reuse an

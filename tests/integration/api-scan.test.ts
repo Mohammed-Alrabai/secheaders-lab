@@ -181,6 +181,35 @@ describe('POST /api/scan — error codes (02 §4, SC-26)', () => {
     expect(response.status).toBe(413)
   })
 
+  it.each([
+    ['errors mid-body', 'error'],
+    ['is cancelled by the client', 'cancel'],
+  ])('400 INVALID_URL — request body stream %s (ADR-039)', async (_name, mode) => {
+    const { handle, logs } = handler()
+    const stream = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(new TextEncoder().encode('{"url":"exa'))
+      },
+      pull(controller) {
+        if (mode === 'error') controller.error(new Error('socket hang up from 10.0.0.7'))
+        else controller.error(new DOMException('The operation was aborted.', 'AbortError'))
+      },
+    })
+    const request = new Request(`${SITE}/api/scan`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', origin: SITE },
+      body: stream,
+      duplex: 'half',
+    } as RequestInit)
+    const response = await handle(request)
+    expect(response.status).toBe(400)
+    expectApiHeaders(response)
+    const text = await response.text()
+    expect(ErrorBodySchema.parse(JSON.parse(text)).error.code).toBe('INVALID_URL')
+    expect(text).not.toMatch(/socket|10\.0\.0\.7|abort/i)
+    expect(logs.join('\n')).not.toMatch(/socket|10\.0\.0\.7/)
+  })
+
   it('400 INVALID_URL — empty body', async () => {
     const { handle } = handler()
     const request = new Request(`${SITE}/api/scan`, {

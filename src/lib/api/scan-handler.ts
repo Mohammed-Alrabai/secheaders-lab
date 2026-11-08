@@ -105,7 +105,15 @@ export function createScanHandler(deps: ScanHandlerDeps): (request: Request) => 
       return errorResponse('UNSUPPORTED_MEDIA_TYPE')
     }
 
-    const raw = await readLimited(request, MAX_REQUEST_BYTES)
+    // A body stream that errors or is cancelled is a malformed request, never a 500
+    // (ADR-039). The stream error text is discarded: it may name internal addresses.
+    let raw: string | null
+    try {
+      raw = await readLimited(request, MAX_REQUEST_BYTES)
+    } catch {
+      done('INVALID_URL')
+      return errorResponse('INVALID_URL')
+    }
     if (raw === null) {
       done('PAYLOAD_TOO_LARGE')
       return errorResponse('PAYLOAD_TOO_LARGE')

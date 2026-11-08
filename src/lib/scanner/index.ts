@@ -10,6 +10,7 @@ import {
   safeFetch,
 } from './safe-fetch'
 import { SCORING_VERSION, computeScore } from './scoring'
+import { isSameSite } from './site'
 import { type TlsInspection, inspectTls } from './tls-inspect'
 import type { Finding, HttpRedirectCheck, ScanResult, Status } from './types'
 import { normalizeAndValidate } from './url-policy'
@@ -48,7 +49,11 @@ export interface ScanDeps {
 
 const budgetExceeded = () => new ScanError('TARGET_TIMEOUT', 'BUDGET_EXCEEDED')
 
-/** Main page fetch with the HTTPS → HTTP fallback of ADR-013. */
+/**
+ * Main page fetch with the HTTPS → HTTP fallback of ADR-013. The fallback requests only
+ * `http://<host>/`: the input's path and query may carry tokens and must never be sent
+ * in plaintext (ADR-039).
+ */
 async function fetchPage(url: URL, deps: SafeFetchDeps): Promise<SafeFetchResult> {
   try {
     return await safeFetch(url, deps)
@@ -56,8 +61,7 @@ async function fetchPage(url: URL, deps: SafeFetchDeps): Promise<SafeFetchResult
     const canFallBack =
       url.protocol === 'https:' && isScanError(error) && HTTPS_FALLBACK_DETAILS.has(error.detail)
     if (!canFallBack) throw error
-    const plain = new URL(url.href)
-    plain.protocol = 'http:'
+    const plain = new URL(`http://${url.hostname}/`)
     try {
       return await safeFetch(plain, deps)
     } catch {
@@ -66,14 +70,18 @@ async function fetchPage(url: URL, deps: SafeFetchDeps): Promise<SafeFetchResult
   }
 }
 
-/** TLS-HTTP-REDIRECT input: where does `http://<host>/` lead? (`04` §4.2) */
+/**
+ * TLS-HTTP-REDIRECT input: where does `http://<host>/` lead? (`04` §4.2) The probe stops
+ * before the first HTTPS hop and before any hop to another site, so it never sends a
+ * request to an unrelated host (ADR-039).
+ */
 async function checkHttpRedirect(
   hostname: string,
   deps: SafeFetchDeps,
 ): Promise<HttpRedirectCheck> {
   try {
     const result = await safeFetch(new URL(`http://${hostname}/`), deps, {
-      stopBefore: (next) => next.protocol === 'https:',
+      stopBefore: (next) => next.protocol === 'https:' || !isSameSite(next.hostname, hostname),
     })
     return { kind: 'response', finalUrl: result.finalUrl.href }
   } catch (error) {
