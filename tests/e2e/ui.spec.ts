@@ -102,6 +102,31 @@ test.describe('results page (mocked API)', () => {
     })
   }
 
+  test('downloads the report as JSON, built in the browser (ADR-040)', async ({ page }) => {
+    const errors: string[] = []
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text())
+    })
+    let scans = 0
+    await mockScan(page, (route) => {
+      scans += 1
+      return okResponse(route)
+    })
+    await page.goto('/ar/scan?url=example.com')
+    const button = page.getByRole('button', { name: 'تنزيل JSON' })
+    await expect(button).toBeVisible()
+    const [download] = await Promise.all([page.waitForEvent('download'), button.click()])
+    expect(download.suggestedFilename()).toBe('secheaders-example.com-2026-11-07.json')
+    let text = ''
+    const stream = await download.createReadStream()
+    stream.setEncoding('utf8')
+    for await (const chunk of stream) text += String(chunk)
+    expect(JSON.parse(text)).toEqual(JSON.parse(JSON.stringify(sampleResult())))
+    expect(text).not.toContain('TOP-SECRET')
+    expect(scans).toBe(1) // the export makes no request of its own
+    expect(errors).toEqual([])
+  })
+
   test('language switch keeps the page and its query (FR-10)', async ({ page }) => {
     await mockScan(page, okResponse)
     await page.goto('/en/scan?url=example.com')
