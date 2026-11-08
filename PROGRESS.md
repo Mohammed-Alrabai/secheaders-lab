@@ -6,7 +6,7 @@
 
 | Field | Value |
 |---|---|
-| Current phase | All phases complete — v1.0.1 hardening prepared (branch `fix/v1.0.1-hardening`) |
+| Current phase | All phases complete — v1.0.1 released |
 | Last gate approved | Phase 6, approved by user 2026-11-08 |
 | Blockers | none |
 
@@ -60,6 +60,8 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-08 — v1.0.1 released: PR #3 (all checks green) merged by the user as `78de367`; annotated tag `v1.0.1` pushed; GitHub release "SecHeaders Lab v1.0.1" published (Latest) from `docs/releases/v1.0.1.md`. Feature branch deleted locally. CI on `main` ✅ (lint, tests, build, e2e, audit, CodeQL, Semgrep, Gitleaks); live site 200, self-scan A+ / 100.
 
 - 2026-11-08 — v1.0.1 hardening (ADR-039), from an external static review the user shared: HTTPS→HTTP fallback limited to `http://<host>/`; TLS-HTTP-REDIRECT probe stops before cross-site hops (new `scanner/site.ts`, shared with the TLS check); body stream errors → `400 INVALID_URL` with `no-store`. Regression tests for each fix (5 scenarios failed before the fixes) plus unit tests for `site.ts`. README test counts corrected (1,298 unit/integration, 75 e2e, 32 axe combinations). Version 1.0.1, CHANGELOG, release notes. Not yet pushed or tagged.
 
