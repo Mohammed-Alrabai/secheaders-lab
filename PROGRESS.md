@@ -6,7 +6,7 @@
 
 | Field | Value |
 |---|---|
-| Current phase | All phases complete — v1.0.1 released |
+| Current phase | All phases complete — v1.1.0 prepared (branch `feat/v1.1`) |
 | Last gate approved | Phase 6, approved by user 2026-11-08 |
 | Blockers | none |
 
@@ -60,6 +60,8 @@ _none_
 Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08` §6).
 
 ## Log
+
+- 2026-11-08 — v1.1.0 prepared (user chose the small v1.1 items from the review): JSON download (ADR-040, PRD §7), IANA special-purpose registry tests with `2001::/23` added to the explicit IPv6 list (ADR-041), CI job summary with test counts and coverage (ADR-042). Gate: lint ✅ typecheck ✅ 1,381 tests ✅ (99.8% statements) build ✅ e2e 76 ✅. Not yet pushed.
 
 - 2026-11-08 — v1.0.1 released: PR #3 (all checks green) merged by the user as `78de367`; annotated tag `v1.0.1` pushed; GitHub release "SecHeaders Lab v1.0.1" published (Latest) from `docs/releases/v1.0.1.md`. Feature branch deleted locally. CI on `main` ✅ (lint, tests, build, e2e, audit, CodeQL, Semgrep, Gitleaks); live site 200, self-scan A+ / 100.
 

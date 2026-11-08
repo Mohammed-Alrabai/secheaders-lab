@@ -45,6 +45,7 @@ export const BLOCKED_IPV6_CIDRS: readonly string[] = [
   '64:ff9b::/96', // NAT64 well-known prefix
   '64:ff9b:1::/48', // NAT64 local-use prefix
   '100::/64', // discard-only
+  '2001::/23', // IETF protocol assignments: not globally reachable per IANA (ADR-041)
   '2001::/32', // Teredo (embeds IPv4)
   '2001:2::/48', // benchmarking
   '2001:10::/28', // deprecated ORCHID

@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronDown, Printer, RotateCcw, Route } from 'lucide-react'
+import { ChevronDown, Download, Printer, RotateCcw, Route } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { forwardRef, useState } from 'react'
 
@@ -17,6 +17,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { Platform } from '@/lib/remediation'
+import { REPORT_JSON_TYPE, reportFileName, reportJson } from '@/lib/report-export'
 import type { Category, ScanResult } from '@/lib/scanner/types'
 import { displayText } from '@/lib/sanitize'
 import { cn } from '@/lib/utils'
@@ -34,6 +35,19 @@ function formatDate(iso: string, locale: string): string {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(new Date(iso))
+}
+
+/** Saves the report as JSON, built in the browser: nothing is sent or stored (ADR-040). */
+function downloadReport(result: ScanResult): void {
+  const url = URL.createObjectURL(new Blob([reportJson(result)], { type: REPORT_JSON_TYPE }))
+  const link = document.createElement('a')
+  link.href = url
+  link.download = reportFileName(result)
+  link.click()
+  // Revoke after the click has been handled, so the download can start.
+  setTimeout(() => {
+    URL.revokeObjectURL(url)
+  }, 0)
 }
 
 interface ScanReportProps {
@@ -119,6 +133,16 @@ export const ScanReport = forwardRef<HTMLHeadingElement, ScanReportProps>(functi
           >
             <Printer strokeWidth={1.75} className="size-4" aria-hidden />
             {t('actions.print')}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              downloadReport(result)
+            }}
+          >
+            <Download strokeWidth={1.75} className="size-4" aria-hidden />
+            {t('actions.downloadJson')}
           </Button>
         </div>
       </section>

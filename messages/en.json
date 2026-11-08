@@ -114,7 +114,8 @@
       "copied": "Copied to clipboard",
       "copyFailed": "Could not copy",
       "copyCode": "Copy code",
-      "copyUrl": "Copy final URL"
+      "copyUrl": "Copy final URL",
+      "downloadJson": "Download JSON"
     },
     "caps": {
       "title": "Grade capped",

@@ -49,7 +49,7 @@ jobs:
 
       - run: pnpm lint
       - run: pnpm typecheck
-      - run: pnpm test:coverage
+      - run: pnpm test:coverage --reporter=default --reporter=json --outputFile.json=reports/vitest.json
       - run: pnpm build
 
       - name: Read Playwright version
@@ -71,6 +71,11 @@ jobs:
         run: pnpm exec playwright install-deps chromium
 
       - run: pnpm test:e2e
+
+      # ADR-042: test counts and coverage on the run page, even when a step failed.
+      - name: Write test summary
+        if: always()
+        run: node scripts/ci-summary.mjs >> "$GITHUB_STEP_SUMMARY"
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: failure()
