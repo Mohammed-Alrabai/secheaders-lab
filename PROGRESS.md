@@ -61,7 +61,9 @@ Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08
 
 ## Log
 
-- 2026-11-08 — 6.5 prepared: version 1.0.0 (`package.json`, so the scanner User-Agent reads `SecHeadersLab/1.0.0`), CHANGELOG entry dated with compare links, release notes in `docs/releases/v1.0.0.md`. Lint, typecheck, tests, build ✅. Tag and GitHub release pending user approval.
+- 2026-11-08 — 6.5 done: annotated tag `v1.0.0` on `b2d3b64` pushed; CI ✅, CodeQL ✅, live self-scan A+ / 100. GitHub release "SecHeaders Lab v1.0.0" published (marked Latest); its description was set from `docs/releases/v1.0.0.md` via the GitHub UI after the user signed in. Release notes unwrapped to one line per paragraph because GitHub release pages render single line breaks.
+
+- 2026-11-08 — 6.5 prepared: version 1.0.0 (`package.json`, so the scanner User-Agent reads `SecHeadersLab/1.0.0`), CHANGELOG entry dated with compare links, release notes in `docs/releases/v1.0.0.md`. Lint, typecheck, tests, build ✅. Tag pushed and GitHub release published (user approved).
 
 - 2026-11-07 — Dependabot PRs merged (user approved, `58320a8`): #2 next/eslint-config-next 16.4.5, tailwindcss/@tailwindcss/postcss 4.3.4, lucide-react 1.68.0; #1 codeql-action 4.39.3 (SHA `33d7b85` verified as the peeled `v4.39.3` tag). Tested merged onto current main before pushing: install, lint, typecheck, coverage, build, audit, 75 e2e ✅; Tailwind 4.3.4 drops `lightningcss`/`magic-string`, built CSS differs by 12 bytes of 92 KB. CI ✅, CodeQL ✅, both PRs closed as merged; live site re-verified (console clean, notice OK, self-scan A+ / 100).
 
