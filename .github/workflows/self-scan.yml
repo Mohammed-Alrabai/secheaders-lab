@@ -1,0 +1,39 @@
+name: Self-scan
+
+# ADR-048: scans only the project's own live site once a day, through the public API, and
+# keeps one issue in sync when it drops below A+ / 100.
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+
+# SC-36: least privilege; the job adds only what it needs.
+permissions:
+  contents: read
+
+concurrency:
+  group: self-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    name: Scan the live site
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      # SC-33: every action pinned to a full commit SHA.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Scan and sync the self-scan issue
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/self-scan.mjs >> "$GITHUB_STEP_SUMMARY"
