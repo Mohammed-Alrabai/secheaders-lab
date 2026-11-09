@@ -265,3 +265,62 @@ test.describe('theme and methodology', () => {
     await expect(page.getByText('Informational only — not a compliance assessment.')).toBeVisible()
   })
 })
+
+test.describe('scan history (ADR-045)', () => {
+  const KEY = 'secheaders-history'
+  const stored = (page: Page) => page.evaluate((key) => localStorage.getItem(key), KEY)
+
+  test('is off by default and stores nothing until turned on', async ({ page }) => {
+    await mockScan(page, okResponse)
+    await page.goto('/en/scan?url=example.com')
+    const section = page.getByRole('region', { name: 'Compare with earlier scans' })
+    await expect(section.getByRole('button', { name: 'Turn on history' })).toBeVisible()
+    expect(await stored(page)).toBeNull()
+
+    await section.getByRole('button', { name: 'Turn on history' }).click()
+    await expect(section).toContainText('No earlier scans of this site yet.')
+    const saved = JSON.parse((await stored(page)) ?? '{}') as {
+      entries: { rawHeaders: unknown[] }[]
+    }
+    expect(saved.entries).toHaveLength(1)
+    expect(saved.entries[0]?.rawHeaders).toEqual([])
+
+    await section.getByRole('button', { name: 'Turn off and delete history' }).click()
+    await expect(section.getByRole('button', { name: 'Turn on history' })).toBeVisible()
+    expect(await stored(page)).toBeNull()
+  })
+
+  test('compares the current scan with an earlier one of the same site', async ({ page }) => {
+    const current = sampleResult()
+    const earlier = {
+      ...current,
+      rawHeaders: [],
+      scannedAt: '2026-11-01T09:00:00.000Z',
+      score: current.score - 12,
+      grade: 'D',
+      findings: current.findings.map((f) =>
+        f.id === 'HDR-XCTO' ? { ...f, status: 'fail', severity: 'medium', deduction: 5 } : f,
+      ),
+    }
+    await page.addInitScript(
+      ([key, value]) => {
+        localStorage.setItem(key, value)
+      },
+      [KEY, JSON.stringify({ v: 1, entries: [earlier] })] as const,
+    )
+    await mockScan(page, okResponse)
+    await page.goto('/en/scan?url=example.com')
+    const section = page.getByRole('region', { name: 'Compare with earlier scans' })
+    const list = section.getByRole('list', { name: 'Earlier scans of this site' })
+    await expect(list.getByRole('listitem')).toHaveCount(1)
+    await list.getByRole('button', { name: 'Compare' }).click()
+    const comparison = page.getByTestId('comparison')
+    await expect(comparison).toContainText(
+      `Score: ${String(current.score - 12)} → ${String(current.score)} (+12)`,
+    )
+    await expect(comparison).toContainText(`Grade: D → ${current.grade}`)
+    await expect(comparison.getByRole('row', { name: /X-Content-Type-Options/ })).toContainText(
+      'Fail',
+    )
+  })
+})

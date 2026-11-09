@@ -2,6 +2,7 @@ import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 
 import { COOKIE_NOTICE_KEY, COOKIE_NOTICE_VALUE } from '../../src/lib/cookie-notice'
+import { HISTORY_KEY } from '../../src/lib/scan-history'
 
 const PAGES = [
   { path: 'privacy', en: 'Privacy Policy', ar: 'سياسة الخصوصية' },
@@ -41,9 +42,10 @@ test.describe('legal pages (ADR-037)', () => {
   test('the cookie table lists exactly what the code stores', async ({ page }) => {
     await page.goto('/en/cookies')
     const table = page.getByRole('table')
-    await expect(table.getByRole('row')).toHaveCount(3)
+    await expect(table.getByRole('row')).toHaveCount(4)
     await expect(table).toContainText('theme')
     await expect(table).toContainText(COOKIE_NOTICE_KEY)
+    await expect(table).toContainText(HISTORY_KEY)
   })
 
   test('the sitemap lists the legal pages in both languages', async ({ request }) => {

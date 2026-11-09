@@ -216,6 +216,28 @@
         "cloudflare": "On Cloudflare, headers are set in the dashboard. Follow the steps shown with each finding below.",
         "others": "Fixes for HTTPS, cookies and information disclosure are shown with each finding below."
       }
+    },
+    "history": {
+      "title": "Compare with earlier scans",
+      "off": "Keep a private history of your scans in this browser to see how this site changes over time. It stays on your device and is never sent to our server.",
+      "enable": "Turn on history",
+      "disable": "Turn off and delete history",
+      "unavailable": "History needs browser storage, which is blocked in this browser.",
+      "empty": "No earlier scans of this site yet. Scan it again later to compare.",
+      "listLabel": "Earlier scans of this site",
+      "entry": "{date} · {score}/100 · {grade}",
+      "compare": "Compare",
+      "comparing": "Compared with the scan from {date}",
+      "scoreChange": "Score: {before} → {after} ({delta})",
+      "gradeChange": "Grade: {before} → {after}",
+      "noChanges": "No check changed status.",
+      "table": {
+        "caption": "Checks that changed",
+        "check": "Check",
+        "before": "Before",
+        "after": "Now",
+        "absent": "Not reported"
+      }
     }
   },
   "errors": {
@@ -576,7 +598,7 @@
             "No accounts, sign-ups or passwords.",
             "No analytics, advertising, fingerprinting or tracking of any kind.",
             "No third-party scripts, fonts or embedded content. Every file is served from this site.",
-            "No stored scan results, and no record of full addresses: the scan log keeps only the host name."
+            "No scan results stored on our servers, and no record of full addresses: the scan log keeps only the host name."
           ]
         },
         {
@@ -607,13 +629,13 @@
         {
           "title": "Cookies and local storage",
           "paragraphs": [
-            "The site stores two small preferences in your browser: an optional cookie for your theme, and a local storage entry recording that you closed the cookie notice. The Cookie Policy describes both in detail."
+            "The site stores a few small values in your browser: an optional cookie for your theme, a local storage entry recording that you closed the cookie notice and, only if you turn it on, a history of your scans so you can compare them. The Cookie Policy describes each one in detail."
           ]
         },
         {
           "title": "Your choices",
           "paragraphs": [
-            "Because the application keeps no personal data about you, there is no profile to view, export or delete. You can remove both stored preferences at any time from your browser settings."
+            "Because the application keeps no personal data about you, there is no profile to view, export or delete. You can turn off scan history from any results page, which deletes it, and remove every stored item at any time from your browser settings."
           ]
         },
         {
@@ -700,8 +722,8 @@
         {
           "title": "Your choices",
           "paragraphs": [
-            "Both items are optional preferences that only change how the site looks and behaves for you. The site works fully without them.",
-            "You can delete them at any time from your browser settings, or block cookies for this site. The theme will then follow your system setting."
+            "Every item is optional and only changes how the site looks and behaves for you. The site works fully without them.",
+            "You can delete them at any time from your browser settings, or block cookies and site data for this site. The theme will then follow your system setting. Scan history can also be turned off and deleted from any results page."
           ]
         },
         {
@@ -727,6 +749,11 @@
           "type": "Local storage",
           "purpose": "Remembers that you closed the cookie notice, so it is not shown again.",
           "duration": "Until you clear this site’s data"
+        },
+        "history": {
+          "type": "Local storage",
+          "purpose": "Only if you turn on scan history: your recent scan results (up to 20, without raw headers), used to compare scans of the same site. Never sent to our server.",
+          "duration": "Until you turn history off or clear this site’s data"
         }
       }
     }

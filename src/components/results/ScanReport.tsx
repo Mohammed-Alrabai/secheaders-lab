@@ -24,19 +24,13 @@ import { cn } from '@/lib/utils'
 
 import { CopyButton } from './CopyButton'
 import { FindingCard } from './FindingCard'
+import { formatDate } from './format'
+import { HistoryPanel } from './HistoryPanel'
 import { ImprovePanel } from './ImprovePanel'
 import { CategoryIcon, StatusIcon } from './icons'
 import { CATEGORY_ORDER, GRADE_BADGE, STATUS_CHIP, sortFindings } from './ui-maps'
 
 const DAY_MS = 86_400_000
-
-/** Gregorian calendar and Western digits in both locales (`06` §3). */
-function formatDate(iso: string, locale: string): string {
-  return new Intl.DateTimeFormat(`${locale}-u-ca-gregory-nu-latn`, {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  }).format(new Date(iso))
-}
 
 /** Saves the report as JSON, built in the browser: nothing is sent or stored (ADR-040). */
 function downloadReport(result: ScanResult): void {
@@ -200,6 +194,8 @@ export const ScanReport = forwardRef<HTMLHeadingElement, ScanReportProps>(functi
           onPlatformChange={setPlatform}
         />
       ))}
+
+      <HistoryPanel result={result} />
 
       <TlsPanel result={result} locale={locale} />
       <RedirectChain result={result} />
