@@ -8,6 +8,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-09
+
+### Added
+
+- **Improve your grade** on the results page: the top three fixes with their projected score and grade, a
+  what-if selector for any combination of fixes, and every header fix in one block per platform.
+- **Compare with earlier scans**: an opt-in history kept only in this browser (off by default, up to 20
+  scans, deleted when turned off), comparing score, grade and every check that changed.
+- The TLS panel shows the certificate's public key type and size (informational, not scored).
+- A STRIDE threat model (`docs/09-THREAT-MODEL.md`).
+- A daily workflow that scans the live site and opens an issue if it drops below A+ / 100.
+
+### Changed
+
+- Privacy Policy and Cookie Policy describe the opt-in scan history.
+
 ## [1.1.0] - 2026-11-08
 
 ### Added
@@ -62,7 +78,8 @@ First public release, live at https://secheaders-lab.netlify.app.
 - Unit, integration and end-to-end test suites (including accessibility, CSP and keyboard-only tests) and CI
   with CodeQL, Semgrep, Gitleaks and `pnpm audit`.
 
-[Unreleased]: https://github.com/Mohammed-Alrabai/secheaders-lab/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/Mohammed-Alrabai/secheaders-lab/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/Mohammed-Alrabai/secheaders-lab/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/Mohammed-Alrabai/secheaders-lab/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/Mohammed-Alrabai/secheaders-lab/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Mohammed-Alrabai/secheaders-lab/releases/tag/v1.0.0

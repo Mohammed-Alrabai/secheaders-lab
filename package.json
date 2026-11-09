@@ -1,6 +1,6 @@
 {
   "name": "secheaders-lab",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Passive website security review: HTTP security headers, TLS, cookies and information disclosure, with a grade and copy-ready fixes.",
   "license": "MIT",
   "author": "Mohammed Alrabai",

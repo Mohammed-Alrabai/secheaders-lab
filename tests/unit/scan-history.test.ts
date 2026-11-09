@@ -80,6 +80,13 @@ describe('scan history storage (ADR-045)', () => {
     expect(history.map((r) => r.scannedAt.slice(8, 10))).toEqual(['04', '03'])
   })
 
+  it('returns false when not even one entry fits', () => {
+    const s = memoryStorage(40)
+    expect(enableHistory(() => s)).toBe(true)
+    expect(saveToHistory(() => s, at('2026-10-01T00:00:00.000Z'))).toBe(false)
+    expect(parseHistory(readHistoryRaw(() => s))).toEqual([])
+  })
+
   it('treats an invalid stored value as on and empty', () => {
     expect(parseHistory('not json')).toEqual([])
     expect(parseHistory(JSON.stringify({ v: 2, entries: [] }))).toEqual([])
@@ -103,6 +110,13 @@ describe('earlierScans and compareScans (ADR-045)', () => {
     })
     const older = at('2026-11-01T00:00:00.000Z')
     expect(earlierScans([current, other, older], current)).toEqual([older])
+  })
+
+  it('ignores entries whose address cannot be parsed', () => {
+    const broken = at('2026-11-03T00:00:00.000Z', {
+      target: { ...current.target, finalUrl: 'not a url' },
+    })
+    expect(earlierScans([broken], current)).toEqual([])
   })
 
   it('reports the score delta, grades and only the checks that changed', () => {
