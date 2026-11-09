@@ -209,7 +209,8 @@ Performance 99–100, Accessibility 100, Best Practices 100, SEO 100.
 
 The project was planned before it was built. The [docs](docs) folder holds the product requirements,
 architecture, security controls, scoring specification, engineering standards, UI and i18n guide, design
-system, implementation plan and an ADR-style [decision log](docs/DECISIONS.md). [PROGRESS.md](PROGRESS.md)
+system, implementation plan, a [threat model](docs/09-THREAT-MODEL.md) and an ADR-style
+[decision log](docs/DECISIONS.md). [PROGRESS.md](PROGRESS.md)
 records what was delivered in each phase.
 
 ## Roadmap
