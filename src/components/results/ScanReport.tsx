@@ -24,6 +24,7 @@ import { cn } from '@/lib/utils'
 
 import { CopyButton } from './CopyButton'
 import { FindingCard } from './FindingCard'
+import { ImprovePanel } from './ImprovePanel'
 import { CategoryIcon, StatusIcon } from './icons'
 import { CATEGORY_ORDER, GRADE_BADGE, STATUS_CHIP, sortFindings } from './ui-maps'
 
@@ -186,6 +187,8 @@ export const ScanReport = forwardRef<HTMLHeadingElement, ScanReportProps>(functi
           )
         })}
       </ul>
+
+      <ImprovePanel findings={result.findings} platform={platform} onPlatformChange={setPlatform} />
 
       {/* Findings by category */}
       {CATEGORY_ORDER.map((category) => (

@@ -308,6 +308,88 @@ function otherSnippet(rule: RuleId, platform: Platform): Snippet {
   }
 }
 
+/** True when the rule is fixed by setting one response header (`RECOMMENDED_HEADERS`). */
+export function isHeaderRule(rule: RuleId): boolean {
+  return HEADER_MAP.has(rule)
+}
+
+/**
+ * One copy-ready block that sets every recommended header for the given rules on a
+ * platform (ADR-044), in `RECOMMENDED_HEADERS` order. `null` when no header rule is given,
+ * and for Cloudflare, whose fixes are dashboard settings shown per finding.
+ */
+export function combinedHeaderFix(rules: readonly RuleId[], platform: Platform): Snippet | null {
+  const wanted = new Set(rules)
+  const headers = Object.entries(RECOMMENDED_HEADERS)
+    .filter(([rule]) => wanted.has(rule as RuleId))
+    .map(([rule, [name, value]]) => ({ name, value, note: HEADER_NOTES.get(rule) }))
+  if (headers.length === 0 || platform === 'cloudflare') return null
+  switch (platform) {
+    case 'nginx':
+      return code(
+        'nginx',
+        'nginx.conf (server block)',
+        headers.flatMap(({ name, value, note }) => [
+          ...(note ? [`# ${note}`] : []),
+          `add_header ${name} "${value}" always;`,
+        ]),
+      )
+    case 'apache':
+      return code(
+        'apache',
+        '.htaccess or VirtualHost (mod_headers)',
+        headers.flatMap(({ name, value, note }) => [
+          ...(note ? [`# ${note}`] : []),
+          `Header always set ${name} "${value}"`,
+        ]),
+      )
+    case 'iis':
+      return code('xml', 'web.config', [
+        '<system.webServer>',
+        '  <httpProtocol>',
+        '    <customHeaders>',
+        ...headers.flatMap(({ name, value, note }) => [
+          ...(note ? [`      <!-- ${note} -->`] : []),
+          `      <add name="${name}" value="${value.replaceAll('"', '&quot;')}" />`,
+        ]),
+        '    </customHeaders>',
+        '  </httpProtocol>',
+        '</system.webServer>',
+      ])
+    case 'nextjs':
+      return code('ts', 'next.config.ts', [
+        'const nextConfig = {',
+        '  async headers() {',
+        '    return [',
+        '      {',
+        "        source: '/:path*',",
+        '        headers: [',
+        ...headers.flatMap(({ name, value, note }) => [
+          ...(note ? [`          // ${note}`] : []),
+          `          { key: '${name}', value: ${JSON.stringify(value)} },`,
+        ]),
+        '        ],',
+        '      },',
+        '    ]',
+        '  },',
+        '}',
+        '',
+        'export default nextConfig',
+      ])
+    case 'netlify':
+      // Comments stay above the path line, as in the single-rule snippet.
+      return code('text', '_headers', [
+        ...headers.flatMap(({ name, note }) => (note ? [`# ${name}: ${note}`] : [])),
+        '/*',
+        ...headers.map(({ name, value }) => `  ${name}: ${value}`),
+      ])
+    default: {
+      const exhaustive: never = platform
+      throw new Error(`Unknown platform: ${String(exhaustive)}`)
+    }
+  }
+}
+
 /** The fix for a rule on a platform: copy-ready config or a key for localized steps. */
 export function remediationFor(rule: RuleId, platform: Platform): Snippet {
   const header = HEADER_MAP.get(rule)

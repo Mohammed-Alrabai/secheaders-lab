@@ -127,6 +127,47 @@ test.describe('results page (mocked API)', () => {
     expect(errors).toEqual([])
   })
 
+  test('improve panel: fix plan, what-if and combined header block (ADR-043, ADR-044)', async ({
+    page,
+  }) => {
+    await mockScan(page, okResponse)
+    await page.goto('/en/scan?url=example.com')
+    const panel = page.getByRole('region', { name: 'Improve your grade' })
+    await expect(panel).toBeVisible()
+
+    const steps = page.getByTestId('fix-plan').getByRole('listitem')
+    await expect(steps).toHaveCount(3)
+    await expect(steps.first()).toContainText(/^1Fix /)
+    await expect(steps.first()).toContainText(/Projected after this step: \d+ out of 100, grade /)
+
+    const result = page.getByTestId('what-if-result')
+    await page.getByRole('button', { name: 'Try your own combination' }).click()
+    const before = await result.textContent()
+    const boxes = panel.getByRole('checkbox')
+    await boxes.first().check()
+    await expect(result).not.toHaveText(before ?? '')
+    await page.getByRole('button', { name: 'Clear selection' }).click()
+    await expect(result).toHaveText(before ?? '')
+    await expect(boxes.first()).not.toBeChecked()
+
+    const combined = page.getByRole('region', { name: 'All header fixes in one block' })
+    await expect(combined.locator('pre')).toContainText('add_header Content-Security-Policy')
+    await combined.getByRole('tab', { name: 'Cloudflare' }).click()
+    await expect(combined).toContainText('On Cloudflare, headers are set in the dashboard.')
+  })
+
+  test('improve panel in Arabic is right-to-left and keeps code left-to-right', async ({
+    page,
+  }) => {
+    await mockScan(page, okResponse)
+    await page.goto('/ar/scan?url=example.com')
+    await expect(page.getByRole('heading', { name: 'حسّن تقديرك' })).toBeVisible()
+    const block = page
+      .getByRole('region', { name: 'كل إصلاحات الرؤوس في كتلة واحدة' })
+      .locator('pre')
+    await expect(block).toHaveAttribute('dir', 'ltr')
+  })
+
   test('language switch keeps the page and its query (FR-10)', async ({ page }) => {
     await mockScan(page, okResponse)
     await page.goto('/en/scan?url=example.com')

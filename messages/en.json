@@ -197,6 +197,25 @@
       "note": "Long values are shortened, and cookie values are hidden for privacy.",
       "name": "Header",
       "value": "Value"
+    },
+    "improve": {
+      "title": "Improve your grade",
+      "intro": "Start with these fixes. The projection uses the same scoring model as this report; your real result depends on how each fix is applied.",
+      "step": "Fix {rule}",
+      "projected": "{score}/100 · {grade}",
+      "projectedLabel": "Projected after this step: {score} out of 100, grade {grade}",
+      "whatIf": {
+        "title": "Try your own combination",
+        "legend": "Fixes to apply",
+        "result": "With the selected fixes: {score}/100, grade {grade}",
+        "reset": "Clear selection"
+      },
+      "combined": {
+        "title": "All header fixes in one block",
+        "intro": "Every missing or weak header in this report, ready to paste in one place.",
+        "cloudflare": "On Cloudflare, headers are set in the dashboard. Follow the steps shown with each finding below.",
+        "others": "Fixes for HTTPS, cookies and information disclosure are shown with each finding below."
+      }
     }
   },
   "errors": {
