@@ -16,6 +16,7 @@
 <p align="center">
   <a href="https://github.com/Mohammed-Alrabai/secheaders-lab/actions/workflows/ci.yml"><img src="https://github.com/Mohammed-Alrabai/secheaders-lab/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status"></a>
   <a href="https://github.com/Mohammed-Alrabai/secheaders-lab/actions/workflows/codeql.yml"><img src="https://github.com/Mohammed-Alrabai/secheaders-lab/actions/workflows/codeql.yml/badge.svg?branch=main" alt="CodeQL status"></a>
+  <a href="https://scorecard.dev/viewer/?uri=github.com/Mohammed-Alrabai/secheaders-lab"><img src="https://api.scorecard.dev/projects/github.com/Mohammed-Alrabai/secheaders-lab/badge" alt="OpenSSF Scorecard"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
 </p>
 

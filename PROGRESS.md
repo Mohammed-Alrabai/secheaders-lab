@@ -61,7 +61,7 @@ Removed: `next-themes` and the generated `theme-provider.tsx` (not approved, `08
 
 ## Log
 
-- 2026-11-09 — v1.2.0 prepared (batch 1 of the 20-item improvement list): fix plan, what-if and combined header config (ADR-043, ADR-044), opt-in browser history and comparison with legal copy updated (ADR-045), certificate key info (ADR-046), STRIDE threat model (ADR-047), daily self-scan workflow (ADR-048). Gate: lint ✅ typecheck ✅ 1,464 tests ✅ (99.65% statements) build ✅ e2e 81 ✅. Item 16 (OpenSSF Scorecard, `ossf/scorecard-action` v2.5.0 `fa7117d`) awaits approval as a new third-party action. A parallel session for items 16/18/20 was refused by the permission classifier, so 18 and 20 were done here. Not yet pushed.
+- 2026-11-09 — v1.2.0 prepared (batch 1 of the 20-item improvement list): fix plan, what-if and combined header config (ADR-043, ADR-044), opt-in browser history and comparison with legal copy updated (ADR-045), certificate key info (ADR-046), STRIDE threat model (ADR-047), daily self-scan workflow (ADR-048). Gate: lint ✅ typecheck ✅ 1,464 tests ✅ (99.65% statements) build ✅ e2e 81 ✅. Item 16 (OpenSSF Scorecard, `ossf/scorecard-action` v2.5.0 `fa7117d`) added after user approval (ADR-049). A parallel session for items 16/18/20 was refused by the permission classifier, so 18 and 20 were done here. Not yet pushed.
 
 - 2026-11-09 — v1.1.0: PR #4 merged by the user (`c583396`); tag `v1.1.0` pushed; CI on `main` ✅; live site serves the JSON download, self-scan A+ / 100. GitHub release not yet published: the browser session was signed out.
 

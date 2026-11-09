@@ -294,3 +294,9 @@ Format per entry: **ADR-NNN — Title** · Date · Status (Accepted / Superseded
 **Context:** Item 20: notice quickly if the production site drops below A+.
 **Decision:** `.github/workflows/self-scan.yml` runs daily and on demand. `scripts/self-scan.mjs` scans only `https://secheaders-lab.netlify.app` (the project's own site, allowed by CLAUDE.md §6) through the public API, writes the result to the job summary and keeps one issue in sync: opened or commented on below A+ / 100, closed on recovery. The job has `contents: read` and `issues: write` only; no new actions (REST API via `fetch`).
 **Consequences:** One extra scan per day against our own rate limit. `DRY_RUN=1` runs it locally without touching issues.
+
+### ADR-049 — OpenSSF Scorecard
+2026-11-09 · Accepted (user approved the new action: `ossf/scorecard-action` v2.5.0, commit `fa7117db83c52d787ae5a89f350999701505d78e`)
+**Context:** Item 16: an independent, well-known measure of the repository's supply-chain practices.
+**Decision:** `.github/workflows/scorecard.yml` runs on pushes to `main` and weekly, following the action's official README (v2.5.0): workflow `permissions: read-all`; the one job adds `security-events: write` (SARIF upload to code scanning) and `id-token: write` (authenticated `publish_results: true` for the badge). Only actions the Scorecard rules allow are used, all pinned to full SHAs (SC-33). The README shows the badge.
+**Consequences:** Results are public at scorecard.dev. Findings appear in code scanning; low scores on checks that need maintainers or a long history (for example Code-Review, Maintained) are expected for a single-maintainer project.

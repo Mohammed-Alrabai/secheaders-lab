@@ -102,7 +102,7 @@ flowchart LR
 | Threat | STRIDE | Mitigation | Residual risk |
 |---|---|---|---|
 | Malicious or compromised dependency | T, E | Exact pins and frozen lockfile (SC-32); Dependabot (SC-33); `pnpm audit`, CodeQL, Semgrep (SC-34); pnpm's minimum release age policy | Medium: a compromised pinned version would still need review to catch |
-| Tampered GitHub Action | T, E | Actions pinned to full commit SHAs (SC-33) | Low |
+| Tampered GitHub Action | T, E | Actions pinned to full commit SHAs (SC-33); OpenSSF Scorecard reports on pinning, token permissions and branch protection weekly (ADR-049) | Low |
 | Leaked secrets in the repository | I | No secrets in code; Gitleaks in CI (SC-34) | Low |
 | Over-privileged CI token | E | `contents: read` by default, elevated per job only (SC-36) | Low |
 | Unreviewed change reaching production | T | Branch ruleset on `main`: pull requests, required checks, no force push or deletion | Medium: repository admins can bypass the ruleset |

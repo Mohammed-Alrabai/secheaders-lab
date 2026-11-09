@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The TLS panel shows the certificate's public key type and size (informational, not scored).
 - A STRIDE threat model (`docs/09-THREAT-MODEL.md`).
 - A daily workflow that scans the live site and opens an issue if it drops below A+ / 100.
+- OpenSSF Scorecard supply-chain checks with a README badge and results in code scanning.
 
 ### Changed
 
