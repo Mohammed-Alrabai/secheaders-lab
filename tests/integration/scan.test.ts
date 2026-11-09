@@ -117,6 +117,7 @@ describe('scan() end to end (02 §2)', () => {
         protocol: 'TLSv1.3',
         authorized: true,
         issuer: 'SecHeaders Lab Test CA',
+        key: { type: 'EC', bits: 256, curve: 'P-256' },
       },
       score: 100,
       grade: 'A+',
@@ -411,6 +412,7 @@ describe('scan() errors (02 §4)', () => {
             validFrom: null,
             validTo: null,
             issuer: null,
+            key: null,
           }),
       }),
     )

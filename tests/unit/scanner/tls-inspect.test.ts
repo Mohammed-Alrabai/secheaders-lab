@@ -16,7 +16,30 @@ describe('summarizeCertificate', () => {
       validFrom: null,
       validTo: null,
       issuer: null,
+      key: null,
     })
+  })
+
+  it('reports EC keys with their curve and RSA keys with their size (ADR-046)', () => {
+    expect(
+      summarizeCertificate(cert({ bits: 256, nistCurve: 'P-256', asn1Curve: 'prime256v1' }), 'x')
+        .key,
+    ).toEqual({ type: 'EC', bits: 256, curve: 'P-256' })
+    expect(summarizeCertificate(cert({ bits: 384, asn1Curve: 'secp384r1' }), 'x').key).toEqual({
+      type: 'EC',
+      bits: 384,
+      curve: 'secp384r1',
+    })
+    expect(summarizeCertificate(cert({ bits: 2048, modulus: 'C0FFEE' }), 'x').key).toEqual({
+      type: 'RSA',
+      bits: 2048,
+    })
+  })
+
+  it('omits keys it cannot identify', () => {
+    expect(summarizeCertificate(cert({ bits: 0, modulus: 'AB' }), 'x').key).toBeNull()
+    expect(summarizeCertificate(cert({ bits: 256 }), 'x').key).toBeNull()
+    expect(summarizeCertificate(cert({ bits: 256, nistCurve: 'x'.repeat(40) }), 'x').key).toBeNull()
   })
 
   it('prefers the issuer organisation, then the common name', () => {

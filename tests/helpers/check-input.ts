@@ -19,6 +19,7 @@ export function validTls(
     validFrom: new Date(NOW.getTime() - 30 * DAY).toISOString(),
     validTo: new Date(NOW.getTime() + days * DAY).toISOString(),
     issuer: 'Test CA',
+    key: { type: 'EC', bits: 256, curve: 'P-256' },
   }
 }
 

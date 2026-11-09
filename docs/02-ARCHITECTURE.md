@@ -124,7 +124,8 @@ interface ScanResult {
     redirectChain: { url: string; status: number }[];
     httpStatus: number;
   };
-  tls: { available: boolean; protocol?: string; validTo?: string; issuer?: string; authorized?: boolean };
+  tls: { available: boolean; protocol?: string; validTo?: string; issuer?: string; authorized?: boolean;
+         key?: { type: 'RSA' | 'EC'; bits: number; curve?: string } }; // key: ADR-046, informational
   score: number;             // 0–100 integer
   grade: 'A+' | 'A' | 'B' | 'C' | 'D' | 'F';
   capsApplied: string[];     // cap ids from scoring spec

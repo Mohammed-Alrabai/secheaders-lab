@@ -186,7 +186,11 @@
       "validUntil": "صالحة حتى",
       "daysRemaining": "{days, plural, =0 {تنتهي اليوم} one {يتبقّى يوم واحد} two {يتبقّى يومان} few {يتبقّى # أيام} many {يتبقّى # يومًا} other {يتبقّى # يوم}}",
       "expired": "منتهية الصلاحية",
-      "unavailable": "تعذّر فتح اتصال HTTPS بهذا الموقع."
+      "unavailable": "تعذّر فتح اتصال HTTPS بهذا الموقع.",
+      "key": "المفتاح العام",
+      "keyRsa": "RSA، {bits} بت",
+      "keyEc": "EC ({curve})، {bits} بت",
+      "keyWeak": "أصغر من الحجم الموصى به عادةً اليوم"
     },
     "redirects": {
       "title": "سلسلة التحويلات",

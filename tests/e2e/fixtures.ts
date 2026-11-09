@@ -42,6 +42,7 @@ export function sampleResult(): ScanResult {
       validTo: '2027-02-01T00:00:00.000Z',
       issuer: 'Test CA',
       authorized: true,
+      key: { type: 'EC', bits: 256, curve: 'P-256' },
     },
     ...computeScore(findings),
     summary,

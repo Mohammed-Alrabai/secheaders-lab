@@ -105,6 +105,7 @@ function tlsSummary(tls: TlsInspection): ScanResult['tls'] {
   if (tls.protocol !== null) out.protocol = tls.protocol
   if (tls.validTo !== null) out.validTo = tls.validTo
   if (tls.issuer !== null) out.issuer = tls.issuer
+  if (tls.key !== null) out.key = { ...tls.key }
   return out
 }
 

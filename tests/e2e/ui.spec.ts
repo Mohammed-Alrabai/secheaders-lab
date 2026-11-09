@@ -168,6 +168,27 @@ test.describe('results page (mocked API)', () => {
     await expect(block).toHaveAttribute('dir', 'ltr')
   })
 
+  test('TLS panel shows the certificate key, and flags a small one (ADR-046)', async ({ page }) => {
+    await mockScan(page, okResponse)
+    await page.goto('/en/scan?url=example.com')
+    await expect(page.getByText('EC (P-256), 256 bits')).toBeVisible()
+    await expect(page.getByText('smaller than the size commonly recommended today')).toHaveCount(0)
+
+    const weak = {
+      ...sampleResult(),
+      tls: { ...sampleResult().tls, key: { type: 'RSA', bits: 1024 } },
+    }
+    await page.unroute('**/api/scan')
+    await mockScan(page, (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(weak) }),
+    )
+    await page.goto('/ar/scan?url=example.com')
+    await expect(page.getByText('RSA، 1024 بت')).toBeVisible()
+    await expect(
+      page.getByText('أصغر من الحجم الموصى به عادةً اليوم', { exact: false }),
+    ).toBeVisible()
+  })
+
   test('language switch keeps the page and its query (FR-10)', async ({ page }) => {
     await mockScan(page, okResponse)
     await page.goto('/en/scan?url=example.com')

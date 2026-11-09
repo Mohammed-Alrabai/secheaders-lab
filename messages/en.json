@@ -186,7 +186,11 @@
       "validUntil": "Valid until",
       "daysRemaining": "{days, plural, =0 {expires today} one {# day left} other {# days left}}",
       "expired": "expired",
-      "unavailable": "Could not open an HTTPS connection to this site."
+      "unavailable": "Could not open an HTTPS connection to this site.",
+      "key": "Public key",
+      "keyRsa": "RSA, {bits} bits",
+      "keyEc": "EC ({curve}), {bits} bits",
+      "keyWeak": "smaller than the size commonly recommended today"
     },
     "redirects": {
       "title": "Redirect chain",

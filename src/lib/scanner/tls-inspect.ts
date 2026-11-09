@@ -8,12 +8,22 @@ export const TLS_INSPECT_TIMEOUT_MS = 3_000
 export type TlsUnavailableReason =
   'TIMEOUT' | 'BUDGET_EXCEEDED' | 'CONNECT_FAILED' | 'HANDSHAKE_FAILED'
 
+/** The certificate's public key (ADR-046): reported for information, never scored. */
+export interface CertificateKey {
+  type: 'RSA' | 'EC'
+  bits: number
+  /** Named curve for EC keys, e.g. `P-256`. */
+  curve?: string
+}
+
 export interface CertificateSummary {
   hostnameMatches: boolean
   validFrom: string | null
   validTo: string | null
   /** Upstream data: treat as untrusted text (SC-29). */
   issuer: string | null
+  /** `null` when the key type is not RSA or EC, or its size is unknown. */
+  key: CertificateKey | null
 }
 
 export type TlsInspection =
@@ -46,6 +56,19 @@ function firstOf(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value
 }
 
+/** RSA keys expose a modulus; EC keys a named curve. Other key types are not reported. */
+function keyOf(cert: tls.PeerCertificate): CertificateKey | null {
+  const fields = cert as Partial<Record<'bits' | 'nistCurve' | 'asn1Curve' | 'modulus', unknown>>
+  const bits = typeof fields.bits === 'number' && fields.bits > 0 ? fields.bits : null
+  if (bits === null) return null
+  const curve = [fields.nistCurve, fields.asn1Curve].find(
+    (c): c is string => typeof c === 'string' && c.length > 0 && c.length <= 32,
+  )
+  if (curve !== undefined) return { type: 'EC', bits, curve }
+  if (typeof fields.modulus === 'string' && fields.modulus.length > 0) return { type: 'RSA', bits }
+  return null
+}
+
 /**
  * Extracts the fields we report from a peer certificate. An empty object (no certificate)
  * yields nulls and `hostnameMatches: false`.
@@ -60,6 +83,7 @@ export function summarizeCertificate(
     validFrom: isoDate(cert.valid_from),
     validTo: isoDate(cert.valid_to),
     issuer: firstOf(issuer.O) ?? firstOf(issuer.CN) ?? null,
+    key: keyOf(cert),
   }
 }
 
