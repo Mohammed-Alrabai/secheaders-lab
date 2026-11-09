@@ -15,6 +15,7 @@ import { alternatesFor } from '@/i18n/alternates'
 import { resolveLocaleParam } from '@/i18n/locale-param'
 import type { Locale } from '@/i18n/routing'
 import { COOKIE_NOTICE_KEY } from '@/lib/cookie-notice'
+import { HISTORY_KEY } from '@/lib/scan-history'
 import { THEME_COOKIE } from '@/lib/theme'
 
 interface CookiesPageProps {
@@ -35,6 +36,7 @@ export async function generateMetadata({ params }: CookiesPageProps): Promise<Me
 const STORED = [
   { name: THEME_COOKIE, key: 'theme' },
   { name: COOKIE_NOTICE_KEY, key: 'notice' },
+  { name: HISTORY_KEY, key: 'history' },
 ] as const
 
 async function StorageTable({ locale }: { locale: Locale }) {

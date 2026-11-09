@@ -105,6 +105,8 @@ export interface ScanResult {
     validTo?: string
     issuer?: string
     authorized?: boolean
+    /** Certificate public key, for information only (ADR-046). */
+    key?: { type: 'RSA' | 'EC'; bits: number; curve?: string }
   }
   score: number
   grade: Grade

@@ -24,18 +24,13 @@ import { cn } from '@/lib/utils'
 
 import { CopyButton } from './CopyButton'
 import { FindingCard } from './FindingCard'
+import { formatDate } from './format'
+import { HistoryPanel } from './HistoryPanel'
+import { ImprovePanel } from './ImprovePanel'
 import { CategoryIcon, StatusIcon } from './icons'
 import { CATEGORY_ORDER, GRADE_BADGE, STATUS_CHIP, sortFindings } from './ui-maps'
 
 const DAY_MS = 86_400_000
-
-/** Gregorian calendar and Western digits in both locales (`06` §3). */
-function formatDate(iso: string, locale: string): string {
-  return new Intl.DateTimeFormat(`${locale}-u-ca-gregory-nu-latn`, {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  }).format(new Date(iso))
-}
 
 /** Saves the report as JSON, built in the browser: nothing is sent or stored (ADR-040). */
 function downloadReport(result: ScanResult): void {
@@ -187,6 +182,8 @@ export const ScanReport = forwardRef<HTMLHeadingElement, ScanReportProps>(functi
         })}
       </ul>
 
+      <ImprovePanel findings={result.findings} platform={platform} onPlatformChange={setPlatform} />
+
       {/* Findings by category */}
       {CATEGORY_ORDER.map((category) => (
         <CategorySection
@@ -197,6 +194,8 @@ export const ScanReport = forwardRef<HTMLHeadingElement, ScanReportProps>(functi
           onPlatformChange={setPlatform}
         />
       ))}
+
+      <HistoryPanel result={result} />
 
       <TlsPanel result={result} locale={locale} />
       <RedirectChain result={result} />
@@ -266,6 +265,11 @@ function CategorySection({
   )
 }
 
+/** Informational only (ADR-046): RSA below 2048 bits or EC below 256 bits. Never scored. */
+function isWeakKey(key: NonNullable<ScanResult['tls']['key']>): boolean {
+  return key.type === 'RSA' ? key.bits < 2048 : key.bits < 256
+}
+
 function TlsPanel({ result, locale }: { result: ScanResult; locale: string }) {
   const t = useTranslations('results.tls')
   const { tls } = result
@@ -294,6 +298,21 @@ function TlsPanel({ result, locale }: { result: ScanResult; locale: string }) {
                 {tls.issuer === undefined ? '—' : displayText(tls.issuer)}
               </bdi>
             </dd>
+            {tls.key ? (
+              <>
+                <dt className="text-muted-foreground">{t('key')}</dt>
+                <dd>
+                  <bdi dir="ltr" className="font-mono ltr-isolate">
+                    {tls.key.type === 'EC'
+                      ? t('keyEc', { curve: displayText(tls.key.curve ?? '—'), bits: tls.key.bits })
+                      : t('keyRsa', { bits: tls.key.bits })}
+                  </bdi>
+                  {isWeakKey(tls.key) ? (
+                    <span className="text-muted-foreground"> ({t('keyWeak')})</span>
+                  ) : null}
+                </dd>
+              </>
+            ) : null}
             <dt className="text-muted-foreground">{t('validUntil')}</dt>
             <dd>
               {tls.validTo === undefined ? '—' : formatDate(tls.validTo, locale)}

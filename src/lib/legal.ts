@@ -7,7 +7,7 @@ export const LEGAL_PAGES = ['privacy', 'terms', 'cookies'] as const
 export type LegalPage = (typeof LEGAL_PAGES)[number]
 
 /** Date the legal copy last changed (ISO 8601). Update it with every content change. */
-export const LEGAL_UPDATED = '2026-11-07'
+export const LEGAL_UPDATED = '2026-11-09'
 
 /** Public repository: contact channel (issues) and security policy (SC-35). */
 export const REPO_URL = 'https://github.com/Mohammed-Alrabai/secheaders-lab'

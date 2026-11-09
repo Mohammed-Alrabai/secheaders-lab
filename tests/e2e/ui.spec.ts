@@ -127,6 +127,68 @@ test.describe('results page (mocked API)', () => {
     expect(errors).toEqual([])
   })
 
+  test('improve panel: fix plan, what-if and combined header block (ADR-043, ADR-044)', async ({
+    page,
+  }) => {
+    await mockScan(page, okResponse)
+    await page.goto('/en/scan?url=example.com')
+    const panel = page.getByRole('region', { name: 'Improve your grade' })
+    await expect(panel).toBeVisible()
+
+    const steps = page.getByTestId('fix-plan').getByRole('listitem')
+    await expect(steps).toHaveCount(3)
+    await expect(steps.first()).toContainText(/^1Fix /)
+    await expect(steps.first()).toContainText(/Projected after this step: \d+ out of 100, grade /)
+
+    const result = page.getByTestId('what-if-result')
+    await page.getByRole('button', { name: 'Try your own combination' }).click()
+    const before = await result.textContent()
+    const boxes = panel.getByRole('checkbox')
+    await boxes.first().check()
+    await expect(result).not.toHaveText(before ?? '')
+    await page.getByRole('button', { name: 'Clear selection' }).click()
+    await expect(result).toHaveText(before ?? '')
+    await expect(boxes.first()).not.toBeChecked()
+
+    const combined = page.getByRole('region', { name: 'All header fixes in one block' })
+    await expect(combined.locator('pre')).toContainText('add_header Content-Security-Policy')
+    await combined.getByRole('tab', { name: 'Cloudflare' }).click()
+    await expect(combined).toContainText('On Cloudflare, headers are set in the dashboard.')
+  })
+
+  test('improve panel in Arabic is right-to-left and keeps code left-to-right', async ({
+    page,
+  }) => {
+    await mockScan(page, okResponse)
+    await page.goto('/ar/scan?url=example.com')
+    await expect(page.getByRole('heading', { name: 'حسّن تقديرك' })).toBeVisible()
+    const block = page
+      .getByRole('region', { name: 'كل إصلاحات الرؤوس في كتلة واحدة' })
+      .locator('pre')
+    await expect(block).toHaveAttribute('dir', 'ltr')
+  })
+
+  test('TLS panel shows the certificate key, and flags a small one (ADR-046)', async ({ page }) => {
+    await mockScan(page, okResponse)
+    await page.goto('/en/scan?url=example.com')
+    await expect(page.getByText('EC (P-256), 256 bits')).toBeVisible()
+    await expect(page.getByText('smaller than the size commonly recommended today')).toHaveCount(0)
+
+    const weak = {
+      ...sampleResult(),
+      tls: { ...sampleResult().tls, key: { type: 'RSA', bits: 1024 } },
+    }
+    await page.unroute('**/api/scan')
+    await mockScan(page, (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(weak) }),
+    )
+    await page.goto('/ar/scan?url=example.com')
+    await expect(page.getByText('RSA، 1024 بت')).toBeVisible()
+    await expect(
+      page.getByText('أصغر من الحجم الموصى به عادةً اليوم', { exact: false }),
+    ).toBeVisible()
+  })
+
   test('language switch keeps the page and its query (FR-10)', async ({ page }) => {
     await mockScan(page, okResponse)
     await page.goto('/en/scan?url=example.com')
@@ -222,5 +284,64 @@ test.describe('theme and methodology', () => {
       page.getByRole('row', { name: /Strict-Transport-Security \(HSTS\).*20/ }),
     ).toBeVisible()
     await expect(page.getByText('Informational only — not a compliance assessment.')).toBeVisible()
+  })
+})
+
+test.describe('scan history (ADR-045)', () => {
+  const KEY = 'secheaders-history'
+  const stored = (page: Page) => page.evaluate((key) => localStorage.getItem(key), KEY)
+
+  test('is off by default and stores nothing until turned on', async ({ page }) => {
+    await mockScan(page, okResponse)
+    await page.goto('/en/scan?url=example.com')
+    const section = page.getByRole('region', { name: 'Compare with earlier scans' })
+    await expect(section.getByRole('button', { name: 'Turn on history' })).toBeVisible()
+    expect(await stored(page)).toBeNull()
+
+    await section.getByRole('button', { name: 'Turn on history' }).click()
+    await expect(section).toContainText('No earlier scans of this site yet.')
+    const saved = JSON.parse((await stored(page)) ?? '{}') as {
+      entries: { rawHeaders: unknown[] }[]
+    }
+    expect(saved.entries).toHaveLength(1)
+    expect(saved.entries[0]?.rawHeaders).toEqual([])
+
+    await section.getByRole('button', { name: 'Turn off and delete history' }).click()
+    await expect(section.getByRole('button', { name: 'Turn on history' })).toBeVisible()
+    expect(await stored(page)).toBeNull()
+  })
+
+  test('compares the current scan with an earlier one of the same site', async ({ page }) => {
+    const current = sampleResult()
+    const earlier = {
+      ...current,
+      rawHeaders: [],
+      scannedAt: '2026-11-01T09:00:00.000Z',
+      score: current.score - 12,
+      grade: 'D',
+      findings: current.findings.map((f) =>
+        f.id === 'HDR-XCTO' ? { ...f, status: 'fail', severity: 'medium', deduction: 5 } : f,
+      ),
+    }
+    await page.addInitScript(
+      ([key, value]) => {
+        localStorage.setItem(key, value)
+      },
+      [KEY, JSON.stringify({ v: 1, entries: [earlier] })] as const,
+    )
+    await mockScan(page, okResponse)
+    await page.goto('/en/scan?url=example.com')
+    const section = page.getByRole('region', { name: 'Compare with earlier scans' })
+    const list = section.getByRole('list', { name: 'Earlier scans of this site' })
+    await expect(list.getByRole('listitem')).toHaveCount(1)
+    await list.getByRole('button', { name: 'Compare' }).click()
+    const comparison = page.getByTestId('comparison')
+    await expect(comparison).toContainText(
+      `Score: ${String(current.score - 12)} → ${String(current.score)} (+12)`,
+    )
+    await expect(comparison).toContainText(`Grade: D → ${current.grade}`)
+    await expect(comparison.getByRole('row', { name: /X-Content-Type-Options/ })).toContainText(
+      'Fail',
+    )
   })
 })

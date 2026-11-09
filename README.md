@@ -16,6 +16,7 @@
 <p align="center">
   <a href="https://github.com/Mohammed-Alrabai/secheaders-lab/actions/workflows/ci.yml"><img src="https://github.com/Mohammed-Alrabai/secheaders-lab/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status"></a>
   <a href="https://github.com/Mohammed-Alrabai/secheaders-lab/actions/workflows/codeql.yml"><img src="https://github.com/Mohammed-Alrabai/secheaders-lab/actions/workflows/codeql.yml/badge.svg?branch=main" alt="CodeQL status"></a>
+  <a href="https://scorecard.dev/viewer/?uri=github.com/Mohammed-Alrabai/secheaders-lab"><img src="https://api.scorecard.dev/projects/github.com/Mohammed-Alrabai/secheaders-lab/badge" alt="OpenSSF Scorecard"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
 </p>
 
@@ -57,6 +58,9 @@ Nginx, Apache, IIS, Next.js, Netlify or Cloudflare. It never probes, crawls or a
 - **Shareable results** (`/en/scan?url=example.com`), redirect chain and sanitized raw headers.
 - **Print / Save as PDF** report: A4, page numbers, failing findings expanded, your platform's fixes only.
 - **JSON download** of the full result, built in your browser.
+- **Improve your grade**: the top three fixes with their projected score, a what-if selector and every
+  header fix in one block for your platform.
+- **Compare with earlier scans** using an opt-in history kept only in your browser.
 - **Bilingual** English and Arabic with proper RTL, light and dark themes, WCAG 2.2 AA.
 - **Transparent methodology** page generated from the same rule and scoring code the scanner uses.
 - **Private by design**: no accounts, no analytics, no stored scans, no third-party scripts or fonts, and
@@ -192,12 +196,13 @@ corepack pnpm start
 |---|---|
 | `pnpm lint` | ESLint with zero warnings allowed |
 | `pnpm typecheck` | Route type generation and `tsc --noEmit` |
-| `pnpm test` | 1,381 unit and integration tests (local servers, mocked DNS, no internet) |
+| `pnpm test` | 1,464 unit and integration tests (local servers, mocked DNS, no internet) |
 | `pnpm test:coverage` | Same, with coverage thresholds (scanner core ≥ 95%; currently ~99%) |
-| `pnpm test:e2e` | 76 Playwright tests: user flows, error states, print, axe on 32 page/locale/theme combinations, CSP, keyboard-only use, own headers A+ |
+| `pnpm test:e2e` | 81 Playwright tests: user flows, error states, print, axe on 32 page/locale/theme combinations, CSP, keyboard-only use, own headers A+ |
 | `pnpm check` | Lint, typecheck, coverage and build together |
 
-Every CI run lists its test counts and coverage on the run page.
+Every CI run lists its test counts and coverage on the run page, and a daily workflow scans the live
+site and opens an issue if it drops below A+.
 
 Before the first end-to-end run, install a browser with `pnpm exec playwright install chromium`, or reuse an
 installed Edge or Chrome by setting `PLAYWRIGHT_CHANNEL` to `msedge` or `chrome`.
@@ -209,7 +214,8 @@ Performance 99–100, Accessibility 100, Best Practices 100, SEO 100.
 
 The project was planned before it was built. The [docs](docs) folder holds the product requirements,
 architecture, security controls, scoring specification, engineering standards, UI and i18n guide, design
-system, implementation plan and an ADR-style [decision log](docs/DECISIONS.md). [PROGRESS.md](PROGRESS.md)
+system, implementation plan, a [threat model](docs/09-THREAT-MODEL.md) and an ADR-style
+[decision log](docs/DECISIONS.md). [PROGRESS.md](PROGRESS.md)
 records what was delivered in each phase.
 
 ## Roadmap
@@ -218,7 +224,6 @@ Possible next steps after v1.0:
 
 - DNS email security (SPF, DMARC) and `/.well-known/security.txt` checks.
 - CORS, COEP and CORP scoring.
-- Browser-only scan history and comparing two scans.
 
 ## Disclaimer
 

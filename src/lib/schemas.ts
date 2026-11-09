@@ -61,6 +61,13 @@ export const ScanResultSchema = z.strictObject({
     validTo: z.exactOptional(z.iso.datetime()),
     issuer: z.exactOptional(z.string().max(512)),
     authorized: z.exactOptional(z.boolean()),
+    key: z.exactOptional(
+      z.strictObject({
+        type: z.enum(['RSA', 'EC']),
+        bits: z.number().int().positive().max(16_384),
+        curve: z.exactOptional(z.string().max(32)),
+      }),
+    ),
   }),
   score: z.number().int().min(0).max(100),
   grade: z.enum(['A+', 'A', 'B', 'C', 'D', 'F']),

@@ -258,3 +258,45 @@ Format per entry: **ADR-NNN — Title** · Date · Status (Accepted / Superseded
 **Context:** The review (TD-05) noted that configured checks are not evidence of a passing run. README numbers had also drifted (ADR-039).
 **Decision:** In CI, Vitest writes a JSON report and a coverage `json-summary`, Playwright a JSON report, and `scripts/ci-summary.mjs` (Node built-ins, local files only) appends a Markdown table to `$GITHUB_STEP_SUMMARY`, even when a step failed. Reports go to the git-ignored `reports/` folder because Playwright clears `test-results/`.
 **Consequences:** Every CI run shows its own test counts and coverage on the run page. No new dependencies.
+
+### ADR-043 — Fix plan and what-if projections reuse the scoring model
+2026-11-09 · Accepted (user approved batch 1 of the improvement list)
+**Context:** Item 7 (top fixes) and item 9 (what-if simulator) both need a projected score. A separate estimator could drift from `04-SCORING-SPEC.md`.
+**Decision:** `src/lib/fix-plan.ts` replaces each chosen actionable finding (`warn`/`fail`) with a passing one and calls `computeScore` again, so caps and A+ requirements apply unchanged; a fixed HSTS carries the recommended two-year `max-age`. The plan picks up to three fixes greedily: best projected grade, then score, then the most serious finding; it stops at A+. The UI labels the numbers as a projection.
+**Consequences:** No scoring change. Projections assume each fix is applied as recommended; rules that interact (for example HTTPS and HSTS) are projected independently.
+
+### ADR-044 — Every header fix in one block per platform
+2026-11-09 · Accepted (user approved batch 1)
+**Context:** Item 8: a site missing several headers had to copy one snippet per finding.
+**Decision:** `combinedHeaderFix(rules, platform)` builds one block from `RECOMMENDED_HEADERS` (one `add_header` or `Header always set` list, one `customHeaders`, one Next.js `headers()` entry, one Netlify `/*` rule). Cloudflare has no config file, so it points to the per-finding dashboard steps; non-header fixes stay with their findings. Platform tabs are shared through `PlatformTabs` and `SnippetView`.
+**Consequences:** Single-rule and combined snippets come from the same source, so they cannot disagree.
+
+### ADR-045 — Opt-in scan history in the browser (PRD §7)
+2026-11-09 · Accepted (user approved batch 1; the "no stored scan results" wording now reads "no scan results stored on our servers")
+**Context:** Item 10 asks for local history and "compare two scans". The site promises not to store scans.
+**Decision:** History is **off by default**. Turning it on creates one `localStorage` key (`secheaders-history`) holding up to 20 results without raw headers, validated with `ScanResultSchema` on read; turning it off deletes the key. Earlier scans of the same host can be compared with the current one (score and grade change, and each check whose status changed). Nothing is sent to the server. A full store drops the oldest entries; blocked storage shows a message.
+**Consequences:** Privacy Policy, Cookie Policy (storage table) and `LEGAL_UPDATED` changed in both languages. The server-side promise (SC-38) is unchanged.
+
+### ADR-046 — Certificate key type and size, informational
+2026-11-09 · Accepted (user approved batch 1)
+**Context:** Item 4 asked for more certificate detail. Expiry and days remaining were already shown.
+**Decision:** TLS inspection reads the public key from the peer certificate (EC with its named curve, RSA with its modulus size; anything else is omitted). `ScanResult.tls` gains an optional `key` (additive; schema and `02` contract updated). The TLS panel notes RSA below 2048 bits or EC below 256 bits as smaller than commonly recommended.
+**Consequences:** No rule, weight or scoring-version change; scoring the key would need a scoring-spec change and user approval.
+
+### ADR-047 — STRIDE threat model
+2026-11-09 · Accepted (user approved batch 1)
+**Context:** Item 18: a security tool should show how it was threat-modelled.
+**Decision:** `docs/09-THREAT-MODEL.md` with data-flow diagrams, trust boundaries, assets and STRIDE tables. Every mitigation cites an existing SC control or ADR; residual risks are stated.
+**Consequences:** The document lists its own review triggers (new outbound requests, storage, services or API changes).
+
+### ADR-048 — Daily self-scan of the live site
+2026-11-09 · Accepted (user approved batch 1)
+**Context:** Item 20: notice quickly if the production site drops below A+.
+**Decision:** `.github/workflows/self-scan.yml` runs daily and on demand. `scripts/self-scan.mjs` scans only `https://secheaders-lab.netlify.app` (the project's own site, allowed by CLAUDE.md §6) through the public API, writes the result to the job summary and keeps one issue in sync: opened or commented on below A+ / 100, closed on recovery. The job has `contents: read` and `issues: write` only; no new actions (REST API via `fetch`).
+**Consequences:** One extra scan per day against our own rate limit. `DRY_RUN=1` runs it locally without touching issues.
+
+### ADR-049 — OpenSSF Scorecard
+2026-11-09 · Accepted (user approved the new action: `ossf/scorecard-action` v2.5.0, commit `fa7117db83c52d787ae5a89f350999701505d78e`)
+**Context:** Item 16: an independent, well-known measure of the repository's supply-chain practices.
+**Decision:** `.github/workflows/scorecard.yml` runs on pushes to `main` and weekly, following the action's official README (v2.5.0): workflow `permissions: read-all`; the one job adds `security-events: write` (SARIF upload to code scanning) and `id-token: write` (authenticated `publish_results: true` for the badge). Only actions the Scorecard rules allow are used, all pinned to full SHAs (SC-33). The README shows the badge.
+**Consequences:** Results are public at scorecard.dev. Findings appear in code scanning; low scores on checks that need maintainers or a long history (for example Code-Review, Maintained) are expected for a single-maintainer project.
